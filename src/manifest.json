@@ -1,0 +1,22 @@
+{
+  "name": "8rainstation Enhancer",
+  "version": "0.0.1.0",
+  "description": "Enhances the 8rainstation website.",
+  "icons": {
+    // "48": "icon48.png",
+    // "128": "icon128.png"
+  },
+  "manifest_version": 3,
+  "content_scripts": [{
+     "matches": ["https://app.8rainstation.com/*"],
+     "css": ["content-script.css"],
+     "js": [
+       "common.js",
+       "content-script.js"
+     ]
+  }],
+  "options_page": "options.html",
+  "permissions": [
+    "storage"
+  ]
+}

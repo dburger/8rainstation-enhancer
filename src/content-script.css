@@ -1,0 +1,6 @@
+/*
+ Test CSS to make sure we are hooking in as expected.
+ */
+.price {
+    border: 2px solid red !important;
+}

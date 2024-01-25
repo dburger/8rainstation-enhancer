@@ -1,0 +1,19 @@
+* {
+  font-family: sans-serif
+}
+
+div.group {
+  border-top: 1px solid lightgray;
+  margin: 5px;
+  padding: 5px;
+  background-color: lightgray;
+}
+
+textarea {
+  width: 500px;
+  height: 100px;
+}
+
+p.instructions {
+  width: 500px;
+}
