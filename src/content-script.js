@@ -1,9 +1,11 @@
-const playsDiv = (minEv) => {
+const insertAfter = (newElem, elem) => {
+  elem.parentElement.insertBefore(newElem, elem.nextSibling);
+};
+
+const navDiv = (href, text) => {
   const a = document.createElement("a");
-  a.setAttribute(
-    "href",
-    `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`);
-  a.appendChild(document.createTextNode(`${minEv}`));
+  a.setAttribute("href", href);
+  a.appendChild(document.createTextNode(text));
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav");
@@ -12,8 +14,21 @@ const playsDiv = (minEv) => {
   return div;
 };
 
+const minEvPlaysDiv = (minEv) => {
+  return navDiv(
+      `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`,
+      minEv);
+};
+
+const arbPlaysDiv = () => {
+  return navDiv(
+      "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=&width=",
+      "A");
+}
+
 const settingsDiv = document.querySelector('a[href="/settings"]').parentElement;
-const topNav = settingsDiv.parentElement;
-topNav.insertBefore(playsDiv(3), settingsDiv.nextSibling);
-topNav.insertBefore(playsDiv(4), settingsDiv.nextSibling);
-topNav.insertBefore(playsDiv(5), settingsDiv.nextSibling);
+
+insertAfter(arbPlaysDiv(), settingsDiv);
+insertAfter(minEvPlaysDiv(3), settingsDiv);
+insertAfter(minEvPlaysDiv(4), settingsDiv);
+insertAfter(minEvPlaysDiv(5), settingsDiv);
