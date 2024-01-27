@@ -41,3 +41,12 @@ if (settingsAnchor) {
 } else {
   console.log("Settings link not found, navigation not added.");
 }
+
+window.addEventListener('click', function(evt) {
+  if (evt.target.className === "sports_book_name") {
+    // TODO(dburger): launch sportsbook by name
+    console.log(`Clicked ${evt.target.innerText}`);
+    // evt.preventDefault();
+    // evt.stopPropagation();
+  }
+}, true);
