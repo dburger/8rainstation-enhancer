@@ -1,7 +1,3 @@
-/*
-Currently not using CSS modifications.
-
-a[href^="/search/plays"] {
+div.sports_book_name {
   border: 2px solid red !important;
 }
- */

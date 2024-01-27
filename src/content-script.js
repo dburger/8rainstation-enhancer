@@ -42,11 +42,23 @@ if (settingsAnchor) {
   console.log("Settings link not found, navigation not added.");
 }
 
+const getUrl = (book) => {
+  if (book === "FanDuel") {
+    return "https://sportsbook.fanduel.com/";
+  } else if (book === "DraftKings") {
+    return "https://sportsbook.draftkings.com/";
+  } else {
+    return null;
+  }
+}
+
 window.addEventListener('click', function(evt) {
-  if (evt.target.className === "sports_book_name") {
-    // TODO(dburger): launch sportsbook by name
-    console.log(`Clicked ${evt.target.innerText}`);
-    // evt.preventDefault();
-    // evt.stopPropagation();
+  if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
+    const url = getUrl(evt.target.innerText);
+    if (url) {
+      window.open(url, "_blank");
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
   }
 }, true);
