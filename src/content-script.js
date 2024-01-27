@@ -26,9 +26,18 @@ const arbPlaysDiv = () => {
       "A");
 }
 
-const settingsDiv = document.querySelector('a[href="/settings"]').parentElement;
+const addNav = (anchor) => {
+  const div = anchor.parentElement;
+  insertAfter(arbPlaysDiv(), div);
+  insertAfter(minEvPlaysDiv(3), div);
+  insertAfter(minEvPlaysDiv(4), div);
+  insertAfter(minEvPlaysDiv(5), div);
+};
 
-insertAfter(arbPlaysDiv(), settingsDiv);
-insertAfter(minEvPlaysDiv(3), settingsDiv);
-insertAfter(minEvPlaysDiv(4), settingsDiv);
-insertAfter(minEvPlaysDiv(5), settingsDiv);
+const settingsAnchor = document.querySelector('a[href="/settings"]');
+
+if (settingsAnchor) {
+  addNav(settingsAnchor);
+} else {
+  console.log("Settings link not found, navigation not added.");
+}
