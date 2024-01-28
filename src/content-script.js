@@ -62,3 +62,8 @@ window.addEventListener('click', function(evt) {
     }
   }
 }, true);
+
+// TODO(dburger): how to extract the game after click on div.sports_book_name:
+//
+// 1. Walk up to div.play
+// 2. div.play > div.header > div.game_name > a.innerText == A at B
