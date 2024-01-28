@@ -8,7 +8,7 @@ const navDiv = (href, text) => {
   a.appendChild(document.createTextNode(text));
 
   const div = document.createElement("div");
-  div.setAttribute("class", "nav");
+  div.setAttribute("class", "nav enhancer");
   div.appendChild(a);
 
   return div;

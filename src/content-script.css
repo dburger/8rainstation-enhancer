@@ -1,3 +1,8 @@
 div.sports_book_name {
-  border: 2px solid red !important;
+    border: 2px solid red !important;
+    cursor: crosshair;
+}
+
+.nav.enhancer {
+    border: 2px solid red !important;
 }
