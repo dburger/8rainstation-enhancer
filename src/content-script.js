@@ -44,7 +44,7 @@ if (settingsAnchor) {
 
 const getUrl = (book) => {
   if (book === "FanDuel") {
-    return "https://sportsbook.fanduel.com/";
+    return "https://sportsbook.fanduel.com/search";
   } else if (book === "DraftKings") {
     return "https://sportsbook.draftkings.com/";
   } else {
