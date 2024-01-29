@@ -7,8 +7,11 @@ const closeSportsbookTabs = () => {
             // between this background worker and the content script so that we are
             // not repeating ourselves.
             console.log(tab.url);
-            if (tab.url.startsWith("https://bet.wynnbet.com") ||
+            if (tab.url.includes("betrivers.com") ||
+                tab.url.includes("unibet.com") ||
+                tab.url.startsWith("https://bet.wynnbet.com") ||
                 tab.url.startsWith("https://espnbet.com") ||
+                tab.url.startsWith("https://www.playdesertdiamond.com") ||
                 tab.url.startsWith("https://sportsbook.caesars.com") ||
                 tab.url.startsWith("https://sportsbook.fanduel.com") ||
                 tab.url.startsWith("https://sportsbook.draftkings.com") ||
