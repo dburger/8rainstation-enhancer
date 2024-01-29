@@ -1,13 +1,12 @@
-div.sports_book_name {
-    /* padding: 0.3rem; */
-    background: #000000;
-    border-radius: 0.5rem;
-    border: 0.1rem solid red;
-    margin: 0.5rem 0.2rem 0 0.4rem;
+:root {
+  --enhanced-clickable-color: yellow;
+}
 
-    /* cursor: crosshair; */
+div.sports_book_name {
+    border-radius: 0.5rem;
+    border: 0.1rem solid var(--enhanced-clickable-color);
 }
 
 .nav.enhancer {
-    border: 0.1rem solid red !important;
+    border: 0.1rem solid var(--enhanced-clickable-color) !important;
 }
