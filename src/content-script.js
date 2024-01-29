@@ -43,10 +43,30 @@ if (settingsAnchor) {
 }
 
 const getUrl = (book) => {
-  if (book === "FanDuel") {
+  if (book === "BetMGM") {
+    return "https://sports.az.betmgm.com/en/sports";
+  } else if (book === "BetRivers") {
+    return "https://az.betrivers.com";
+  } else if (book === "Betway") {
+    return "https://az.betway.com/sports/home";
+  } else if (book === "Caesars") {
+    return "https://sportsbook.caesars.com/us/az/bet/";
+  } else if (book === "ESPN Bet") {
+    return "https://espnbet.com/";
+  } else if (book === "Fliff") {
+    return "https://sports.getfliff.com/";
+  } else if (book === "Hard Rock Bet") {
+    return "https://www.hardrock.bet/az/";
+  } else if (book === "FanDuel") {
     return "https://sportsbook.fanduel.com/search";
   } else if (book === "DraftKings") {
     return "https://sportsbook.draftkings.com/";
+  } else if (book === "Pinnacle") {
+    return "https://www.pinnacle.com/en/";
+  } else if (book === "SuperBook") {
+    return "https://az.superbook.com/sports";
+  } else if (book === "WynnBET") {
+    return "https://bet.wynnbet.com/sports/us/sports/recommendations";
   } else {
     return null;
   }
