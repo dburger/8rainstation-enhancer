@@ -7,6 +7,10 @@
     // "128": "icon128.png"
   },
   "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [{
      "matches": ["https://app.8rainstation.com/*"],
      "css": ["content-script.css"],
@@ -17,6 +21,7 @@
   }],
   "options_page": "options.html",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ]
 }

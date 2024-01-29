@@ -24,10 +24,22 @@ const arbPlaysDiv = () => {
   return navDiv(
       "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=&width=",
       "A");
-}
+};
+
+const closeTabsDiv = () => {
+  const div = navDiv("", "C");
+  div.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    chrome.runtime.sendMessage(null, (resp) => {
+    });
+  });
+  return div;
+};
 
 const addNav = (anchor) => {
   const div = anchor.parentElement;
+  insertAfter(closeTabsDiv(), div);
   insertAfter(arbPlaysDiv(), div);
   insertAfter(minEvPlaysDiv(3), div);
   insertAfter(minEvPlaysDiv(4), div);
