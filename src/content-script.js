@@ -99,3 +99,6 @@ window.addEventListener('click', function(evt) {
 //
 // 1. Walk up to div.play
 // 2. div.play > div.header > div.game_name > a.innerText == A at B
+
+// TODO(dburger): remove proof of concept shared code.
+helloWorld();

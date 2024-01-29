@@ -1,3 +1,5 @@
+importScripts("./common.js");
+
 const closeSportsbookTabs = () => {
     chrome.tabs.query({ url: "https://*/*" }, (tabs) => {
         tabs.forEach((tab) => {
@@ -19,6 +21,8 @@ const closeSportsbookTabs = () => {
 // Note that we currently don't examine the message at all, as the only message
 // sent in this system is a message to close all sportsbook tabs.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // TODO(dburger): remove proof of concept shared code.
+    helloWorld();
     closeSportsbookTabs();
     return null;
 });
