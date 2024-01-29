@@ -7,9 +7,12 @@ const closeSportsbookTabs = () => {
             // between this background worker and the content script so that we are
             // not repeating ourselves.
             console.log(tab.url);
-            if (tab.url.startsWith("https://espnbet.com") ||
+            if (tab.url.startsWith("https://bet.wynnbet.com") ||
+                tab.url.startsWith("https://espnbet.com") ||
+                tab.url.startsWith("https://sportsbook.caesars.com") ||
                 tab.url.startsWith("https://sportsbook.fanduel.com") ||
-                tab.url.startsWith("https://sportsbook.draftkings.com")) {
+                tab.url.startsWith("https://sportsbook.draftkings.com") ||
+                tab.url.startsWith("https://hardrock.bet")) {
                 chrome.tabs.remove(tab.id);
             }
         });
