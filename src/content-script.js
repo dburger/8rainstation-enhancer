@@ -81,7 +81,7 @@ const getUrls = (book) => {
   } else if (book === "Fliff") {
     books.push("https://sports.getfliff.com/");
   } else if (book === "Hard Rock Bet") {
-    books.push("https://www.hardrock.bet/az/");
+    books.push("https://app.hardrock.bet");
   } else if (book === "FanDuel") {
     books.push("https://sportsbook.fanduel.com/search");
   } else if (book === "DraftKings") {
