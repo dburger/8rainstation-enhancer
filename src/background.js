@@ -14,6 +14,7 @@ const closeSportsbookTabs = () => {
                 tab.url.startsWith("https://bet.wynnbet.com") ||
                 tab.url.startsWith("https://espnbet.com") ||
                 tab.url.startsWith("https://www.playdesertdiamond.com") ||
+                tab.url.startsWith("https://sports.az.betmgm.com") ||
                 tab.url.startsWith("https://sportsbook.caesars.com") ||
                 tab.url.startsWith("https://sportsbook.fanduel.com") ||
                 tab.url.startsWith("https://sportsbook.draftkings.com") ||
