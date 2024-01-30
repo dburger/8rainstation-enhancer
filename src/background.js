@@ -17,7 +17,7 @@ const closeSportsbookTabs = () => {
                 tab.url.startsWith("https://sportsbook.caesars.com") ||
                 tab.url.startsWith("https://sportsbook.fanduel.com") ||
                 tab.url.startsWith("https://sportsbook.draftkings.com") ||
-                tab.url.startsWith("https://hardrock.bet")) {
+                tab.url.startsWith("https://app.hardrock.bet")) {
                 chrome.tabs.remove(tab.id);
             }
         });
