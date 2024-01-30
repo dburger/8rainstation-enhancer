@@ -111,9 +111,11 @@ window.addEventListener('click', function (evt) {
     const urls = getUrls(evt.target.innerText);
     // TODO(dburger): what do we want to do if we don't
     // have URLs?
+
+    // Note that we aren't preventing default or stopping propagation.
+    // That is, the details page will still open while the book is
+    // spawned in a new tab.
     if (urls.length > 0) {
-      evt.preventDefault();
-      evt.stopPropagation();
       for (let url of urls) {
         window.open(url, "_blank");
       }
