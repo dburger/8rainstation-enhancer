@@ -105,6 +105,11 @@ window.addEventListener('click', function (evt) {
 //
 // 1. Walk up to div.play
 // 2. div.play > div.header > div.game_name > a.innerText == A at B
+//
+// On Bet Market Details page opponents can be found in:
+//
+// <div class="event-box event-team">Illinois St Redbirds</div>
 
 // TODO(dburger): remove proof of concept shared code.
 helloWorld();
+
