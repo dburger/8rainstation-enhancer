@@ -22,7 +22,7 @@ const minEvPlaysDiv = (minEv) => {
 
 const arbPlaysDiv = () => {
   return navDiv(
-      "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=&width=",
+      "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=",
       "A");
 };
 
