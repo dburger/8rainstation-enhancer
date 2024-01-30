@@ -54,43 +54,49 @@ if (settingsAnchor) {
   console.log("Settings link not found, navigation not added.");
 }
 
-const getUrl = (book) => {
+const getUrls = (book) => {
+  const books = [];
   if (book === "BetMGM") {
-    return "https://sports.az.betmgm.com/en/sports";
+    books.push("https://sports.az.betmgm.com/en/sports");
   } else if (book === "BetRivers") {
-    return "https://az.betrivers.com";
+    books.push("https://az.betrivers.com");
+    books.push("https://www.playdesertdiamond.com/en/sports#home");
+    books.push("https://az.unibet.com/sports#home");
   } else if (book === "Betway") {
-    return "https://az.betway.com/sports/home";
+    books.push("https://az.betway.com/sports/home");
   } else if (book === "Caesars") {
-    return "https://sportsbook.caesars.com/us/az/bet/";
+    books.push("https://sportsbook.caesars.com/us/az/bet/");
   } else if (book === "ESPN Bet") {
-    return "https://espnbet.com/";
+    books.push("https://espnbet.com/");
   } else if (book === "Fliff") {
-    return "https://sports.getfliff.com/";
+    books.push("https://sports.getfliff.com/");
   } else if (book === "Hard Rock Bet") {
-    return "https://www.hardrock.bet/az/";
+    books.push("https://www.hardrock.bet/az/");
   } else if (book === "FanDuel") {
-    return "https://sportsbook.fanduel.com/search";
+    books.push("https://sportsbook.fanduel.com/search");
   } else if (book === "DraftKings") {
-    return "https://sportsbook.draftkings.com/";
+    books.push("https://sportsbook.draftkings.com/");
   } else if (book === "Pinnacle") {
-    return "https://www.pinnacle.com/en/";
+    books.push("https://www.pinnacle.com/en/");
   } else if (book === "SuperBook") {
-    return "https://az.superbook.com/sports";
+    books.push("https://az.superbook.com/sports");
   } else if (book === "WynnBET") {
-    return "https://bet.wynnbet.com/sports/us/sports/recommendations";
-  } else {
-    return null;
+    books.push("https://bet.wynnbet.com/sports/us/sports/recommendations");
   }
+  return books;
 }
 
-window.addEventListener('click', function(evt) {
+window.addEventListener('click', function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
-    const url = getUrl(evt.target.innerText);
-    if (url) {
-      window.open(url, "_blank");
+    const urls = getUrls(evt.target.innerText);
+    // TODO(dburger): what do we want to do if we don't
+    // have URLs?
+    if (urls.length > 0) {
       evt.preventDefault();
       evt.stopPropagation();
+      for (url of urls) {
+        window.open(url, "_blank");
+      }
     }
   }
 }, true);
