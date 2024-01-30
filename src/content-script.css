@@ -1,5 +1,11 @@
+/* Hide the top-left nav logo. It goes to the same place as the plays
+  link and consumes too much horizonal space. */
+div.logo img {
+    display: none;
+}
+
 :root {
-  --enhanced-clickable-color: yellow;
+    --enhanced-clickable-color: yellow;
 }
 
 div.sports_book_name {
