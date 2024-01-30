@@ -14,10 +14,10 @@ const navDiv = (href, text) => {
   return div;
 };
 
-const minEvPlaysDiv = (minEv) => {
+const minEvPlaysDiv = (minEv, text) => {
   return navDiv(
       `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`,
-      minEv);
+      text);
 };
 
 const arbPlaysDiv = () => {
@@ -42,7 +42,7 @@ const addNav = (anchor) => {
   insertAfter(closeTabsDiv(), div);
   insertAfter(arbPlaysDiv(), div);
   for (let i = 0; i < 6; i++) {
-    insertAfter(minEvPlaysDiv(i), div);
+    insertAfter(minEvPlaysDiv(i, i === 3 ? "THREE" : i), div);
   }
 };
 
