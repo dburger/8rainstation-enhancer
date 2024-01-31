@@ -16,7 +16,7 @@ const navDiv = (id, href, text) => {
 };
 
 const minEvUrl = (minEv) => {
-  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`;
+  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=`;
 }
 
 const minEvPlaysDiv = (minEv, text) => {
@@ -51,13 +51,18 @@ const addNav = (anchor) => {
   }
 };
 
-const settingsAnchor = document.querySelector('a[href="/settings"]');
-
-if (settingsAnchor) {
-  addNav(settingsAnchor);
-} else {
-  console.log("Settings link not found, navigation not added.");
-}
+const highlightCurrentNav = () => {
+  const url = new URL(window.location.href);
+  const tail = url.pathname + url.search + url.hash;
+  const minEv = url.searchParams.get("ev");
+  for (let i = 0; i < 6; i++) {
+    if (tail === minEvUrl(i)) {
+      const div = document.getElementById(minEv);
+      div.classList.add("active");
+      break;
+    }
+  }
+};
 
 const getUrls = (book) => {
   const books = [];
@@ -99,7 +104,7 @@ window.addEventListener('click', function (evt) {
     if (urls.length > 0) {
       evt.preventDefault();
       evt.stopPropagation();
-      for (url of urls) {
+      for (let url of urls) {
         window.open(url, "_blank");
       }
     }
@@ -118,13 +123,11 @@ window.addEventListener('click', function (evt) {
 // TODO(dburger): remove proof of concept shared code.
 helloWorld();
 
-const url = new URL(window.location.href);
-const tail = url.pathname + url.search + url.hash;
-const minEv = url.searchParams.get("ev");
-for (let i = 0; i < 6; i++) {
-  if (tail === minEvUrl(i)) {
-    const div = document.getElementById(minEv);
-    div.classList.add("active");
-    break;
-  }
+const settingsAnchor = document.querySelector('a[href="/settings"]');
+
+if (settingsAnchor) {
+  addNav(settingsAnchor);
+  highlightCurrentNav();
+} else {
+  console.log("Settings link not found, navigation not added.");
 }
