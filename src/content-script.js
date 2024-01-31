@@ -41,9 +41,9 @@ const addNav = (anchor) => {
   const div = anchor.parentElement;
   insertAfter(closeTabsDiv(), div);
   insertAfter(arbPlaysDiv(), div);
-  insertAfter(minEvPlaysDiv(3), div);
-  insertAfter(minEvPlaysDiv(4), div);
-  insertAfter(minEvPlaysDiv(5), div);
+  for (let i = 0; i < 6; i++) {
+    insertAfter(minEvPlaysDiv(i), div);
+  }
 };
 
 const settingsAnchor = document.querySelector('a[href="/settings"]');
