@@ -3,7 +3,7 @@ importScripts("./common.js");
 const closeSportsbookTabs = () => {
     chrome.tabs.query({ url: "https://*/*" }, (tabs) => {
         tabs.forEach((tab) => {
-            // TODO(dburger): add all the sportsbooks. King of need shared javascript
+            // TODO(dburger): add all the sportsbooks. Kind of need shared javascript
             // between this background worker and the content script so that we are
             // not repeating ourselves.
             console.log(tab.url);
