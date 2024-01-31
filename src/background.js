@@ -24,22 +24,6 @@ const closeSportsbookTabs = () => {
     });
 };
 
-const highlightNavLink = () => {
-    chrome.tabs.query({active: true}, (tabs) => {
-        tabs.forEach((tab) => {
-            // TODO(dburger): this is proof of concept. Change this to make it apply a highlight
-            // to the active minEv nav link.
-            const url = new URL(tab.url);
-            const tail = url.pathname + url.search + url.hash;
-            if (tail === "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25") {
-                console.log("three");
-            } else {
-                console.log("not three");
-            }
-        });
-    });
-}
-
 // Closes all sports wagering tabs upon message receipt. This is done here,
 // in a background task, as only background tasks and popups can close tabs.
 // Note that we currently don't examine the message at all, as the only message
@@ -49,8 +33,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     helloWorld();
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs();
-    } else if (message.action === HIGHLIGHT_NAV_LINK) {
-        highlightNavLink();
     }
     sendResponse({result: "OK"});
 });

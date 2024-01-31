@@ -2,12 +2,13 @@ const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
 
-const navDiv = (href, text) => {
+const navDiv = (id, href, text) => {
   const a = document.createElement("a");
   a.setAttribute("href", href);
   a.appendChild(document.createTextNode(text));
 
   const div = document.createElement("div");
+  div.setAttribute("id", id);
   div.setAttribute("class", "nav enhancer");
   div.appendChild(a);
 
@@ -16,18 +17,20 @@ const navDiv = (href, text) => {
 
 const minEvPlaysDiv = (minEv, text) => {
   return navDiv(
+      minEv,
       `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`,
       text);
 };
 
 const arbPlaysDiv = () => {
   return navDiv(
+      "arb",
       "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=",
       "A");
 };
 
 const closeTabsDiv = () => {
-  const div = navDiv("", "C");
+  const div = navDiv("closer", "", "C");
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -114,6 +117,17 @@ window.addEventListener('click', function (evt) {
 // TODO(dburger): remove proof of concept shared code.
 helloWorld();
 
-chrome.runtime.sendMessage({action: HIGHLIGHT_NAV_LINK}, (resp) => {
-  console.log(`${HIGHLIGHT_NAV_LINK} result ${resp.result}`);
-});
+const url = new URL(window.location.href);
+const tail = url.pathname + url.search + url.hash;
+const minEv = url.searchParams.get("ev");
+if (tail === "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25") {
+  const div = document.getElementById(minEv);
+  if (div) {
+    div.classList.add("active");
+    console.log("three");
+  } else {
+    console.log("not found");
+  }
+} else {
+  console.log("not three");
+}

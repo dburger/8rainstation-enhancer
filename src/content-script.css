@@ -6,6 +6,7 @@ div.logo img {
 
 :root {
     --enhanced-clickable-color: yellow;
+    --enhanced-clickable-active-color: lime;
 }
 
 div.sports_book_name {
@@ -15,4 +16,8 @@ div.sports_book_name {
 
 .nav.enhancer {
     border: 0.1rem solid var(--enhanced-clickable-color) !important;
+}
+
+.nav.enhancer.active {
+    border: 0.1rem solid var(--enhanced-clickable-active-color) !important;
 }
