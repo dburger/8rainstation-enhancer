@@ -10,6 +10,10 @@
 // when using async/await from non-module code. Thus instead of mixing
 // approaches, we just use callbacks exclusively.
 
+// TODO(dburger): javascript enums or other approach?
+const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
+const HIGHLIGHT_NAV_LINK = "highlightNavLink";
+
 const helloWorld = () => {
   console.log("hello world");
 };

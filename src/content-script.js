@@ -28,10 +28,11 @@ const arbPlaysDiv = () => {
 
 const closeTabsDiv = () => {
   const div = navDiv("", "C");
-  div.addEventListener('click', (evt) => {
+  div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    chrome.runtime.sendMessage(null, (resp) => {
+    chrome.runtime.sendMessage({action: CLOSE_SPORTSBOOK_TABS}, (resp) => {
+      console.log(`${CLOSE_SPORTSBOOK_TABS} result ${resp.result}`);
     });
   });
   return div;
@@ -113,3 +114,6 @@ window.addEventListener('click', function (evt) {
 // TODO(dburger): remove proof of concept shared code.
 helloWorld();
 
+chrome.runtime.sendMessage({action: HIGHLIGHT_NAV_LINK}, (resp) => {
+  console.log(`${HIGHLIGHT_NAV_LINK} result ${resp.result}`);
+});
