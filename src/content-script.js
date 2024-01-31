@@ -15,11 +15,12 @@ const navDiv = (id, href, text) => {
   return div;
 };
 
+const minEvUrl = (minEv) => {
+  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`;
+}
+
 const minEvPlaysDiv = (minEv, text) => {
-  return navDiv(
-      minEv,
-      `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25`,
-      text);
+  return navDiv(minEv, minEvUrl(minEv), text);
 };
 
 const arbPlaysDiv = () => {
@@ -120,14 +121,10 @@ helloWorld();
 const url = new URL(window.location.href);
 const tail = url.pathname + url.search + url.hash;
 const minEv = url.searchParams.get("ev");
-if (tail === "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25") {
-  const div = document.getElementById(minEv);
-  if (div) {
+for (let i = 0; i < 6; i++) {
+  if (tail === minEvUrl(i)) {
+    const div = document.getElementById(minEv);
     div.classList.add("active");
-    console.log("three");
-  } else {
-    console.log("not found");
+    break;
   }
-} else {
-  console.log("not three");
 }
