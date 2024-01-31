@@ -36,7 +36,7 @@ const makeSettings = (books) => {
 const DEFAULT_SETTINGS = makeSettings([
   ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
   ["BetRivers", "Kambi", "https://az.betrivers.com"],
-  ["Bally Bet", "Kambi", "https://www.ballybet.com/"],
+  ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
   ["Betway", "Betway", "https://az.betway.com/sports/home"],
   ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
   ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
