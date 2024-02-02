@@ -16,7 +16,7 @@ const navDiv = (id, href, text) => {
 };
 
 const minEvUrl = (minEv) => {
-  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=`;
+  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=&days=`;
 }
 
 const minEvPlaysDiv = (minEv, text) => {
