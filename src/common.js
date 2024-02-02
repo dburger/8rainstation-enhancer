@@ -24,7 +24,21 @@ const bookDetail = (urlTemplate) => {
 const makeSettings = () => {
   return {
     settings: {
-      "BetMGM": bookDetail("https://sports.az.betmgm.com/en/sports")
+      "BetMGM": bookDetail("https://sports.az.betmgm.com/en/sports"),
+      "BetRivers": bookDetail("https://az.betrivers.com"),
+      // TODO(dburger): do we need multiple details here?
+      // books.push("https://www.playdesertdiamond.com/en/sports#home");
+      // books.push("https://az.unibet.com/sports#home");
+      "Betway": bookDetail("https://az.betway.com/sports/home"),
+      "Caesars": bookDetail("https://sportsbook.caesars.com/us/az/bet/"),
+      "ESPN Bet": bookDetail("https://espnbet.com/search?searchTerm=${homeTeam}"),
+      "Fliff": bookDetail("https://sports.getfliff.com/"),
+      "Hard Rock Bet": bookDetail("https://app.hardrock.bet"),
+      "FanDuel": bookDetail("https://sportsbook.fanduel.com/search?q=${homeTeam}"),
+      "DraftKings": bookDetail("https://sportsbook.draftkings.com/"),
+      "Pinnacle": bookDetail("https://www.pinnacle.com/en/search/${homeTeam}"),
+      "SuperBook": bookDetail("https://az.superbook.com/sports"),
+      "WynnBET": bookDetail("https://bet.wynnbet.com/sports/us/sports/recommendations")
     }
   };
 };
