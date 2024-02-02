@@ -12,6 +12,7 @@
 
 // TODO(dburger): javascript enums or other approach?
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
+const OPEN_OPTIONS_TAB = "openOptionsTab";
 
 const bookDetail = (urlTemplate) => {
   const url = new URL(urlTemplate);

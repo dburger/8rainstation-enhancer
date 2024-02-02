@@ -66,6 +66,8 @@ const arbPlaysDiv = () => {
   return navDiv("arb", ARB_URL, "A");
 };
 
+// TODO(dburger: DRY the next two.
+
 const closeTabsDiv = () => {
   const div = navDiv("closer", "", "C");
   div.addEventListener("click", (evt) => {
@@ -76,7 +78,23 @@ const closeTabsDiv = () => {
       settings : settings.settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
-      console.log(`${CLOSE_SPORTSBOOK_TABS} result ${resp.result}`);
+      console.log(`${message.action} result ${resp.result}`);
+    });
+  });
+  return div;
+};
+
+const openOptionsDiv = () => {
+  const div = navDiv("options", "", "O");
+  div.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const message = {
+      action: OPEN_OPTIONS_TAB,
+      settings : settings.settings
+    };
+    chrome.runtime.sendMessage(message, (resp) => {
+      console.log(`${message.action} result ${resp.result}`);
     });
   });
   return div;
@@ -84,6 +102,7 @@ const closeTabsDiv = () => {
 
 const addNav = (anchor) => {
   const div = anchor.parentElement;
+  insertAfter(openOptionsDiv(), div);
   insertAfter(closeTabsDiv(), div);
   insertAfter(arbPlaysDiv(), div);
   for (let i = 0; i < 6; i++) {

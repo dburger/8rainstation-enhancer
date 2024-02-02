@@ -25,6 +25,8 @@ const closeSportsbookTabs = (settings) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs(message.settings);
+    } else if (message.action === OPEN_OPTIONS_TAB) {
+        chrome.runtime.openOptionsPage();
     }
     sendResponse({result: "OK"});
 });
