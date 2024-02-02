@@ -1,3 +1,5 @@
+const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
+
 const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
@@ -17,17 +19,14 @@ const navDiv = (id, href, text) => {
 
 const minEvUrl = (minEv) => {
   return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=&days=`;
-}
+};
 
 const minEvPlaysDiv = (minEv, text) => {
   return navDiv(minEv, minEvUrl(minEv), text);
 };
 
 const arbPlaysDiv = () => {
-  return navDiv(
-      "arb",
-      "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=",
-      "A");
+  return navDiv("arb", ARB_URL, "A");
 };
 
 const closeTabsDiv = () => {
@@ -51,16 +50,27 @@ const addNav = (anchor) => {
   }
 };
 
+const highlightNavDiv = (id) => {
+  const div = document.getElementById(id);
+  if (div) {
+    div.classList.add("active");
+  }
+};
+
 const highlightCurrentNav = () => {
   const url = new URL(window.location.href);
   const tail = url.pathname + url.search + url.hash;
+
   const minEv = url.searchParams.get("ev");
   for (let i = 0; i < 6; i++) {
     if (tail === minEvUrl(i)) {
-      const div = document.getElementById(minEv);
-      div.classList.add("active");
-      break;
+      highlightNavDiv(minEv);
+      return;
     }
+  }
+
+  if (tail === ARB_URL) {
+    highlightNavDiv("arb");
   }
 };
 
