@@ -1,7 +1,25 @@
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
-const insertAfter = (newElem, elem) => {
-  elem.parentElement.insertBefore(newElem, elem.nextSibling);
+const getHomeTeam = (elem) => {
+  // Plays page.
+  const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
+  if (div) {
+    const gdiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
+    if (gdiv) {
+      const parts = gdiv.innerText.split(" at ");
+      if (parts.length === 2) {
+        return parts[1];
+      }
+    }
+  }
+
+  // Book Market Details page.
+  const divs = document.querySelectorAll("div.event-team");
+  if (divs.length === 2) {
+    return divs[1].innerText;
+  }
+
+  return null;
 };
 
 const navDiv = (id, href, text) => {
@@ -109,6 +127,10 @@ const getUrls = (book) => {
 window.addEventListener('click', function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
     const urls = getUrls(evt.target.innerText);
+    const homeTeam = getHomeTeam(evt.target);
+    console.log("found home team", homeTeam);
+    // TODO(dburger): use homeTeam for deep linking.
+
     // TODO(dburger): what do we want to do if we don't
     // have URLs?
 
@@ -122,15 +144,6 @@ window.addEventListener('click', function (evt) {
     }
   }
 }, true);
-
-// TODO(dburger): how to extract the game after click on div.sports_book_name:
-//
-// 1. Walk up to div.play
-// 2. div.play > div.header > div.game_name > a.innerText == A at B
-//
-// On Bet Market Details page opponents can be found in:
-//
-// <div class="event-box event-team">Illinois St Redbirds</div>
 
 const settingsAnchor = document.querySelector('a[href="/settings"]');
 

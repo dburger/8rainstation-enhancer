@@ -38,3 +38,28 @@ const getSettings = (callback) => {
 const setSettings = (callback) => {
   chrome.storage.sync.set(makeSettings(), callback);
 }
+
+const insertAfter = (newElem, elem) => {
+  elem.parentElement.insertBefore(newElem, elem.nextSibling);
+};
+
+const walkUp = (elem, pred) => {
+  if (pred(elem)) {
+    return elem;
+  }
+  return elem.parentElement ? walkUp(elem.parentElement, pred) : null;
+}
+
+const walkDown = (elem, pred) => {
+  if (pred(elem)) {
+    return elem;
+  }
+  // TODO(dburger): This is depth first, perhaps switch this to breadth first.
+  for (child of elem.childNodes) {
+    const result = walkDown(child, pred);
+    if (result) {
+      return result;
+    }
+  }
+  return null;
+}
