@@ -7,7 +7,9 @@ const closeSportsbookTabs = () => {
             // between this background worker and the content script so that we are
             // not repeating ourselves.
             console.log(tab.url);
-            if (tab.url.includes("betrivers.com") ||
+            if (!tab.active && (
+                tab.url.includes("app.8rainstation.com") ||
+                tab.url.includes("betrivers.com") ||
                 tab.url.includes("betway.com") ||
                 tab.url.includes("unibet.com") ||
                 tab.url.includes("superbook.com") ||
@@ -18,7 +20,7 @@ const closeSportsbookTabs = () => {
                 tab.url.startsWith("https://sportsbook.caesars.com") ||
                 tab.url.startsWith("https://sportsbook.fanduel.com") ||
                 tab.url.startsWith("https://sportsbook.draftkings.com") ||
-                tab.url.startsWith("https://app.hardrock.bet")) {
+                tab.url.startsWith("https://app.hardrock.bet"))) {
                 chrome.tabs.remove(tab.id);
             }
         });
