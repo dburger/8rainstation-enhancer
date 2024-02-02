@@ -105,17 +105,17 @@ const getUrls = (book) => {
   } else if (book === "Caesars") {
     books.push("https://sportsbook.caesars.com/us/az/bet/");
   } else if (book === "ESPN Bet") {
-    books.push("https://espnbet.com/");
+    books.push("https://espnbet.com/search?searchTerm=${homeTeam}");
   } else if (book === "Fliff") {
     books.push("https://sports.getfliff.com/");
   } else if (book === "Hard Rock Bet") {
     books.push("https://app.hardrock.bet");
   } else if (book === "FanDuel") {
-    books.push("https://sportsbook.fanduel.com/search");
+    books.push("https://sportsbook.fanduel.com/search?q=${homeTeam}");
   } else if (book === "DraftKings") {
     books.push("https://sportsbook.draftkings.com/");
   } else if (book === "Pinnacle") {
-    books.push("https://www.pinnacle.com/en/");
+    books.push("https://www.pinnacle.com/en/search/${homeTeam}");
   } else if (book === "SuperBook") {
     books.push("https://az.superbook.com/sports");
   } else if (book === "WynnBET") {
@@ -139,6 +139,9 @@ window.addEventListener('click', function (evt) {
     // spawned in a new tab.
     if (urls.length > 0) {
       for (let url of urls) {
+        if (homeTeam) {
+          url = url.replace("${homeTeam}", homeTeam);
+        }
         window.open(url, "_blank");
       }
     }
