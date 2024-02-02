@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     defaultsButton.addEventListener("click", (evt) => {
-        console.log("defaults");
+        chrome.storage.sync.clear();
+        getSettings(loadSettings);
     });
 });
