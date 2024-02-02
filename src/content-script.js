@@ -1,5 +1,16 @@
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
+const isPlaysPage = () => {
+  return window.location.href.includes("/search/plays");
+};
+
+const isBetMarketDetailsPage = () => {
+  // TODO(dburger): This isn't strictly true, the events page will also
+  // render with a single slash at the end. Could check for the existence
+  // of characters past the slash.
+  return window.location.href.includes("/events/");
+}
+
 const getHomeTeam = (elem) => {
   // Plays page.
   const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
@@ -124,19 +135,18 @@ const getUrls = (book) => {
   return books;
 }
 
-window.addEventListener('click', function (evt) {
+window.addEventListener("click", function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
     const urls = getUrls(evt.target.innerText);
     const homeTeam = getHomeTeam(evt.target);
-    console.log("found home team", homeTeam);
-    // TODO(dburger): use homeTeam for deep linking.
 
-    // TODO(dburger): what do we want to do if we don't
-    // have URLs?
+    // In the case of the Bet Market Details page we don't want to pop up
+    // the save bet dialog if they clicked the book name.
+    if (isBetMarketDetailsPage()) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
 
-    // Note that we aren't preventing default or stopping propagation.
-    // That is, the details page will still open while the book is
-    // spawned in a new tab.
     if (urls.length > 0) {
       for (let url of urls) {
         if (homeTeam) {
