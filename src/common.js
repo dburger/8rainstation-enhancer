@@ -12,18 +12,12 @@
 
 // TODO(dburger): javascript enums or other approach?
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
-const HIGHLIGHT_NAV_LINK = "highlightNavLink";
 
-const helloWorld = () => {
-  console.log("hello world");
-};
-
-/*
 const makeSettings = () => {
   return {
     settings: {
     }
-  }
+  };
 };
 
 const DEFAULT_SETTINGS = makeSettings();
@@ -33,6 +27,5 @@ const getSettings = (callback) => {
 }
 
 const setSettings = (callback) => {
-  chrome.storage.sync.set(makeSettings(target, showMark), callback);
+  chrome.storage.sync.set(makeSettings(), callback);
 }
-*/
