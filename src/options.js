@@ -1,3 +1,9 @@
+const removeChildren = (elem) => {
+    while (elem.lastChild) {
+        elem.removeChild(elem.lastChild);
+    }
+}
+
 const createInputText = (value) => {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
@@ -19,8 +25,8 @@ const createBooksRow = (key, urlTemplate) => {
 };
 
 const loadSettings = (settings) => {
-    const booksTable = document.getElementById("books");
-    const tbody = booksTable.querySelector("tbody");
+    const tbody = document.getElementById("booksBody");
+    removeChildren(tbody);
 
     // Array.from(settings) and then sort by the first element, I think.
     // actually it is in settings.settings, do you want that?
@@ -31,4 +37,20 @@ const loadSettings = (settings) => {
 
 document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
+
+    const saveButton = document.getElementById("save");
+    const reloadButton = document.getElementById("reload");
+    const defaultsButton = document.getElementById("defaults");
+
+    saveButton.addEventListener("click", (evt) => {
+        console.log("save");
+    });
+
+    reloadButton.addEventListener("click", (evt) => {
+        getSettings(loadSettings);
+    });
+
+    defaultsButton.addEventListener("click", (evt) => {
+        console.log("defaults");
+    });
 });
