@@ -1,27 +1,18 @@
 importScripts("./common.js");
 
-const closeSportsbookTabs = () => {
+const closeSportsbookTabs = (settings) => {
+    const hosts = [];
+    for (const bookDetail of Object.values(settings)) {
+        hosts.push(bookDetail.hostname);
+    }
     chrome.tabs.query({url: "https://*/*"}, (tabs) => {
         tabs.forEach((tab) => {
-            // TODO(dburger): add all the sportsbooks. Kind of need shared javascript
-            // between this background worker and the content script so that we are
-            // not repeating ourselves.
-            console.log(tab.url);
-            if (!tab.active && (
-                tab.url.includes("app.8rainstation.com") ||
-                tab.url.includes("betrivers.com") ||
-                tab.url.includes("betway.com") ||
-                tab.url.includes("unibet.com") ||
-                tab.url.includes("superbook.com") ||
-                tab.url.startsWith("https://bet.wynnbet.com") ||
-                tab.url.startsWith("https://espnbet.com") ||
-                tab.url.startsWith("https://www.playdesertdiamond.com") ||
-                tab.url.startsWith("https://sports.az.betmgm.com") ||
-                tab.url.startsWith("https://sportsbook.caesars.com") ||
-                tab.url.startsWith("https://sportsbook.fanduel.com") ||
-                tab.url.startsWith("https://sportsbook.draftkings.com") ||
-                tab.url.startsWith("https://app.hardrock.bet"))) {
-                chrome.tabs.remove(tab.id);
+            if (!tab.active) {
+                for (let i = 0; i < hosts.length; i++) {
+                    if (tab.url.includes(hosts[i])) {
+                        chrome.tabs.remove(tab.id);
+                    }
+                }
             }
         });
     });
@@ -33,7 +24,7 @@ const closeSportsbookTabs = () => {
 // sent in this system is a message to close all sportsbook tabs.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
-        closeSportsbookTabs();
+        closeSportsbookTabs(message.settings);
     }
     sendResponse({result: "OK"});
 });

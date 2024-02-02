@@ -16,7 +16,7 @@ const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const bookDetail = (urlTemplate) => {
   const url = new URL(urlTemplate);
   return {
-    domain: url.hostname,
+    hostname: url.hostname,
     urlTemplate: urlTemplate
   };
 };

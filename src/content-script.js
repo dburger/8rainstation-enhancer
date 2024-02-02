@@ -1,3 +1,11 @@
+// As I understand it, content scripts cannot work as modules. This prevents us
+// from using async / await. Thus, the settings are retrieved here with a callback
+// instead of on demand when needed. If this page changes to need some of the
+// settings on initialization, that code will have to be moved into this callback.
+// For now, initialization like adding the custom links, lives outside this callback.
+let settings = null;
+getSettings((s) => settings = s);
+
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
 const isPlaysPage = () => {
@@ -63,7 +71,11 @@ const closeTabsDiv = () => {
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    chrome.runtime.sendMessage({action: CLOSE_SPORTSBOOK_TABS}, (resp) => {
+    const message = {
+      action: CLOSE_SPORTSBOOK_TABS,
+      settings : settings.settings
+    };
+    chrome.runtime.sendMessage(message, (resp) => {
       console.log(`${CLOSE_SPORTSBOOK_TABS} result ${resp.result}`);
     });
   });
@@ -104,35 +116,12 @@ const highlightCurrentNav = () => {
 };
 
 const getUrls = (book) => {
-  const books = [];
-  if (book === "BetMGM") {
-    books.push("https://sports.az.betmgm.com/en/sports");
-  } else if (book === "BetRivers") {
-    books.push("https://az.betrivers.com");
-    books.push("https://www.playdesertdiamond.com/en/sports#home");
-    books.push("https://az.unibet.com/sports#home");
-  } else if (book === "Betway") {
-    books.push("https://az.betway.com/sports/home");
-  } else if (book === "Caesars") {
-    books.push("https://sportsbook.caesars.com/us/az/bet/");
-  } else if (book === "ESPN Bet") {
-    books.push("https://espnbet.com/search?searchTerm=${homeTeam}");
-  } else if (book === "Fliff") {
-    books.push("https://sports.getfliff.com/");
-  } else if (book === "Hard Rock Bet") {
-    books.push("https://app.hardrock.bet");
-  } else if (book === "FanDuel") {
-    books.push("https://sportsbook.fanduel.com/search?q=${homeTeam}");
-  } else if (book === "DraftKings") {
-    books.push("https://sportsbook.draftkings.com/");
-  } else if (book === "Pinnacle") {
-    books.push("https://www.pinnacle.com/en/search/${homeTeam}");
-  } else if (book === "SuperBook") {
-    books.push("https://az.superbook.com/sports");
-  } else if (book === "WynnBET") {
-    books.push("https://bet.wynnbet.com/sports/us/sports/recommendations");
+  const bookDetails = settings.settings[book];
+  if (bookDetails) {
+    return [bookDetails.urlTemplate];
+  } else {
+    return [];
   }
-  return books;
 }
 
 window.addEventListener("click", function (evt) {
