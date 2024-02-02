@@ -30,8 +30,6 @@ const closeSportsbookTabs = () => {
 // Note that we currently don't examine the message at all, as the only message
 // sent in this system is a message to close all sportsbook tabs.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // TODO(dburger): remove proof of concept shared code.
-    helloWorld();
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs();
     }

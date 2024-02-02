@@ -120,9 +120,6 @@ window.addEventListener('click', function (evt) {
 //
 // <div class="event-box event-team">Illinois St Redbirds</div>
 
-// TODO(dburger): remove proof of concept shared code.
-helloWorld();
-
 const settingsAnchor = document.querySelector('a[href="/settings"]');
 
 if (settingsAnchor) {
