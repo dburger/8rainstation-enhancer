@@ -13,9 +13,18 @@
 // TODO(dburger): javascript enums or other approach?
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 
+const bookDetail = (urlTemplate) => {
+  const url = new URL(urlTemplate);
+  return {
+    domain: url.hostname,
+    urlTemplate: urlTemplate
+  };
+};
+
 const makeSettings = () => {
   return {
     settings: {
+      "BetMGM": bookDetail("https://sports.az.betmgm.com/en/sports")
     }
   };
 };
