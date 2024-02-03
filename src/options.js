@@ -11,16 +11,19 @@ const createInputText = (value) => {
     return input;
 };
 
-const createBooksRowTd = (value) => {
+const createBooksRowTd = (value, className) => {
     const td = document.createElement("td");
     td.appendChild(createInputText(value));
+    if (className) {
+        td.className = className;
+    }
     return td;
 }
 
 const createBooksRow = (key, urlTemplate) => {
     const tr = document.createElement("tr");
     tr.appendChild(createBooksRowTd(key));
-    tr.appendChild(createBooksRowTd(urlTemplate));
+    tr.appendChild(createBooksRowTd(urlTemplate, "url"));
     return tr;
 };
 
