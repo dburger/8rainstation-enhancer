@@ -4,6 +4,8 @@
 // settings on initialization, that code will have to be moved into this callback.
 // For now, initialization like adding the custom links, lives outside this callback.
 let settings = null;
+
+// TODO(dburger): bahhhhh, should only store settings.settings.
 getSettings((s) => settings = s);
 
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
@@ -137,7 +139,15 @@ const highlightCurrentNav = () => {
 const getUrls = (book) => {
   const bookDetails = settings.settings[book];
   if (bookDetails) {
-    return [bookDetails.urlTemplate];
+    const urls = [];
+    const oddsGroup = bookDetails.oddsGroup;
+    // TODO(dburger): filter instead?
+    for (const bd of Object.values(settings.settings)) {
+      if (bd.oddsGroup === oddsGroup) {
+        urls.push(bd.urlTemplate);
+      }
+    }
+    return urls;
   } else {
     return [];
   }

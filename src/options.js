@@ -27,16 +27,17 @@ const createBooksRowTd = (value, className) => {
     return td;
 }
 
-const createBooksRow = (key, urlTemplate) => {
+const createBooksRow = (key, oddsGroup, urlTemplate) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
     tr.appendChild(createBooksRowTd(key));
+    tr.appendChild(createBooksRowTd(oddsGroup));
     tr.appendChild(createBooksRowTd(urlTemplate, "url"));
     return tr;
 };
 
-const addBookRow = (tbody, key, urlTemplate) => {
-    tbody.appendChild(createBooksRow(key, urlTemplate));
+const addBookRow = (tbody, key, oddsGroup, urlTemplate) => {
+    tbody.appendChild(createBooksRow(key, oddsGroup, urlTemplate));
 };
 
 const loadSettings = (settings) => {
@@ -46,7 +47,7 @@ const loadSettings = (settings) => {
     // Array.from(settings) and then sort by the first element, I think.
     // actually it is in settings.settings, do you want that?
     for (const [key, value] of Object.entries(settings.settings)) {
-        addBookRow(tbody, key, value.urlTemplate);
+        addBookRow(tbody, key, value.oddsGroup, value.urlTemplate);
     }
 };
 
@@ -63,8 +64,9 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         const books = [];
         for (const tr of tbody.childNodes) {
             const key = tr.childNodes[1].childNodes[0].value;
-            const urlTemplate = tr.childNodes[2].childNodes[0].value;
-            books.push([key, urlTemplate]);
+            const oddsGroup = tr.childNodes[2].childNodes[0].value;
+            const urlTemplate = tr.childNodes[3].childNodes[0].value;
+            books.push([key, oddsGroup, urlTemplate]);
         }
         setSettings(books, (e) => {
             if (chrome.runtime.lastError) {

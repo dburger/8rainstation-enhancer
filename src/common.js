@@ -14,10 +14,11 @@
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
-const bookDetail = (urlTemplate) => {
+const bookDetail = (oddsGroup, urlTemplate) => {
   const url = new URL(urlTemplate);
   return {
     hostname: url.hostname,
+    oddsGroup: oddsGroup,
     urlTemplate: urlTemplate
   };
 };
@@ -27,27 +28,27 @@ const makeSettings = (books) => {
     settings: {}
   };
   for (const book of books) {
-    settings.settings[book[0]] = bookDetail(book[1]);
+    settings.settings[book[0]] = bookDetail(book[1], book[2]);
   }
   return settings;
 };
 
 const DEFAULT_SETTINGS = makeSettings([
-  ["BetMGM", "https://sports.az.betmgm.com/en/sports"],
-  ["BetRivers", "https://az.betrivers.com"],
-  // TODO(dburger): do we need multiple details here?
-  // books.push("https://www.playdesertdiamond.com/en/sports#home");
-  // books.push("https://az.unibet.com/sports#home");
-  ["Betway", "https://az.betway.com/sports/home"],
-  ["Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
-  ["ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
-  ["Fliff", "https://sports.getfliff.com/"],
-  ["Hard Rock Bet", "https://app.hardrock.bet"],
-  ["FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
-  ["DraftKings", "https://sportsbook.draftkings.com/"],
-  ["Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
-  ["SuperBook", "https://az.superbook.com/sports"],
-  ["WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
+  ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
+  ["BetRivers", "Kambi", "https://az.betrivers.com"],
+  ["Bally Bet", "Kambi", "https://www.ballybet.com/"],
+  ["Betway", "Betway", "https://az.betway.com/sports/home"],
+  ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
+  ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
+  ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
+  ["Fliff", "Fliff", "https://sports.getfliff.com/"],
+  ["Hard Rock Bet", "Hard Rock Bet", "https://app.hardrock.bet"],
+  ["FanDuel", "FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
+  ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
+  ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
+  ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
+  ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
+  ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
 ]);
 
 const getSettings = (callback) => {
