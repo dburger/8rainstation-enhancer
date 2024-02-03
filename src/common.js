@@ -22,36 +22,46 @@ const bookDetail = (urlTemplate) => {
   };
 };
 
-const makeSettings = () => {
-  return {
-    settings: {
-      "BetMGM": bookDetail("https://sports.az.betmgm.com/en/sports"),
-      "BetRivers": bookDetail("https://az.betrivers.com"),
-      // TODO(dburger): do we need multiple details here?
-      // books.push("https://www.playdesertdiamond.com/en/sports#home");
-      // books.push("https://az.unibet.com/sports#home");
-      "Betway": bookDetail("https://az.betway.com/sports/home"),
-      "Caesars": bookDetail("https://sportsbook.caesars.com/us/az/bet/"),
-      "ESPN Bet": bookDetail("https://espnbet.com/search?searchTerm=${homeTeam}"),
-      "Fliff": bookDetail("https://sports.getfliff.com/"),
-      "Hard Rock Bet": bookDetail("https://app.hardrock.bet"),
-      "FanDuel": bookDetail("https://sportsbook.fanduel.com/search?q=${homeTeam}"),
-      "DraftKings": bookDetail("https://sportsbook.draftkings.com/"),
-      "Pinnacle": bookDetail("https://www.pinnacle.com/en/search/${homeTeam}"),
-      "SuperBook": bookDetail("https://az.superbook.com/sports"),
-      "WynnBET": bookDetail("https://bet.wynnbet.com/sports/us/sports/recommendations")
-    }
+const makeSettings = (books) => {
+  const settings = {
+    settings: {}
   };
+  for (const book of books) {
+    settings.settings[book[0]] = bookDetail(book[1]);
+  }
+  return settings;
 };
 
-const DEFAULT_SETTINGS = makeSettings();
+const DEFAULT_SETTINGS = makeSettings([
+  ["BetMGM", "https://sports.az.betmgm.com/en/sports"],
+  ["BetRivers", "https://az.betrivers.com"],
+  // TODO(dburger): do we need multiple details here?
+  // books.push("https://www.playdesertdiamond.com/en/sports#home");
+  // books.push("https://az.unibet.com/sports#home");
+  ["Betway", "https://az.betway.com/sports/home"],
+  ["Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
+  ["ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
+  ["Fliff", "https://sports.getfliff.com/"],
+  ["Hard Rock Bet", "https://app.hardrock.bet"],
+  ["FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
+  ["DraftKings", "https://sportsbook.draftkings.com/"],
+  ["Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
+  ["SuperBook", "https://az.superbook.com/sports"],
+  ["WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
+]);
 
 const getSettings = (callback) => {
-  chrome.storage.sync.get(DEFAULT_SETTINGS, callback);
+  chrome.storage.sync.get({settings: {}}, (s) => {
+    if (Object.keys(s.settings).length === 0) {
+      callback(DEFAULT_SETTINGS);
+    } else {
+      callback(s);
+    }
+  });
 }
 
-const setSettings = (callback) => {
-  chrome.storage.sync.set(makeSettings(), callback);
+const setSettings = (books, callback) => {
+  chrome.storage.sync.set(makeSettings(books), callback);
 }
 
 const insertAfter = (newElem, elem) => {

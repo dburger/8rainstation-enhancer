@@ -60,6 +60,17 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     saveButton.addEventListener("click", (evt) => {
         console.log("save");
+        const books = [];
+        for (const tr of tbody.childNodes) {
+            const key = tr.childNodes[1].childNodes[0].value;
+            const urlTemplate = tr.childNodes[2].childNodes[0].value;
+            books.push([key, urlTemplate]);
+        }
+        setSettings(books, (e) => {
+            if (chrome.runtime.lastError) {
+                window.alert(chrome.runtime.lastError.message);
+            }
+        });
     });
 
     reloadButton.addEventListener("click", (evt) => {
