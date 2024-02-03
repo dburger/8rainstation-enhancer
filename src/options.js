@@ -35,6 +35,10 @@ const createBooksRow = (key, urlTemplate) => {
     return tr;
 };
 
+const addBookRow = (tbody, key, urlTemplate) => {
+    tbody.appendChild(createBooksRow(key, urlTemplate));
+};
+
 const loadSettings = (settings) => {
     const tbody = document.getElementById("booksBody");
     removeChildren(tbody);
@@ -42,7 +46,7 @@ const loadSettings = (settings) => {
     // Array.from(settings) and then sort by the first element, I think.
     // actually it is in settings.settings, do you want that?
     for (const [key, value] of Object.entries(settings.settings)) {
-      tbody.appendChild(createBooksRow(key, value.urlTemplate));
+        addBookRow(tbody, key, value.urlTemplate);
     }
 };
 
@@ -52,6 +56,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const saveButton = document.getElementById("save");
     const reloadButton = document.getElementById("reload");
     const defaultsButton = document.getElementById("defaults");
+    const addButton = document.getElementById("add");
 
     saveButton.addEventListener("click", (evt) => {
         console.log("save");
@@ -64,6 +69,10 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     defaultsButton.addEventListener("click", (evt) => {
         chrome.storage.sync.clear();
         getSettings(loadSettings);
+    });
+
+    addButton.addEventListener("click", (evt) => {
+        addBookRow(tbody, "", "");
     });
 
     // const booksTable = document.getElementById("books");
