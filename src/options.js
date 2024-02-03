@@ -11,6 +11,13 @@ const createInputText = (value) => {
     return input;
 };
 
+const createDeleteRowTd = () => {
+  const td = document.createElement("td");
+  td.innerText = "X";
+  td.className = "deleter";
+  return td;
+};
+
 const createBooksRowTd = (value, className) => {
     const td = document.createElement("td");
     td.appendChild(createInputText(value));
@@ -22,6 +29,7 @@ const createBooksRowTd = (value, className) => {
 
 const createBooksRow = (key, urlTemplate) => {
     const tr = document.createElement("tr");
+    tr.appendChild(createDeleteRowTd());
     tr.appendChild(createBooksRowTd(key));
     tr.appendChild(createBooksRowTd(urlTemplate, "url"));
     return tr;
@@ -56,5 +64,13 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     defaultsButton.addEventListener("click", (evt) => {
         chrome.storage.sync.clear();
         getSettings(loadSettings);
+    });
+
+    // const booksTable = document.getElementById("books");
+    const tbody = document.getElementById("booksBody")
+    tbody.addEventListener("click", (evt) => {
+        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+            tbody.removeChild(evt.target.parentElement);
+        }
     });
 });

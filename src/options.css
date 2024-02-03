@@ -23,3 +23,7 @@ p.instructions {
 td.url input {
   width: 30rem;
 }
+
+td.deleter {
+  cursor: pointer;
+}
