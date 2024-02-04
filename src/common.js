@@ -25,10 +25,10 @@ const bookDetail = (oddsGroup, urlTemplate) => {
 
 const makeSettings = (books) => {
   const settings = {
-    settings: {}
+    v1: {}
   };
   for (const book of books) {
-    settings.settings[book[0]] = bookDetail(book[1], book[2]);
+    settings.v1[book[0]] = bookDetail(book[1], book[2]);
   }
   return settings;
 };
@@ -52,12 +52,9 @@ const DEFAULT_SETTINGS = makeSettings([
 ]);
 
 const getSettings = (callback) => {
-  chrome.storage.sync.get({settings: {}}, (s) => {
-    if (Object.keys(s.settings).length === 0) {
-      callback(DEFAULT_SETTINGS);
-    } else {
-      callback(s);
-    }
+  chrome.storage.sync.get({v1: {}}, (s) => {
+    const settings = s.v1 === undefined ? DEFAULT_SETTINGS.v1 : s.v1;
+    callback(settings);
   });
 }
 

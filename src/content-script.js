@@ -5,8 +5,7 @@
 // For now, initialization like adding the custom links, lives outside this callback.
 let settings = null;
 
-// TODO(dburger): bahhhhh, should only store settings.settings.
-getSettings((s) => settings = s);
+getSettings(s => settings = s);
 
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
@@ -77,7 +76,7 @@ const closeTabsDiv = () => {
     evt.stopPropagation();
     const message = {
       action: CLOSE_SPORTSBOOK_TABS,
-      settings : settings.settings
+      settings : settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
       console.log(`${message.action} result ${resp.result}`);
@@ -93,7 +92,7 @@ const openOptionsDiv = () => {
     evt.stopPropagation();
     const message = {
       action: OPEN_OPTIONS_TAB,
-      settings : settings.settings
+      settings : settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
       console.log(`${message.action} result ${resp.result}`);
@@ -137,12 +136,12 @@ const highlightCurrentNav = () => {
 };
 
 const getUrls = (book) => {
-  const bookDetails = settings.settings[book];
+  const bookDetails = settings[book];
   if (bookDetails) {
     const urls = [];
     const oddsGroup = bookDetails.oddsGroup;
     // TODO(dburger): filter instead?
-    for (const bd of Object.values(settings.settings)) {
+    for (const bd of Object.values(settings)) {
       if (bd.oddsGroup === oddsGroup) {
         urls.push(bd.urlTemplate);
       }
