@@ -71,7 +71,7 @@ const arbPlaysDiv = () => {
 // TODO(dburger: DRY the next two.
 
 const closeTabsDiv = () => {
-  const div = navDiv("closer", "", "C");
+  const div = navDiv("closer", "", "X");
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
