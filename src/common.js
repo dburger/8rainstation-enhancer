@@ -81,7 +81,7 @@ const walkDown = (elem, pred) => {
     return elem;
   }
   // TODO(dburger): This is depth first, perhaps switch this to breadth first.
-  for (child of elem.childNodes) {
+  for (const child of elem.childNodes) {
     const result = walkDown(child, pred);
     if (result) {
       return result;
