@@ -53,7 +53,7 @@ const DEFAULT_SETTINGS = makeSettings([
 
 const getSettings = (callback) => {
   chrome.storage.sync.get({v1: {}}, (s) => {
-    const settings = s.v1 === undefined ? DEFAULT_SETTINGS.v1 : s.v1;
+    const settings = Object.keys(s.v1).length === 0 ? DEFAULT_SETTINGS.v1 : s.v1;
     callback(settings);
   });
 }
