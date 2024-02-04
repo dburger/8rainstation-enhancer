@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     addButton.addEventListener("click", (evt) => {
-        addBookRow(tbody, "", "");
+        addBookRow(tbody, "", "", "");
     });
 
     // const booksTable = document.getElementById("books");
