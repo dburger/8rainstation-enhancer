@@ -59,6 +59,13 @@ const minEvUrl = (minEv) => {
   return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7`;
 };
 
+/**
+ * Creates and returns the clickable navigation div for minimum EV plays.
+ *
+ * @param minEv {number} - The minimum EV of plays to display.
+ * @param text {number|string} - The text to display in the link.
+ * @returns {HTMLDivElement} - The clickable navigation div.
+ */
 const minEvPlaysDiv = (minEv, text) => {
   return navDiv(minEv, minEvUrl(minEv), text);
 };
