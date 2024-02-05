@@ -169,7 +169,7 @@ window.addEventListener("click", function (evt) {
         if (homeTeam) {
           url = url.replace("${homeTeam}", homeTeam);
         }
-        window.open(url, "_blank");
+        window.open(url, "_blank", "noreferrer");
       }
     }
   }
