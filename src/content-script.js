@@ -42,6 +42,14 @@ const getHomeTeam = (elem) => {
   return null;
 };
 
+/**
+ * Creates and returns a clickable navigation div.
+ *
+ * @param id {number|string} - The id attribute to apply to the div element.
+ * @param href {string} - The href for the link included in the div element.
+ * @param text {string} - The text to display within the link in the div element.
+ * @returns {HTMLDivElement} - The clickable navigation div.
+ */
 const navDiv = (id, href, text) => {
   const a = document.createElement("a");
   a.setAttribute("href", href);
@@ -70,6 +78,11 @@ const minEvPlaysDiv = (minEv, text) => {
   return navDiv(minEv, minEvUrl(minEv), text);
 };
 
+/**
+ * Creates and returns the clickable navigation div for arb plays.
+ *
+ * @returns {HTMLDivElement} - The clickable navigation div.
+ */
 const arbPlaysDiv = () => {
   return navDiv("arb", ARB_URL, "A");
 };
