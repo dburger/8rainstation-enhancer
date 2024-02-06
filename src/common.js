@@ -38,6 +38,7 @@ const DEFAULT_SETTINGS = makeSettings([
   ["BetRivers", "Kambi", "https://az.betrivers.com"],
   ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
   ["Betway", "Betway", "https://az.betway.com/sports/home"],
+  ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
   ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
   ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
   ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
