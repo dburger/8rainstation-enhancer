@@ -15,6 +15,8 @@ const closeSportsbookTabs = (bookDetails) => {
             if (!tab.active) {
                 for (let i = 0; i < hosts.length; i++) {
                     if (tab.url.includes(hosts[i])) {
+                        // TODO(dburger): this was supposed to include
+                        // extra app.8rainstation.com tabs.
                         chrome.tabs.remove(tab.id);
                     }
                 }
