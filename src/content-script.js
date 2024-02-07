@@ -189,7 +189,7 @@ const openOptionsDiv = () => {
   return div;
 };
 
-const addNav = (anchor) => {
+const addPlaysNav = (anchor) => {
   const div = anchor.parentElement;
   insertAfter(openOptionsDiv(), div);
   insertAfter(closeTabsDiv(), div);
@@ -206,7 +206,7 @@ const highlightNavDiv = (id) => {
   }
 };
 
-const highlightCurrentNav = () => {
+const highlightCurrentPlaysNav = () => {
   const url = new URL(window.location.href);
   const tail = url.pathname + url.search + url.hash;
 
@@ -221,6 +221,22 @@ const highlightCurrentNav = () => {
   if (tail === ARB_URL) {
     highlightNavDiv("arb");
   }
+};
+
+const addEventsNav = (anchor) => {
+  insertAfter(navDiv("events", "", "events"), anchor.parentElement);
+};
+
+const addBooksNav = (anchor) => {
+  insertAfter(navDiv("books", "", "books"), anchor.parentElement);
+};
+
+const addWeightingsNav = (anchor) => {
+  insertAfter(navDiv("weightings", "", "weightings"), anchor.parentElement);
+};
+
+const addWagersNav = (anchor) => {
+  insertAfter(navDiv("wagers", "", "wagers"), anchor.parentElement);
 };
 
 const getUrls = (book) => {
@@ -261,17 +277,17 @@ const settingsAnchor = document.querySelector('a[href="/settings"]');
 
 if (settingsAnchor) {
   if (isPlaysPage() || isBetMarketDetailsPage()) {
-    console.log("plays or bet market details page");
-    addNav(settingsAnchor);
-    highlightCurrentNav();
+    addPlaysNav(settingsAnchor);
+    highlightCurrentPlaysNav();
   } else if (isEventsPage()) {
     console.log("events page");
+    addEventsNav(settingsAnchor);
   } else if (isBooksPage()) {
-    console.log("books page");
+    addBooksNav(settingsAnchor);
   } else if (isWeightingsPage()) {
-    console.log("weightings page");
+    addWeightingsNav(settingsAnchor);
   } else if (isWagersPage()) {
-    console.log("wagers page");
+    addWagersNav(settingsAnchor);
   } else if (isSettingsPage()) {
     console.log("settings page");
   }
