@@ -189,6 +189,27 @@ const openOptionsDiv = () => {
   return div;
 };
 
+const snapshotBooksDiv = () => {
+  const div = navDiv("snapshot-books", "", "Snapshot");
+  div.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const mapping = {};
+    const books = document.querySelectorAll(".book");
+    // This is somewhat fragile obviously. For example, extra text nodes in the DOM
+    // will throw this off. May need to change to the walk* algorithms instead.
+    for (const book of books) {
+      const label = book.childNodes[1];
+      if (label !== undefined && label.innerText !== "Select All Books") {
+        mapping[label.innerText] = label.childNodes[1].checked;
+      }
+    }
+    console.log("snapshotting books:", mapping);
+    console.log("snapshotting books:", Object.keys(mapping).length);
+  });
+  return div;
+};
+
 const addPlaysNav = (anchor) => {
   const div = anchor.parentElement;
   insertAfter(openOptionsDiv(), div);
@@ -228,7 +249,7 @@ const addEventsNav = (anchor) => {
 };
 
 const addBooksNav = (anchor) => {
-  insertAfter(navDiv("books", "", "books"), anchor.parentElement);
+  insertAfter(snapshotBooksDiv(), anchor.parentElement);
 };
 
 const addWeightingsNav = (anchor) => {
