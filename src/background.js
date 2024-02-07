@@ -5,10 +5,10 @@ importScripts("./common.js");
  *
  * @param {object} settings - The settings object. See {@link makeSettings}.
  */
-const closeSportsbookTabs = (settings) => {
+const closeSportsbookTabs = (bookDetails) => {
     const hosts = [];
-    for (const bookDetail of Object.values(settings)) {
-        hosts.push(bookDetail.hostname);
+    for (const bd of Object.values(bookDetails)) {
+        hosts.push(bd.hostname);
     }
     chrome.tabs.query({url: "https://*/*"}, (tabs) => {
         tabs.forEach((tab) => {
@@ -29,7 +29,7 @@ const closeSportsbookTabs = (settings) => {
  */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
-        closeSportsbookTabs(message.settings);
+        closeSportsbookTabs(message.settings.bookDetails);
     } else if (message.action === OPEN_OPTIONS_TAB) {
         chrome.runtime.openOptionsPage();
     }

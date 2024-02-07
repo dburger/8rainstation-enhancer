@@ -46,8 +46,8 @@ const loadSettings = (settings) => {
 
     // Array.from(settings) and then sort by the first element, I think.
     // actually it is in settings.settings, do you want that?
-    for (const [key, value] of Object.entries(settings)) {
-        addBookRow(tbody, key, value.oddsGroup, value.urlTemplate);
+    for (const [key, bd] of Object.entries(settings.bookDetails)) {
+        addBookRow(tbody, key, bd.oddsGroup, bd.urlTemplate);
     }
 };
 

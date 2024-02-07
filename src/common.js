@@ -23,12 +23,14 @@ const bookDetail = (oddsGroup, urlTemplate) => {
   };
 };
 
-const makeSettings = (books) => {
+const makeSettings = (bookDetails) => {
   const settings = {
-    v1: {}
+    v1: {
+      bookDetails: {},
+    }
   };
-  for (const book of books) {
-    settings.v1[book[0]] = bookDetail(book[1], book[2]);
+  for (const bd of bookDetails) {
+    settings.v1.bookDetails[bd[0]] = bookDetail(bd[1], bd[2]);
   }
   return settings;
 };

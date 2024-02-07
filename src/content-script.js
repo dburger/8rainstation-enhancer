@@ -159,7 +159,7 @@ const closeTabsDiv = () => {
     evt.stopPropagation();
     const message = {
       action: CLOSE_SPORTSBOOK_TABS,
-      settings : settings
+      settings: settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
       console.log(`${message.action} result ${resp.result}`);
@@ -180,7 +180,7 @@ const openOptionsDiv = () => {
     evt.stopPropagation();
     const message = {
       action: OPEN_OPTIONS_TAB,
-      settings : settings
+      settings: settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
       console.log(`${message.action} result ${resp.result}`);
@@ -261,9 +261,9 @@ const addWagersNav = (anchor) => {
 };
 
 const getUrls = (book) => {
-  const bookDetails = settings[book];
+  const bookDetails = settings.bookDetails[book];
   if (bookDetails) {
-    return Object.values(settings)
+    return Object.values(settings.bookDetails)
         .filter(bd => bd.oddsGroup === bookDetails.oddsGroup)
         .map(bd => bd.urlTemplate);
   } else {
