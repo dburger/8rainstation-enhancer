@@ -86,3 +86,16 @@ const walkDown = (elem, pred) => {
   }
   return null;
 }
+
+/**
+ * Takes the given id and returns a uniqueified id. The intention here is
+ * to avoid all DOM id collisions as to not disrupt any existing page
+ * Javascript.
+ *
+ * @param id {string} - The id to uniqueify.
+ * @returns {string} - The uniqueified id.
+ */
+const idgen = (id) => {
+  // 8rain Station Enhancer.
+  return "8rse-" + id;
+};
