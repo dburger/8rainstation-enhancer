@@ -9,15 +9,67 @@ getSettings(s => settings = s);
 
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
+/**
+ * Returns whether or not the current page is the plays page.
+ *
+ * @returns {boolean}
+ */
 const isPlaysPage = () => {
   return window.location.href.includes("/search/plays");
 };
 
+/**
+ * Returns whether or not the current page is the events page.
+ *
+ * @returns {boolean}
+ */
+const isEventsPage = () => {
+  return window.location.href.match(/^.*\/events\/?$/);
+};
+
+/**
+ * Returns whether or not the current page is the books page.
+ *
+ * @returns {boolean}
+ */
+const isBooksPage = () => {
+  return window.location.href.match(/^.*\/settings\/books\/?$/);
+};
+
+/**
+ * Returns whether or not the current page is the weightings page.
+ *
+ * @returns {boolean}
+ */
+const isWeightingsPage = () => {
+  return window.location.href.match(/^.*\/settings\/weightings\/?$/);
+};
+
+/**
+ * Returns whether or not the current page is the wagers page.
+ *
+ * @returns {boolean}
+ */
+const isWagersPage = () => {
+  return window.location.href.includes("/wagers/");
+};
+
+/**
+ * Returns whether or not the current page is the settings page.
+ *
+ * @returns {boolean}
+ */
+const isSettingsPage = () => {
+  return window.location.href.match(/^.*\/settings\/?$/);
+};
+
+/**
+ * Returns whether or not the current page is the bet market details page.
+ *
+ * @returns {boolean}
+ */
 const isBetMarketDetailsPage = () => {
-  // TODO(dburger): This isn't strictly true, the events page will also
-  // render with a single slash at the end. Could check for the existence
-  // of characters past the slash.
-  return window.location.href.includes("/events/");
+  return window.location.href.match(/^.*\/events\/.+$/);
 }
 
 const getHomeTeam = (elem) => {
@@ -63,6 +115,12 @@ const navDiv = (id, href, text) => {
   return div;
 };
 
+/**
+ * Returns the minimum +EV URL for the given minimum +EV.
+ *
+ * @param minEv {number} - The minimum +EV to set in the URL.
+ * @returns {string} - The URL for the given minimum +EV.
+ */
 const minEvUrl = (minEv) => {
   return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7`;
 };
@@ -89,6 +147,11 @@ const arbPlaysDiv = () => {
 
 // TODO(dburger: DRY the next two.
 
+/**
+ * Creates and returns the clickable div for closing all sportsbook tabs.
+ *
+ * @returns {HTMLDivElement} - The clickable div to close sportsbook tabs.
+ */
 const closeTabsDiv = () => {
   const div = navDiv("closer", "", "X");
   div.addEventListener("click", (evt) => {
@@ -105,6 +168,11 @@ const closeTabsDiv = () => {
   return div;
 };
 
+/**
+ * Creates and returns the clickable div for opening the options tab.
+ *
+ * @returns {HTMLDivElement} - The clickable div to open the options tab.
+ */
 const openOptionsDiv = () => {
   const div = navDiv("options", "", "O");
   div.addEventListener("click", (evt) => {
@@ -158,15 +226,9 @@ const highlightCurrentNav = () => {
 const getUrls = (book) => {
   const bookDetails = settings[book];
   if (bookDetails) {
-    const urls = [];
-    const oddsGroup = bookDetails.oddsGroup;
-    // TODO(dburger): filter instead?
-    for (const bd of Object.values(settings)) {
-      if (bd.oddsGroup === oddsGroup) {
-        urls.push(bd.urlTemplate);
-      }
-    }
-    return urls;
+    return Object.values(settings)
+        .filter(bd => bd.oddsGroup === bookDetails.oddsGroup)
+        .map(bd => bd.urlTemplate);
   } else {
     return [];
   }
@@ -198,8 +260,21 @@ window.addEventListener("click", function (evt) {
 const settingsAnchor = document.querySelector('a[href="/settings"]');
 
 if (settingsAnchor) {
-  addNav(settingsAnchor);
-  highlightCurrentNav();
+  if (isPlaysPage() || isBetMarketDetailsPage()) {
+    console.log("plays or bet market details page");
+    addNav(settingsAnchor);
+    highlightCurrentNav();
+  } else if (isEventsPage()) {
+    console.log("events page");
+  } else if (isBooksPage()) {
+    console.log("books page");
+  } else if (isWeightingsPage()) {
+    console.log("weightings page");
+  } else if (isWagersPage()) {
+    console.log("wagers page");
+  } else if (isSettingsPage()) {
+    console.log("settings page");
+  }
 } else {
   console.log("Settings link not found, navigation not added.");
 }
