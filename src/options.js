@@ -11,14 +11,19 @@ const createInputText = (value) => {
     return input;
 };
 
+const createTextTd = (text) => {
+    const td = document.createElement("td");
+    td.innerText = text;
+    return td;
+}
+
 const createDeleteRowTd = () => {
-  const td = document.createElement("td");
-  td.innerText = "X";
+  const td = createTextTd("X");
   td.className = "deleter";
   return td;
 };
 
-const createBooksRowTd = (value, className) => {
+const createInputTd = (value, className) => {
     const td = document.createElement("td");
     td.appendChild(createInputText(value));
     if (className) {
@@ -27,28 +32,51 @@ const createBooksRowTd = (value, className) => {
     return td;
 }
 
-const createBooksRow = (key, oddsGroup, urlTemplate) => {
+const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
-    tr.appendChild(createBooksRowTd(key));
-    tr.appendChild(createBooksRowTd(oddsGroup));
-    tr.appendChild(createBooksRowTd(urlTemplate, "url"));
+    tr.appendChild(createInputTd(key));
+    tr.appendChild(createInputTd(oddsGroup));
+    tr.appendChild(createInputTd(urlTemplate, "url"));
     return tr;
 };
 
-const addBookRow = (tbody, key, oddsGroup, urlTemplate) => {
-    tbody.appendChild(createBooksRow(key, oddsGroup, urlTemplate));
+const createActiveBookSetsRow = (key) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(createDeleteRowTd());
+    tr.appendChild(createTextTd(key));
+    return tr;
+}
+
+const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
+    tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
 
-const loadSettings = (settings) => {
+const addActiveBookSetsRow = (tbody, key) => {
+    tbody.appendChild(createActiveBookSetsRow(key));
+}
+
+const loadBookDetails = (bookDetails) => {
     const tbody = document.getElementById("bookDetailsBody");
     removeChildren(tbody);
 
-    // Array.from(settings) and then sort by the first element, I think.
-    // actually it is in settings.settings, do you want that?
-    for (const [key, bd] of Object.entries(settings.bookDetails)) {
-        addBookRow(tbody, key, bd.oddsGroup, bd.urlTemplate);
+    for (const [key, bd] of Object.entries(bookDetails)) {
+        addBookDetailsRow(tbody, key, bd.oddsGroup, bd.urlTemplate);
     }
+};
+
+const loadActiveBookSets = (activeBookSets) => {
+    const tbody = document.getElementById("activeBookSetsBody");
+    removeChildren(tbody);
+
+    for (const key of Object.keys(activeBookSets)) {
+        addActiveBookSetsRow(tbody, key);
+    }
+};
+
+const loadSettings = (settings) => {
+    loadBookDetails(settings.bookDetails);
+    loadActiveBookSets(settings.activeBookSets);
 };
 
 document.addEventListener("DOMContentLoaded", (evt) => {
@@ -85,7 +113,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     addButton.addEventListener("click", (evt) => {
-        addBookRow(tbody, "", "", "");
+        addBookDetailsRow(tbody, "", "", "");
     });
 
     // const booksTable = document.getElementById("books");

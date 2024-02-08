@@ -27,6 +27,7 @@ const makeSettings = (bookDetails) => {
   const settings = {
     v1: {
       bookDetails: {},
+      activeBookSets: {}
     }
   };
   for (const bd of bookDetails) {
