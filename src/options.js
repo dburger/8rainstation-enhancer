@@ -41,7 +41,7 @@ const addBookRow = (tbody, key, oddsGroup, urlTemplate) => {
 };
 
 const loadSettings = (settings) => {
-    const tbody = document.getElementById("booksBody");
+    const tbody = document.getElementById("bookDetailsBody");
     removeChildren(tbody);
 
     // Array.from(settings) and then sort by the first element, I think.
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     // const booksTable = document.getElementById("books");
-    const tbody = document.getElementById("booksBody")
+    const tbody = document.getElementById("bookDetailsBody")
     tbody.addEventListener("click", (evt) => {
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             tbody.removeChild(evt.target.parentElement);
