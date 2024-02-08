@@ -82,6 +82,9 @@ const loadSettings = (settings) => {
 document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
 
+    const bookDetailsBody = document.getElementById("bookDetailsBody");
+    const activeBookSetsBody = document.getElementById("activeBookSetsBody");
+
     const saveButton = document.getElementById("save");
     const reloadButton = document.getElementById("reload");
     const defaultsButton = document.getElementById("defaults");
@@ -89,14 +92,20 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     saveButton.addEventListener("click", (evt) => {
         console.log("save");
-        const books = [];
-        for (const tr of tbody.childNodes) {
+        const bookDetails = [];
+        for (const tr of bookDetailsBody.childNodes) {
             const key = tr.childNodes[1].childNodes[0].value;
             const oddsGroup = tr.childNodes[2].childNodes[0].value;
             const urlTemplate = tr.childNodes[3].childNodes[0].value;
-            books.push([key, oddsGroup, urlTemplate]);
+            bookDetails.push([key, oddsGroup, urlTemplate]);
         }
-        setSettings(books, (e) => {
+
+        const activeBookSets = [];
+        for (const tr of activeBookSetsBody.childNodes) {
+            activeBookSets.push(tr.childNodes[1].innerText);
+        }
+
+        setSettings(bookDetails, activeBookSets, (e) => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -113,14 +122,18 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     addButton.addEventListener("click", (evt) => {
-        addBookDetailsRow(tbody, "", "", "");
+        addBookDetailsRow(bookDetailsBody, "", "", "");
     });
 
-    // const booksTable = document.getElementById("books");
-    const tbody = document.getElementById("bookDetailsBody")
-    tbody.addEventListener("click", (evt) => {
+    bookDetailsBody.addEventListener("click", (evt) => {
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
-            tbody.removeChild(evt.target.parentElement);
+            bookDetailsBody.removeChild(evt.target.parentElement);
+        }
+    });
+
+    activeBookSetsBody.addEventListener("click", (evt) => {
+        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+            activeBookSetsBody.removeChild(evt.target.parentElement);
         }
     });
 });

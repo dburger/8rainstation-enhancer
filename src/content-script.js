@@ -189,25 +189,45 @@ const openOptionsDiv = () => {
   return div;
 };
 
-const snapshotBooksDiv = () => {
-  const div = navDiv("snapshot-books", "", "Snapshot");
-  div.addEventListener("click", (evt) => {
+const loadActiveBooksDiv = () => {
+  const loadActiveBooksDiv = navDiv("load-books", "", "Load");
+  loadActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    const mapping = {};
+    getSettings(settings => {
+      const activeBooks = settings.activeBookSets["solid"];
+      const books = document.querySelectorAll(".book");
+      for (const book of books) {
+        const label = book.childNodes[1];
+        if (label !== undefined && label.innerText !== "Select All Books") {
+          label.childNodes[1].checked = activeBooks.includes(label.innerText);
+        }
+      }
+    });
+  });
+  return loadActiveBooksDiv;
+};
+
+const snapshotActiveBooksDiv = () => {
+  const snapshotActiveBooksDiv = navDiv("snapshot-books", "", "Snapshot");
+  snapshotActiveBooksDiv.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const activeBooks = [];
     const books = document.querySelectorAll(".book");
     // This is somewhat fragile obviously. For example, extra text nodes in the DOM
     // will throw this off. May need to change to the walk* algorithms instead.
     for (const book of books) {
       const label = book.childNodes[1];
-      if (label !== undefined && label.innerText !== "Select All Books") {
-        mapping[label.innerText] = label.childNodes[1].checked;
+      if (label !== undefined && label.innerText !== "Select All Books" && label.childNodes[1].checked) {
+        activeBooks.push(label.innerText);
       }
     }
-    console.log("snapshotting books:", mapping);
-    console.log("snapshotting books:", Object.keys(mapping).length);
+    setActiveBookSetSettings("solid", activeBooks, (x) => {
+      console.log("called back");
+    });
   });
-  return div;
+  return snapshotActiveBooksDiv;
 };
 
 const addPlaysNav = (anchor) => {
@@ -249,7 +269,8 @@ const addEventsNav = (anchor) => {
 };
 
 const addBooksNav = (anchor) => {
-  insertAfter(snapshotBooksDiv(), anchor.parentElement);
+  insertAfter(snapshotActiveBooksDiv(), anchor.parentElement);
+  insertAfter(loadActiveBooksDiv(), anchor.parentElement);
 };
 
 const addWeightingsNav = (anchor) => {

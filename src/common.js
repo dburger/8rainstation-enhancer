@@ -23,16 +23,22 @@ const bookDetail = (oddsGroup, urlTemplate) => {
   };
 };
 
+const makeBookDetailsMap = (bookDetails) => {
+  const result = {};
+  for (const bd of bookDetails) {
+    result[bd[0]] = bookDetail(bd[1], bd[2]);
+  }
+  return result;
+};
+
 const makeSettings = (bookDetails) => {
+  // TODO(dburger): make versioned settings?
   const settings = {
     v1: {
-      bookDetails: {},
+      bookDetails: makeBookDetailsMap(bookDetails),
       activeBookSets: {}
     }
   };
-  for (const bd of bookDetails) {
-    settings.v1.bookDetails[bd[0]] = bookDetail(bd[1], bd[2]);
-  }
   return settings;
 };
 
@@ -62,9 +68,32 @@ const getSettings = (callback) => {
   });
 }
 
-const setSettings = (books, callback) => {
-  chrome.storage.sync.set(makeSettings(books), callback);
+const setVersionedSettings = (settings, callback) => {
+  console.log("saving", settings);
+  chrome.storage.sync.set({v1: settings}, callback);
 }
+
+const setSettings = (bookDetails, activeBookSets, callback) => {
+  getSettings(settings => {
+    settings.bookDetails = makeBookDetailsMap(bookDetails);
+    // TODO(dburger): keep keys helper method.
+    const newActiveBookSets = {};
+    for (const [key, value] of Object.entries(settings.activeBookSets)) {
+      if (activeBookSets.includes(key)) {
+        newActiveBookSets[key] = value;
+      }
+    }
+    settings.activeBookSets = newActiveBookSets;
+    setVersionedSettings(settings, callback);
+  });
+}
+
+const setActiveBookSetSettings = (name, activeBooks, callback) => {
+  getSettings(settings => {
+    settings.activeBookSets[name] = activeBooks;
+    setVersionedSettings(settings, callback);
+  });
+};
 
 const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
