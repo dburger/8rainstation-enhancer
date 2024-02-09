@@ -18,6 +18,10 @@ div.sports_book_name {
     border: 0.1rem solid var(--enhanced-clickable-color) !important;
 }
 
+div.nav.unclickable {
+    border: none !important;
+}
+
 .nav.enhancer.active {
     border: 0.1rem solid var(--enhanced-clickable-active-color) !important;
 }

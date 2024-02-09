@@ -194,8 +194,13 @@ const loadActiveBooksDiv = () => {
   loadActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
+    const activeBookSetName = document.getElementById("activeBookSetTextBox").value;
     getSettings(settings => {
-      const activeBooks = settings.activeBookSets["solid"];
+      // TODO(dburger): convert to Set for speed up below?
+      const activeBooks = settings.activeBookSets[activeBookSetName];
+      if (!activeBooks) {
+        return;
+      }
       const books = document.querySelectorAll(".book");
       for (const book of books) {
         const label = book.childNodes[1];
@@ -223,11 +228,25 @@ const snapshotActiveBooksDiv = () => {
         activeBooks.push(label.innerText);
       }
     }
-    setActiveBookSetSettings("solid", activeBooks, (x) => {
+    const activeBookSetName = document.getElementById("activeBookSetTextBox").value;
+    setActiveBookSetSettings(activeBookSetName, activeBooks, (x) => {
+      // TODO(dburger): Drop a better log.
       console.log("called back");
     });
   });
   return snapshotActiveBooksDiv;
+};
+
+const activeBookSetNameTextBox = () => {
+  const input = document.createElement("input");
+  input.setAttribute("id", "activeBookSetTextBox");
+  input.setAttribute("type", "text");
+
+  const div = document.createElement("div");
+  div.setAttribute("class", "nav unclickable");
+  div.appendChild(input);
+
+  return div;
 };
 
 const addPlaysNav = (anchor) => {
@@ -271,6 +290,7 @@ const addEventsNav = (anchor) => {
 const addBooksNav = (anchor) => {
   insertAfter(snapshotActiveBooksDiv(), anchor.parentElement);
   insertAfter(loadActiveBooksDiv(), anchor.parentElement);
+  insertAfter(activeBookSetNameTextBox(), anchor.parentElement);
 };
 
 const addWeightingsNav = (anchor) => {
