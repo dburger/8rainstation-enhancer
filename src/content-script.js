@@ -1,8 +1,8 @@
+const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
+
 // As I understand it, content scripts cannot work as modules. This prevents us
 // from using async / await. Thus, the settings are retrieved here with a callback
-// instead of on demand when needed. If this page changes to need some of the
-// settings on initialization, that code will have to be moved into this callback.
-// For now, initialization like adding the custom links, lives outside this callback.
+// instead of on demand when needed.
 let settings = null;
 
 getSettings(s => {
@@ -21,10 +21,8 @@ getSettings(s => {
   }
 });
 
-const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
-
 /**
- * Returns whether or not the current page is the plays page.
+ * Returns whether the current page is the plays page.
  *
  * @returns {boolean}
  */
@@ -33,7 +31,7 @@ const isPlaysPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the events page.
+ * Returns whether the current page is the events page.
  *
  * @returns {boolean}
  */
@@ -42,7 +40,7 @@ const isEventsPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the books page.
+ * Returns whether the current page is the books page.
  *
  * @returns {boolean}
  */
@@ -51,7 +49,7 @@ const isBooksPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the weightings page.
+ * Returns whether the current page is the weightings page.
  *
  * @returns {boolean}
  */
@@ -60,7 +58,7 @@ const isWeightingsPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the wagers page.
+ * Returns whether the current page is the wagers page.
  *
  * @returns {boolean}
  */
@@ -69,7 +67,7 @@ const isWagersPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the settings page.
+ * Returns whether the current page is the settings page.
  *
  * @returns {boolean}
  */
@@ -78,7 +76,7 @@ const isSettingsPage = () => {
 };
 
 /**
- * Returns whether or not the current page is the bet market details page.
+ * Returns whether the current page is the bet market details page.
  *
  * @returns {boolean}
  */
@@ -87,22 +85,22 @@ const isBetMarketDetailsPage = () => {
 }
 
 const getHomeTeam = (elem) => {
-  // Plays page.
-  const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
-  if (div) {
-    const gdiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
-    if (gdiv) {
-      const parts = gdiv.innerText.split(" at ");
-      if (parts.length === 2) {
-        return parts[1];
+  if (isPlaysPage()) {
+    const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
+    if (div) {
+      const gdiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
+      if (gdiv) {
+        const parts = gdiv.innerText.split(" at ");
+        if (parts.length === 2) {
+          return parts[1];
+        }
       }
     }
-  }
-
-  // Book Market Details page.
-  const divs = document.querySelectorAll("div.event-team");
-  if (divs.length === 2) {
-    return divs[1].innerText;
+  } else if (isBetMarketDetailsPage()) {
+    const divs = document.querySelectorAll("div.event-team");
+    if (divs.length === 2) {
+      return divs[1].innerText;
+    }
   }
 
   return null;
@@ -313,6 +311,10 @@ const addBooksNav = (anchor) => {
 };
 
 const addWeightingsNav = (anchor) => {
+  // TODO(dburger):
+  // insertAfter(storeActiveWeightingsDiv(), anchor.parentElement);
+  // insertAfter(loadActiveWeightingsDiv(), anchor.parentElement);
+  // insertAfter(activeWeightingSetNameTextBox(), anchor.parentElement);
   insertAfter(navDiv("weightings", "", "weightings"), anchor.parentElement);
 };
 
