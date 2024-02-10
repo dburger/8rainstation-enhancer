@@ -8,7 +8,7 @@ let settings = null;
 getSettings(s => {
   settings = s;
   if (isBooksPage()) {
-    const datalist = document.getElementById("activeBookSetDatalist");
+    const datalist = document.getElementById("activeBooksNamesDatalist");
     if (datalist) {
       for (const name of Object.keys(settings.activeBookSets)) {
         const option = document.createElement("option");
@@ -251,10 +251,10 @@ const activeBooksNameTextBox = () => {
   const input = document.createElement("input");
   input.setAttribute("id", "activeBooksNameTextBox");
   input.setAttribute("type", "text");
-  input.setAttribute("list", "activeBookSetDatalist");
+  input.setAttribute("list", "activeBooksNamesDatalist");
 
   const datalist = document.createElement("datalist");
-  datalist.setAttribute("id", "activeBookSetDatalist");
+  datalist.setAttribute("id", "activeBooksNamesDatalist");
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav unclickable");
