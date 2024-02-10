@@ -41,7 +41,7 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     return tr;
 };
 
-const createActiveBookSetsRow = (key) => {
+const createActiveBooksRow = (key) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
     tr.appendChild(createTextTd(key));
@@ -52,8 +52,8 @@ const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
     tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
 
-const addActiveBookSetsRow = (tbody, key) => {
-    tbody.appendChild(createActiveBookSetsRow(key));
+const addActiveBooksRow = (tbody, key) => {
+    tbody.appendChild(createActiveBooksRow(key));
 }
 
 const loadBookDetails = (bookDetails) => {
@@ -65,25 +65,25 @@ const loadBookDetails = (bookDetails) => {
     }
 };
 
-const loadActiveBookSets = (activeBookSets) => {
-    const tbody = document.getElementById("activeBookSetsBody");
+const loadActiveBooks = (activeBookSets) => {
+    const tbody = document.getElementById("activeBooksBody");
     removeChildren(tbody);
 
     for (const key of Object.keys(activeBookSets)) {
-        addActiveBookSetsRow(tbody, key);
+        addActiveBooksRow(tbody, key);
     }
 };
 
 const loadSettings = (settings) => {
     loadBookDetails(settings.bookDetails);
-    loadActiveBookSets(settings.activeBookSets);
+    loadActiveBooks(settings.activeBookSets);
 };
 
 document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
 
     const bookDetailsBody = document.getElementById("bookDetailsBody");
-    const activeBookSetsBody = document.getElementById("activeBookSetsBody");
+    const activeBooksBody = document.getElementById("activeBooksBody");
 
     const saveButton = document.getElementById("save");
     const reloadButton = document.getElementById("reload");
@@ -100,12 +100,12 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             bookDetails.push([key, oddsGroup, urlTemplate]);
         }
 
-        const activeBookSets = [];
-        for (const tr of activeBookSetsBody.childNodes) {
-            activeBookSets.push(tr.childNodes[1].innerText);
+        const activeBooksNames = [];
+        for (const tr of activeBooksBody.childNodes) {
+            activeBooksNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(bookDetails, activeBookSets, (e) => {
+        setSettings(bookDetails, activeBooksNames, (e) => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -131,9 +131,9 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         }
     });
 
-    activeBookSetsBody.addEventListener("click", (evt) => {
+    activeBooksBody.addEventListener("click", (evt) => {
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
-            activeBookSetsBody.removeChild(evt.target.parentElement);
+            activeBooksBody.removeChild(evt.target.parentElement);
         }
     });
 });
