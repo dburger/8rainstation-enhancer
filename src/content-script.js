@@ -157,20 +157,21 @@ const arbPlaysDiv = () => {
   return navDiv("arb", ARB_URL, "A");
 };
 
-// TODO(dburger: DRY the next two.
-
 /**
- * Creates and returns the clickable div for closing all sportsbook tabs.
+ * Creates and returns a clickable div that operates by sending a message.
  *
- * @returns {HTMLDivElement} - The clickable div to close sportsbook tabs.
+ * @param id {number|string} - The id attribute to apply to the div element.
+ * @param text {string} - The text to display within the link in the div element.
+ * @param action {string} - The action to send in the message.
+ * @returns {HTMLDivElement} - The clickable navigation div.
  */
-const closeTabsDiv = () => {
-  const div = navDiv("closer", "", "X");
+const sendMessageDiv = (id, text, action) => {
+  const div = navDiv(id, "", text);
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
     const message = {
-      action: CLOSE_SPORTSBOOK_TABS,
+      action: action,
       settings: settings
     };
     chrome.runtime.sendMessage(message, (resp) => {
@@ -181,24 +182,21 @@ const closeTabsDiv = () => {
 };
 
 /**
+ * Creates and returns the clickable div for closing all sportsbook tabs.
+ *
+ * @returns {HTMLDivElement} - The clickable div to close sportsbook tabs.
+ */
+const closeTabsDiv = () => {
+  return sendMessageDiv("closer", "X", CLOSE_SPORTSBOOK_TABS);
+};
+
+/**
  * Creates and returns the clickable div for opening the options tab.
  *
  * @returns {HTMLDivElement} - The clickable div to open the options tab.
  */
 const openOptionsDiv = () => {
-  const div = navDiv("options", "", "O");
-  div.addEventListener("click", (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    const message = {
-      action: OPEN_OPTIONS_TAB,
-      settings: settings
-    };
-    chrome.runtime.sendMessage(message, (resp) => {
-      console.log(`${message.action} result ${resp.result}`);
-    });
-  });
-  return div;
+  return sendMessageDiv("options", "O", OPEN_OPTIONS_TAB);
 };
 
 const loadActiveBooksDiv = () => {
