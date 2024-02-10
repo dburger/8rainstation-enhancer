@@ -227,9 +227,9 @@ const loadActiveBooksDiv = () => {
   return loadActiveBooksDiv;
 };
 
-const snapshotActiveBooksDiv = () => {
-  const snapshotActiveBooksDiv = navDiv("snapshot-books", "", "Snapshot");
-  snapshotActiveBooksDiv.addEventListener("click", (evt) => {
+const storeActiveBooksDiv = () => {
+  const storeActiveBooksDiv = navDiv("store-books", "", "Store");
+  storeActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
     const activeBooks = [];
@@ -248,7 +248,7 @@ const snapshotActiveBooksDiv = () => {
       console.log("called back");
     });
   });
-  return snapshotActiveBooksDiv;
+  return storeActiveBooksDiv;
 };
 
 const activeBookSetNameTextBox = () => {
@@ -307,7 +307,7 @@ const addEventsNav = (anchor) => {
 };
 
 const addBooksNav = (anchor) => {
-  insertAfter(snapshotActiveBooksDiv(), anchor.parentElement);
+  insertAfter(storeActiveBooksDiv(), anchor.parentElement);
   insertAfter(loadActiveBooksDiv(), anchor.parentElement);
   insertAfter(activeBookSetNameTextBox(), anchor.parentElement);
 };
