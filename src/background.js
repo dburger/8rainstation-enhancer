@@ -18,6 +18,7 @@ const closeSportsbookTabs = (bookDetailsMap) => {
                         // TODO(dburger): this was supposed to include
                         // extra app.8rainstation.com tabs.
                         chrome.tabs.remove(tab.id);
+                        break;
                     }
                 }
             }
