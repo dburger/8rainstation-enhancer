@@ -204,10 +204,10 @@ const loadActiveBooksDiv = () => {
   loadActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    const activeBookSetName = document.getElementById("activeBookSetTextBox").value;
+    const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
     getSettings(settings => {
       // TODO(dburger): convert to Set for speed up below?
-      const activeBooks = settings.activeBookSets[activeBookSetName];
+      const activeBooks = settings.activeBookSets[activeBooksName];
       if (!activeBooks) {
         return;
       }
@@ -238,7 +238,7 @@ const storeActiveBooksDiv = () => {
         activeBooks.push(label.innerText);
       }
     }
-    const activeBookSetName = document.getElementById("activeBookSetTextBox").value;
+    const activeBookSetName = document.getElementById("activeBooksNameTextBox").value;
     setActiveBookSetSettings(activeBookSetName, activeBooks, (x) => {
       // TODO(dburger): Drop a better log.
       console.log("called back");
@@ -247,9 +247,9 @@ const storeActiveBooksDiv = () => {
   return storeActiveBooksDiv;
 };
 
-const activeBookSetNameTextBox = () => {
+const activeBooksNameTextBox = () => {
   const input = document.createElement("input");
-  input.setAttribute("id", "activeBookSetTextBox");
+  input.setAttribute("id", "activeBooksNameTextBox");
   input.setAttribute("type", "text");
   input.setAttribute("list", "activeBookSetDatalist");
 
@@ -305,13 +305,13 @@ const addEventsNav = (anchor) => {
 const addBooksNav = (anchor) => {
   insertAfter(storeActiveBooksDiv(), anchor.parentElement);
   insertAfter(loadActiveBooksDiv(), anchor.parentElement);
-  insertAfter(activeBookSetNameTextBox(), anchor.parentElement);
+  insertAfter(activeBooksNameTextBox(), anchor.parentElement);
 };
 
 const addWeightingsNav = (anchor) => {
   // insertAfter(storeActiveWeightingsDiv(), anchor.parentElement);
   // insertAfter(loadActiveWeightingsDiv(), anchor.parentElement);
-  // insertAfter(activeWeightingSetNameTextBox(), anchor.parentElement);
+  // insertAfter(activeWeightingsNameTextBox(), anchor.parentElement);
   insertAfter(navDiv("weightings", "", "weightings"), anchor.parentElement);
 };
 
