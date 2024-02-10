@@ -76,14 +76,7 @@ const setVersionedSettings = (settings, callback) => {
 const setSettings = (bookDetails, activeBookSets, callback) => {
   getSettings(settings => {
     settings.bookDetails = makeBookDetailsMap(bookDetails);
-    // TODO(dburger): keep keys helper method.
-    const newActiveBookSets = {};
-    for (const [key, value] of Object.entries(settings.activeBookSets)) {
-      if (activeBookSets.includes(key)) {
-        newActiveBookSets[key] = value;
-      }
-    }
-    settings.activeBookSets = newActiveBookSets;
+    settings.activeBookSets = keepKeys2(settings.activeBookSets, activeBookSets);
     setVersionedSettings(settings, callback);
   });
 }
@@ -93,6 +86,23 @@ const setActiveBookSetSettings = (name, activeBooks, callback) => {
     settings.activeBookSets[name] = activeBooks;
     setVersionedSettings(settings, callback);
   });
+};
+
+const keepKeys1 = (obj, keys) => {
+  for (const key of Object.keys(obj)) {
+    if (!keys.includes(key)) {
+      delete obj[key];
+    }
+  }
+  return obj;
+};
+
+const keepKeys2 = (obj, keys) => {
+  const newObj = {};
+  for (const key of keys) {
+    newObj[key] = obj[key];
+  }
+  return newObj;
 };
 
 const insertAfter = (newElem, elem) => {
