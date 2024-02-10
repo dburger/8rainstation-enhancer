@@ -41,10 +41,10 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     return tr;
 };
 
-const createActiveBooksRow = (key) => {
+const createNameRow = (name) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
-    tr.appendChild(createTextTd(key));
+    tr.appendChild(createTextTd(name));
     return tr;
 }
 
@@ -52,8 +52,8 @@ const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
     tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
 
-const addActiveBooksRow = (tbody, key) => {
-    tbody.appendChild(createActiveBooksRow(key));
+const addNameRow = (tbody, name) => {
+    tbody.appendChild(createNameRow(name));
 }
 
 const loadBookDetails = (bookDetails) => {
@@ -69,14 +69,24 @@ const loadActiveBooks = (activeBooksMap) => {
     const tbody = document.getElementById("activeBooksBody");
     removeChildren(tbody);
 
-    for (const key of Object.keys(activeBooksMap)) {
-        addActiveBooksRow(tbody, key);
+    for (const name of Object.keys(activeBooksMap)) {
+        addNameRow(tbody, name);
+    }
+};
+
+const loadActiveBookWeightings = (activeBookWeightingsMap) => {
+    const tbody = document.getElementById("activeBookWeightingsBody");
+    removeChildren(tbody);
+
+    for (const name of Object.keys(activeBookWeightingsMap)) {
+        addNameRow(tbody, name);
     }
 };
 
 const loadSettings = (settings) => {
     loadBookDetails(settings.bookDetailsMap);
     loadActiveBooks(settings.activeBooksMap);
+    loadActiveBookWeightings(settings.activeBookWeightingsMap);
 };
 
 document.addEventListener("DOMContentLoaded", (evt) => {
