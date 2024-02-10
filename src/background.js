@@ -3,7 +3,7 @@ importScripts("./common.js");
 /**
  * Closes all tabs opened to sportsbook sites per the settings.
  *
- * @param {object} settings - The settings object. See {@link makeSettings}.
+ * @param {object} settings - The settings object. See {@link makeVersionedSettings}.
  */
 const closeSportsbookTabs = (bookDetails) => {
     const hosts = [];

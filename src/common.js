@@ -31,35 +31,36 @@ const makeBookDetailsMap = (bookDetails) => {
   return result;
 };
 
-const makeSettings = (bookDetails) => {
-  // TODO(dburger): make versioned settings?
-  const settings = {
+const makeVersionedSettings = (bookDetails, activeBookSets) => {
+  return {
     v1: {
-      bookDetails: makeBookDetailsMap(bookDetails),
-      activeBookSets: {}
+      bookDetails: bookDetails,
+      activeBookSets: activeBookSets
     }
   };
-  return settings;
 };
 
-const DEFAULT_SETTINGS = makeSettings([
-  ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
-  ["BetRivers", "Kambi", "https://az.betrivers.com"],
-  ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
-  ["Betway", "Betway", "https://az.betway.com/sports/home"],
-  ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
-  ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
-  ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
-  ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
-  ["Fliff", "Fliff", "https://sports.getfliff.com/"],
-  ["Hard Rock Bet", "Hard Rock Bet", "https://app.hardrock.bet"],
-  ["FanDuel", "FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
-  ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
-  ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
-  ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
-  ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
-  ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
-]);
+const DEFAULT_SETTINGS = makeVersionedSettings(
+    makeBookDetailsMap([
+      ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
+      ["BetRivers", "Kambi", "https://az.betrivers.com"],
+      ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
+      ["Betway", "Betway", "https://az.betway.com/sports/home"],
+      ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
+      ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
+      ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
+      ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
+      ["Fliff", "Fliff", "https://sports.getfliff.com/"],
+      ["Hard Rock Bet", "Hard Rock Bet", "https://app.hardrock.bet"],
+      ["FanDuel", "FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
+      ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
+      ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
+      ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
+      ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
+      ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
+    ]),
+    {}
+)
 
 const getSettings = (callback) => {
   chrome.storage.sync.get({v1: {}}, (s) => {
@@ -68,16 +69,14 @@ const getSettings = (callback) => {
   });
 }
 
-const setVersionedSettings = (settings, callback) => {
-  console.log("saving", settings);
-  chrome.storage.sync.set({v1: settings}, callback);
+const setVersionedSettings = (bookDetails, activeBookSets, callback) => {
+  const settings = makeVersionedSettings(bookDetails, activeBookSets);
+  chrome.storage.sync.set(settings, callback);
 }
 
 const setSettings = (bookDetails, activeBookSets, callback) => {
   getSettings(settings => {
-    settings.bookDetails = makeBookDetailsMap(bookDetails);
-    settings.activeBookSets = keepKeys2(settings.activeBookSets, activeBookSets);
-    setVersionedSettings(settings, callback);
+    setVersionedSettings(makeBookDetailsMap(bookDetails), keepKeys2(settings.activeBookSets, activeBookSets), callback);
   });
 }
 
