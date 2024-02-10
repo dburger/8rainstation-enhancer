@@ -6,7 +6,7 @@ importScripts("./common.js");
  * @param {object} settings - The settings object. See {@link makeVersionedSettings}.
  */
 const closeSportsbookTabs = (bookDetailsMap) => {
-    const hosts = [];
+    const hosts = ["app.8rainstation.com"];
     for (const bd of Object.values(bookDetailsMap)) {
         hosts.push(bd.hostname);
     }
@@ -15,8 +15,6 @@ const closeSportsbookTabs = (bookDetailsMap) => {
             if (!tab.active) {
                 for (let i = 0; i < hosts.length; i++) {
                     if (tab.url.includes(hosts[i])) {
-                        // TODO(dburger): this was supposed to include
-                        // extra app.8rainstation.com tabs.
                         chrome.tabs.remove(tab.id);
                         break;
                     }
