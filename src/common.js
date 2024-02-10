@@ -31,11 +31,11 @@ const makeBookDetailsMap = (bookDetails) => {
   return result;
 };
 
-const makeVersionedSettings = (bookDetails, activeBookSets) => {
+const makeVersionedSettings = (bookDetailsMap, activeBooksMap) => {
   return {
     v1: {
-      bookDetails: bookDetails,
-      activeBookSets: activeBookSets
+      bookDetailsMap: bookDetailsMap,
+      activeBooksMap: activeBooksMap
     }
   };
 };
@@ -69,21 +69,21 @@ const getSettings = (callback) => {
   });
 }
 
-const setVersionedSettings = (bookDetails, activeBookSets, callback) => {
-  const settings = makeVersionedSettings(bookDetails, activeBookSets);
+const setVersionedSettings = (bookDetailsMap, activeBooksMap, callback) => {
+  const settings = makeVersionedSettings(bookDetailsMap, activeBooksMap);
   chrome.storage.sync.set(settings, callback);
 }
 
-const setSettings = (bookDetails, activeBookSets, callback) => {
+const setSettings = (bookDetails, activeBooksNames, callback) => {
   getSettings(settings => {
-    setVersionedSettings(makeBookDetailsMap(bookDetails), keepKeys2(settings.activeBookSets, activeBookSets), callback);
+    setVersionedSettings(makeBookDetailsMap(bookDetails), keepKeys2(settings.activeBooksMap, activeBooksNames), callback);
   });
 }
 
-const setActiveBookSetSettings = (name, activeBooks, callback) => {
+const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
-    settings.activeBookSets[name] = activeBooks;
-    setVersionedSettings(settings, callback);
+    settings.activeBooksMap[name] = activeBooks;
+    setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, callback);
   });
 };
 

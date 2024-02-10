@@ -10,7 +10,7 @@ getSettings(s => {
   if (isBooksPage()) {
     const datalist = document.getElementById("activeBooksNamesDatalist");
     if (datalist) {
-      for (const name of Object.keys(settings.activeBookSets)) {
+      for (const name of Object.keys(settings.activeBooksMap)) {
         const option = document.createElement("option");
         option.setAttribute("value", name);
         datalist.appendChild(option);
@@ -207,7 +207,7 @@ const loadActiveBooksDiv = () => {
     const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
     getSettings(settings => {
       // TODO(dburger): convert to Set for speed up below?
-      const activeBooks = settings.activeBookSets[activeBooksName];
+      const activeBooks = settings.activeBooksMap[activeBooksName];
       if (!activeBooks) {
         return;
       }
@@ -239,7 +239,7 @@ const storeActiveBooksDiv = () => {
       }
     }
     const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
-    setActiveBookSetSettings(activeBooksName, activeBooks, (x) => {
+    setActiveBooks(activeBooksName, activeBooks, (x) => {
       // TODO(dburger): Drop a better log.
       console.log("called back");
     });
@@ -320,9 +320,9 @@ const addWagersNav = (anchor) => {
 };
 
 const getUrls = (book) => {
-  const bookDetails = settings.bookDetails[book];
+  const bookDetails = settings.bookDetailsMap[book];
   if (bookDetails) {
-    return Object.values(settings.bookDetails)
+    return Object.values(settings.bookDetailsMap)
         .filter(bd => bd.oddsGroup === bookDetails.oddsGroup)
         .map(bd => bd.urlTemplate);
   } else {

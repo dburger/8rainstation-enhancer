@@ -65,18 +65,18 @@ const loadBookDetails = (bookDetails) => {
     }
 };
 
-const loadActiveBooks = (activeBookSets) => {
+const loadActiveBooks = (activeBooksMap) => {
     const tbody = document.getElementById("activeBooksBody");
     removeChildren(tbody);
 
-    for (const key of Object.keys(activeBookSets)) {
+    for (const key of Object.keys(activeBooksMap)) {
         addActiveBooksRow(tbody, key);
     }
 };
 
 const loadSettings = (settings) => {
-    loadBookDetails(settings.bookDetails);
-    loadActiveBooks(settings.activeBookSets);
+    loadBookDetails(settings.bookDetailsMap);
+    loadActiveBooks(settings.activeBooksMap);
 };
 
 document.addEventListener("DOMContentLoaded", (evt) => {
