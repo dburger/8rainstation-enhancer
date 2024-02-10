@@ -309,7 +309,6 @@ const addBooksNav = (anchor) => {
 };
 
 const addWeightingsNav = (anchor) => {
-  // TODO(dburger):
   // insertAfter(storeActiveWeightingsDiv(), anchor.parentElement);
   // insertAfter(loadActiveWeightingsDiv(), anchor.parentElement);
   // insertAfter(activeWeightingSetNameTextBox(), anchor.parentElement);
@@ -361,7 +360,6 @@ if (settingsAnchor) {
     addPlaysNav(settingsAnchor);
     highlightCurrentPlaysNav();
   } else if (isEventsPage()) {
-    console.log("events page");
     addEventsNav(settingsAnchor);
   } else if (isBooksPage()) {
     addBooksNav(settingsAnchor);
