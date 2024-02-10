@@ -5,7 +5,21 @@
 // For now, initialization like adding the custom links, lives outside this callback.
 let settings = null;
 
-getSettings(s => settings = s);
+getSettings(s => {
+  settings = s;
+  if (isBooksPage()) {
+    const datalist = document.getElementById("activeBookSetDatalist");
+    if (datalist) {
+      for (const name of Object.keys(settings.activeBookSets)) {
+        const option = document.createElement("option");
+        option.setAttribute("value", name);
+        datalist.appendChild(option);
+      }
+    } else {
+      // TODO(dburger): drop an error log.
+    }
+  }
+});
 
 const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
 
@@ -241,10 +255,15 @@ const activeBookSetNameTextBox = () => {
   const input = document.createElement("input");
   input.setAttribute("id", "activeBookSetTextBox");
   input.setAttribute("type", "text");
+  input.setAttribute("list", "activeBookSetDatalist");
+
+  const datalist = document.createElement("datalist");
+  datalist.setAttribute("id", "activeBookSetDatalist");
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav unclickable");
   div.appendChild(input);
+  div.appendChild(datalist);
 
   return div;
 };
