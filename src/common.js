@@ -31,11 +31,12 @@ const makeBookDetailsMap = (bookDetails) => {
   return result;
 };
 
-const makeVersionedSettings = (bookDetailsMap, activeBooksMap) => {
+const makeVersionedSettings = (bookDetailsMap, activeBooksMap, bookWeightingsMap) => {
   return {
     v1: {
       bookDetailsMap: bookDetailsMap,
-      activeBooksMap: activeBooksMap
+      activeBooksMap: activeBooksMap,
+      bookWeightingsMap: bookWeightingsMap
     }
   };
 };
@@ -59,7 +60,7 @@ const DEFAULT_SETTINGS = makeVersionedSettings(
       ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
       ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
     ]),
-    {}
+    {}, {}
 )
 
 const getSettings = (callback) => {
@@ -69,22 +70,32 @@ const getSettings = (callback) => {
   });
 }
 
-const setVersionedSettings = (bookDetailsMap, activeBooksMap, callback) => {
-  const settings = makeVersionedSettings(bookDetailsMap, activeBooksMap);
+const setVersionedSettings = (bookDetailsMap, activeBooksMap, bookWeightingsMap, callback) => {
+  const settings = makeVersionedSettings(bookDetailsMap, activeBooksMap, bookWeightingsMap);
   chrome.storage.sync.set(settings, callback);
 }
 
-const setSettings = (bookDetails, activeBooksNames, callback) => {
+const setSettings = (bookDetails, activeBooksNames, bookWeightingsNames, callback) => {
   getSettings(settings => {
-    setVersionedSettings(makeBookDetailsMap(bookDetails), keepKeys2(settings.activeBooksMap, activeBooksNames), callback);
+    const bookDetailsMap = makeBookDetailsMap(bookDetails);
+    const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
+    const bookWeightingsMap = keepKeys2(settings.bookWeightingsMap, bookWeightingsNames);
+    setVersionedSettings(bookDetailsMap, activeBooksMap, bookWeightingsMap, callback);
   });
 }
 
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
     settings.activeBooksMap[name] = activeBooks;
-    setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, callback);
+    setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, settings.bookWeightingsMap, callback);
   });
+};
+
+const setBookWeightings = (name, weightings, callback) => {
+    getSettings(settings => {
+        settings.bookWeightingsMap[name] = weightings;
+        setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, settings.bookWeightingsMap, callback);
+    });
 };
 
 const keepKeys1 = (obj, keys) => {
