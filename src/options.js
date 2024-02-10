@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     const bookDetailsBody = document.getElementById("bookDetailsBody");
     const activeBooksBody = document.getElementById("activeBooksBody");
+    const activeBookWeightingsBody = document.getElementById("activeBookWeightingsBody");
 
     const saveButton = document.getElementById("save");
     const reloadButton = document.getElementById("reload");
@@ -115,7 +116,12 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBooksNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(bookDetails, activeBooksNames, (e) => {
+        const activeBookWeightingsNames = [];
+        for (const tr of activeBookWeightingsBody.childNodes) {
+            activeBookWeightingsNames.push(tr.childNodes[1].innerText);
+        }
+
+        setSettings(bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -144,6 +150,12 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     activeBooksBody.addEventListener("click", (evt) => {
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             activeBooksBody.removeChild(evt.target.parentElement);
+        }
+    });
+
+    activeBookWeightingsBody.addEventListener("click", (evt) => {
+        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+            activeBookWeightingsBody.removeChild(evt.target.parentElement);
         }
     });
 });

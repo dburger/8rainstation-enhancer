@@ -8,9 +8,21 @@ let settings = null;
 getSettings(s => {
   settings = s;
   if (isBooksPage()) {
+    // TODO(dburger): DRY this and the next.
     const datalist = document.getElementById("activeBooksNamesDatalist");
     if (datalist) {
       for (const name of Object.keys(settings.activeBooksMap)) {
+        const option = document.createElement("option");
+        option.setAttribute("value", name);
+        datalist.appendChild(option);
+      }
+    } else {
+      // TODO(dburger): drop an error log.
+    }
+  } else if (isWeightingsPage()) {
+    const datalist = document.getElementById("activeBookWeightingsNamesDatalist");
+    if (datalist) {
+      for (const name of Object.keys(settings.activeBookWeightingsMap)) {
         const option = document.createElement("option");
         option.setAttribute("value", name);
         datalist.appendChild(option);
@@ -211,9 +223,9 @@ const loadActiveBooksDiv = () => {
       if (!activeBooks) {
         return;
       }
-      const books = document.querySelectorAll(".book");
-      for (const book of books) {
-        const label = book.childNodes[1];
+      const bookDivs = document.querySelectorAll(".book");
+      for (const bookDiv of bookDivs) {
+        const label = bookDiv.childNodes[1];
         if (label !== undefined && label.innerText !== "Select All Books") {
           label.childNodes[1].checked = activeBooks.includes(label.innerText);
         }
@@ -223,17 +235,41 @@ const loadActiveBooksDiv = () => {
   return loadActiveBooksDiv;
 };
 
+const loadActiveBookWeightingsDiv = () => {
+  const loadActiveBookWeightingsDiv = navDiv("load-weightings", "", "Load");
+  loadActiveBookWeightingsDiv.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const activeWeightingsName = document.getElementById("activeBookWeightingsNameTextBox").value;
+    getSettings(settings => {
+      const activeWeightings = settings.activeBookWeightingsMap[activeWeightingsName];
+      if (!activeWeightings) {
+        return;
+      }
+      const bookDivs = document.querySelectorAll(".book");
+      for (const bookDiv of bookDivs) {
+        const input = bookDiv.childNodes[1];
+        const label = bookDiv.childNodes[3];
+        const book = label.innerText;
+        const weight = activeWeightings[book];
+        input.value = weight ? weight : "";
+      }
+    });
+  });
+  return loadActiveBookWeightingsDiv;
+};
+
 const storeActiveBooksDiv = () => {
   const storeActiveBooksDiv = navDiv("store-books", "", "Store");
   storeActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
     const activeBooks = [];
-    const books = document.querySelectorAll(".book");
+    const bookDivs = document.querySelectorAll(".book");
     // This is somewhat fragile obviously. For example, extra text nodes in the DOM
     // will throw this off. May need to change to the walk* algorithms instead.
-    for (const book of books) {
-      const label = book.childNodes[1];
+    for (const bookDiv of bookDivs) {
+      const label = bookDiv.childNodes[1];
       if (label !== undefined && label.innerText !== "Select All Books" && label.childNodes[1].checked) {
         activeBooks.push(label.innerText);
       }
@@ -247,6 +283,33 @@ const storeActiveBooksDiv = () => {
   return storeActiveBooksDiv;
 };
 
+const storeActiveBookWeightingsDiv = () => {
+  const storeActiveBookWeightingsDiv = navDiv("store-weightings", "", "Store");
+  storeActiveBookWeightingsDiv.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    const activeWeightings = {};
+    const bookDivs = document.querySelectorAll(".book");
+    // This is somewhat fragile obviously. For example, extra text nodes in the DOM
+    // will throw this off. May need to change to the walk* algorithms instead.
+    for (const bookDiv of bookDivs) {
+      const input = bookDiv.childNodes[1];
+      const label = bookDiv.childNodes[3];
+      if (input.value) {
+        const book = label.innerText;
+        const weight = parseFloat(input.value);
+        activeWeightings[book] = weight;
+      }
+    }
+    const activeBookWeightingsName = document.getElementById("activeBookWeightingsNameTextBox").value;
+    setBookWeightings(activeBookWeightingsName, activeWeightings, (x) => {
+      // TODO(dburger): Drop a better log.
+      console.log("called back");
+    });
+  });
+  return storeActiveBookWeightingsDiv;
+};
+
 const activeBooksNameTextBox = () => {
   const input = document.createElement("input");
   input.setAttribute("id", "activeBooksNameTextBox");
@@ -255,6 +318,23 @@ const activeBooksNameTextBox = () => {
 
   const datalist = document.createElement("datalist");
   datalist.setAttribute("id", "activeBooksNamesDatalist");
+
+  const div = document.createElement("div");
+  div.setAttribute("class", "nav unclickable");
+  div.appendChild(input);
+  div.appendChild(datalist);
+
+  return div;
+};
+
+const activeBookWeightingsNameTextBox = () => {
+  const input = document.createElement("input");
+  input.setAttribute("id", "activeBookWeightingsNameTextBox");
+  input.setAttribute("type", "text");
+  input.setAttribute("list", "activeBookWeightingsNamesDatalist");
+
+  const datalist = document.createElement("datalist");
+  datalist.setAttribute("id", "activeBookWeightingsNamesDatalist");
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav unclickable");
@@ -309,10 +389,9 @@ const addBooksNav = (anchor) => {
 };
 
 const addWeightingsNav = (anchor) => {
-  // insertAfter(storeActiveWeightingsDiv(), anchor.parentElement);
-  // insertAfter(loadActiveWeightingsDiv(), anchor.parentElement);
-  // insertAfter(activeWeightingsNameTextBox(), anchor.parentElement);
-  insertAfter(navDiv("weightings", "", "weightings"), anchor.parentElement);
+  insertAfter(storeActiveBookWeightingsDiv(), anchor.parentElement);
+  insertAfter(loadActiveBookWeightingsDiv(), anchor.parentElement);
+  insertAfter(activeBookWeightingsNameTextBox(), anchor.parentElement);
 };
 
 const addWagersNav = (anchor) => {
