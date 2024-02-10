@@ -238,8 +238,8 @@ const storeActiveBooksDiv = () => {
         activeBooks.push(label.innerText);
       }
     }
-    const activeBookSetName = document.getElementById("activeBooksNameTextBox").value;
-    setActiveBookSetSettings(activeBookSetName, activeBooks, (x) => {
+    const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
+    setActiveBookSetSettings(activeBooksName, activeBooks, (x) => {
       // TODO(dburger): Drop a better log.
       console.log("called back");
     });
