@@ -2,8 +2,10 @@ importScripts("./common.js");
 
 /**
  * Closes all tabs opened to sportsbook sites per the settings.
+ * See {@link makeVersionedSettings}.
  *
- * @param bookDetailsMap {Object} - The mapping of book text keys to book details.
+ * @param bookDetailsMap {Object} - The mapping of book text keys to book details
+ *     as stored in the settings.
  */
 const closeSportsbookTabs = (bookDetailsMap) => {
     const hosts = Object.values(bookDetailsMap).map(bd => bd.hostname);
