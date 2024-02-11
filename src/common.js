@@ -41,27 +41,32 @@ const makeVersionedSettings = (bookDetailsMap, activeBooksMap, activeBookWeighti
   };
 };
 
+const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
+    ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
+    ["BetRivers", "Kambi", "https://az.betrivers.com"],
+    ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
+    ["Betway", "Betway", "https://az.betway.com/sports/home"],
+    ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
+    ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
+    ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
+    ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
+    ["Fliff", "Fliff", "https://sports.getfliff.com/"],
+    ["Hard Rock Bet", "Hard Rock Bet", "https://app.hardrock.bet"],
+    ["FanDuel", "FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
+    ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
+    ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
+    ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
+    ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
+    ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
+]);
+
+const DEFAULT_ACTIVE_BOOKS_MAP = {};
+const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
+
 const DEFAULT_SETTINGS = makeVersionedSettings(
-    makeBookDetailsMap([
-      ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
-      ["BetRivers", "Kambi", "https://az.betrivers.com"],
-      ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
-      ["Betway", "Betway", "https://az.betway.com/sports/home"],
-      ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
-      ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
-      ["Desert Diamond", "Kambi", "https://www.playdesertdiamond.com/en/sports/home"],
-      ["ESPN Bet", "ESPN Bet", "https://espnbet.com/search?searchTerm=${homeTeam}"],
-      ["Fliff", "Fliff", "https://sports.getfliff.com/"],
-      ["Hard Rock Bet", "Hard Rock Bet", "https://app.hardrock.bet"],
-      ["FanDuel", "FanDuel", "https://sportsbook.fanduel.com/search?q=${homeTeam}"],
-      ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
-      ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
-      ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
-      ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
-      ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
-    ]),
-    {}, {}
-)
+    DEFAULT_BOOK_DETAILS_MAP,
+    DEFAULT_ACTIVE_BOOKS_MAP,
+    DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP);
 
 const getSettings = (callback) => {
   chrome.storage.sync.get({v1: {}}, (s) => {
