@@ -41,10 +41,11 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     return tr;
 };
 
-const createNameRow = (name) => {
+const createKeyValueRow = (key, value) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
-    tr.appendChild(createTextTd(name));
+    tr.appendChild(createTextTd(key));
+    tr.appendChild(createTextTd(value));
     return tr;
 }
 
@@ -52,9 +53,9 @@ const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
     tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
 
-const addNameRow = (tbody, name) => {
-    tbody.appendChild(createNameRow(name));
-}
+const addKeyValueRow = (tbody, key, value) => {
+    tbody.appendChild(createKeyValueRow(key, value));
+};
 
 const loadBookDetails = (bookDetails) => {
     const tbody = document.getElementById("bookDetailsBody");
@@ -69,8 +70,8 @@ const loadActiveBooks = (activeBooksMap) => {
     const tbody = document.getElementById("activeBooksBody");
     removeChildren(tbody);
 
-    for (const name of Object.keys(activeBooksMap)) {
-        addNameRow(tbody, name);
+    for (const [key, value] of Object.entries(activeBooksMap)) {
+        addKeyValueRow(tbody, key, value);
     }
 };
 
@@ -78,8 +79,9 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
     const tbody = document.getElementById("activeBookWeightingsBody");
     removeChildren(tbody);
 
-    for (const name of Object.keys(activeBookWeightingsMap)) {
-        addNameRow(tbody, name);
+    for (const [key, value] of Object.entries(activeBookWeightingsMap)) {
+        // TODO(dburger): object key => value renderer.
+        addKeyValueRow(tbody, key, Object.entries(value));
     }
 };
 
