@@ -80,8 +80,7 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
     removeChildren(tbody);
 
     for (const [key, value] of Object.entries(activeBookWeightingsMap)) {
-        // TODO(dburger): object key => value renderer.
-        addKeyValueRow(tbody, key, Object.entries(value));
+        addKeyValueRow(tbody, key, objectToString(value));
     }
 };
 

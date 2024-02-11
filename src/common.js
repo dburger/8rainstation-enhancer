@@ -120,6 +120,14 @@ const keepKeys2 = (obj, keys) => {
   return newObj;
 };
 
+const objectToString = (obj) => {
+    const parts = [];
+    for (const [key, value] of Object.entries(obj)) {
+        parts.push(`${key}: ${value}`);
+    }
+    return parts.join(", ");
+};
+
 const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
