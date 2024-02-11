@@ -409,6 +409,18 @@ const getUrls = (book) => {
   }
 }
 
+const launchUrls = (urls, homeTeam) => {
+  if (urls.length > 0) {
+    for (let url of urls) {
+      if (homeTeam) {
+        url = url.replace("${homeTeam}", homeTeam);
+      }
+      // TODO(dburger): noopener?
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  }
+}
+
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
     const urls = getUrls(evt.target.innerText);
@@ -421,14 +433,7 @@ window.addEventListener("click", function (evt) {
       evt.stopPropagation();
     }
 
-    if (urls.length > 0) {
-      for (let url of urls) {
-        if (homeTeam) {
-          url = url.replace("${homeTeam}", homeTeam);
-        }
-        window.open(url, "_blank", "noreferrer");
-      }
-    }
+    launchUrls(urls, homeTeam);
   }
 }, true);
 
