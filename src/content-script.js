@@ -121,7 +121,7 @@ const getHomeTeam = (elem) => {
 /**
  * Creates and returns a clickable navigation div.
  *
- * @param id {number|string} - The id attribute to apply to the div element.
+ * @param id {string} - The id attribute to apply to the div element.
  * @param href {string} - The href for the link included in the div element.
  * @param text {string} - The text to display within the link in the div element.
  * @returns {HTMLDivElement} - The clickable navigation div.
@@ -143,21 +143,24 @@ const navDiv = (id, href, text) => {
  * Returns the minimum +EV URL for the given minimum +EV.
  *
  * @param minEv {number} - The minimum +EV to set in the URL.
+ * @param minWeight {number} - The minimum weight to set in the URL.
  * @returns {string} - The URL for the given minimum +EV.
  */
-const minEvUrl = (minEv) => {
-  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7`;
+const minEvUrl = (minEv, minWeight) => {
+  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=${minWeight}&days=7`;
 };
 
 /**
  * Creates and returns the clickable navigation div for minimum EV plays.
  *
+ * @param id {string} - The id attribute to apply to the div element.
  * @param minEv {number} - The minimum EV of plays to display.
- * @param text {number|string} - The text to display in the link.
+ * @param minWeight {number} - The minimum weight of plays to display.
+ * @param text {string} - The text to display in the link.
  * @returns {HTMLDivElement} - The clickable navigation div.
  */
-const minEvPlaysDiv = (minEv, text) => {
-  return navDiv(minEv, minEvUrl(minEv), text);
+const minEvPlaysDiv = (id, minEv, minWeight, text) => {
+  return navDiv(id, minEvUrl(minEv, minWeight), text);
 };
 
 /**
@@ -349,32 +352,17 @@ const addPlaysNav = (anchor) => {
   insertAfter(openOptionsDiv(), div);
   insertAfter(closeTabsDiv(), div);
   insertAfter(arbPlaysDiv(), div);
-  for (let i = 0; i < 6; i++) {
-    insertAfter(minEvPlaysDiv(i, i === 3 ? "THREE" : i), div);
-  }
-};
-
-const highlightNavDiv = (id) => {
-  const div = document.getElementById(id);
-  if (div) {
-    div.classList.add("active");
-  }
+  insertAfter(minEvPlaysDiv("3/2", 3, 2, "3/2"), div);
+  insertAfter(minEvPlaysDiv("5/0", 5, 0, "5/0"), div);
 };
 
 const highlightCurrentPlaysNav = () => {
-  const url = new URL(window.location.href);
-  const tail = url.pathname + url.search + url.hash;
-
-  const minEv = url.searchParams.get("ev");
-  for (let i = 0; i < 6; i++) {
-    if (tail === minEvUrl(i)) {
-      highlightNavDiv(minEv);
-      return;
+  const navDivs = document.querySelectorAll(".enhancer");
+  for (const div of navDivs) {
+    if (div.tagName === "DIV" && div.childNodes[0] && div.childNodes[0].tagName === "A" && div.childNodes[0].href === window.location.href) {
+      div.classList.add("active");
+      break;
     }
-  }
-
-  if (tail === ARB_URL) {
-    highlightNavDiv("arb");
   }
 };
 
