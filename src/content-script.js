@@ -133,7 +133,8 @@ const navDiv = (id, href, text) => {
 
   const div = document.createElement("div");
   div.setAttribute("id", id);
-  div.setAttribute("class", "nav enhancer");
+  const clazz = href ? "nav enhancer bookmark" : "nav enhancer";
+  div.setAttribute("class", clazz);
   div.appendChild(a);
 
   return div;
@@ -357,7 +358,7 @@ const addPlaysNav = (anchor) => {
 };
 
 const highlightCurrentPlaysNav = () => {
-  const navDivs = document.querySelectorAll(".enhancer");
+  const navDivs = document.querySelectorAll(".bookmark");
   for (const div of navDivs) {
     if (div.tagName === "DIV" && div.childNodes[0] && div.childNodes[0].tagName === "A" && div.childNodes[0].href === window.location.href) {
       div.classList.add("active");
