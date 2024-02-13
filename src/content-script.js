@@ -319,6 +319,7 @@ const activeBooksNameTextBox = () => {
   input.setAttribute("id", "activeBooksNameTextBox");
   input.setAttribute("type", "text");
   input.setAttribute("list", "activeBooksNamesDatalist");
+  input.setAttribute("size", "10");
 
   const datalist = document.createElement("datalist");
   datalist.setAttribute("id", "activeBooksNamesDatalist");
@@ -336,6 +337,7 @@ const activeBookWeightingsNameTextBox = () => {
   input.setAttribute("id", "activeBookWeightingsNameTextBox");
   input.setAttribute("type", "text");
   input.setAttribute("list", "activeBookWeightingsNamesDatalist");
+  input.setAttribute("size", "10");
 
   const datalist = document.createElement("datalist");
   datalist.setAttribute("id", "activeBookWeightingsNamesDatalist");
@@ -348,10 +350,14 @@ const activeBookWeightingsNameTextBox = () => {
   return div;
 };
 
-const addPlaysNav = (anchor) => {
-  const div = anchor.parentElement;
+const addCommonNav = (div) => {
   insertAfter(openOptionsDiv(), div);
   insertAfter(closeTabsDiv(), div);
+};
+
+const addPlaysNav = (anchor) => {
+  const div = anchor.parentElement;
+  addCommonNav(div);
   insertAfter(arbPlaysDiv(), div);
   insertAfter(minEvPlaysDiv("3/2", 3, 2, "3/2"), div);
   insertAfter(minEvPlaysDiv("5/0", 5, 0, "5/0"), div);
@@ -368,23 +374,34 @@ const highlightCurrentPlaysNav = () => {
 };
 
 const addEventsNav = (anchor) => {
-  insertAfter(navDiv("events", "", "events"), anchor.parentElement);
+  const div = anchor.parentElement;
+  addCommonNav(div);
 };
 
 const addBooksNav = (anchor) => {
-  insertAfter(storeActiveBooksDiv(), anchor.parentElement);
-  insertAfter(loadActiveBooksDiv(), anchor.parentElement);
-  insertAfter(activeBooksNameTextBox(), anchor.parentElement);
+  const div = anchor.parentElement;
+  addCommonNav(div);
+  insertAfter(storeActiveBooksDiv(), div);
+  insertAfter(loadActiveBooksDiv(), div);
+  insertAfter(activeBooksNameTextBox(), div);
 };
 
 const addWeightingsNav = (anchor) => {
-  insertAfter(storeActiveBookWeightingsDiv(), anchor.parentElement);
-  insertAfter(loadActiveBookWeightingsDiv(), anchor.parentElement);
-  insertAfter(activeBookWeightingsNameTextBox(), anchor.parentElement);
+  const div = anchor.parentElement;
+  addCommonNav(div);
+  insertAfter(storeActiveBookWeightingsDiv(), div);
+  insertAfter(loadActiveBookWeightingsDiv(), div);
+  insertAfter(activeBookWeightingsNameTextBox(), div);
 };
 
 const addWagersNav = (anchor) => {
-  insertAfter(navDiv("wagers", "", "wagers"), anchor.parentElement);
+  const div = anchor.parentElement;
+  addCommonNav(div);
+};
+
+const addSettingsNav = (anchor) => {
+  const div = anchor.parentElement;
+  addCommonNav(div);
 };
 
 const getUrls = (book) => {
@@ -441,7 +458,7 @@ if (settingsAnchor) {
   } else if (isWagersPage()) {
     addWagersNav(settingsAnchor);
   } else if (isSettingsPage()) {
-    console.log("settings page");
+    addSettingsNav(settingsAnchor);
   }
 } else {
   console.log("Settings link not found, navigation not added.");
