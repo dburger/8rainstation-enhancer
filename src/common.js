@@ -1,5 +1,5 @@
 // NOTE: This is not done as a module (with export, for example) because
-// content scripts can't easily import modules. Thus this is done as shared
+// content scripts can't easily import modules. Thus, this is done as shared
 // Javascript with:
 //
 // 1) The manifest listing this file as one of the files for content-script.js
@@ -14,6 +14,17 @@
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
+/**
+ * Returns a book detail object. This is used in the serialization of the
+ * settings and is the value in the {@link bookDetailsMap}.
+ *
+ * @param oddsGroup {string} - The odds group the book belongs to. An odds group
+ *     has the same odds.
+ * @param urlTemplate {string} - The URL template for launching the sportsbook on
+ *     a given bet.
+ * @returns {{hostname: string, oddsGroup: string, urlTemplate: string}} - The
+ *     book detail object.
+ */
 const bookDetail = (oddsGroup, urlTemplate) => {
   const url = new URL(urlTemplate);
   return {
