@@ -57,6 +57,15 @@ const addKeyValueRow = (tbody, key, value) => {
     tbody.appendChild(createKeyValueRow(key, value));
 };
 
+const loadPlaymarks = (playmarksMap) => {
+    const tbody = document.getElementById("playmarksBody");
+    removeChildren(tbody);
+
+    for (const [key, value] of Object.entries(playmarksMap)) {
+        addKeyValueRow(tbody, key, value);
+    }
+};
+
 const loadBookDetails = (bookDetails) => {
     const tbody = document.getElementById("bookDetailsBody");
     removeChildren(tbody);
@@ -85,6 +94,7 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
 };
 
 const loadSettings = (settings) => {
+    loadPlaymarks(settings.playmarksMap);
     loadBookDetails(settings.bookDetailsMap);
     loadActiveBooks(settings.activeBooksMap);
     loadActiveBookWeightings(settings.activeBookWeightingsMap);
@@ -93,6 +103,7 @@ const loadSettings = (settings) => {
 document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
 
+    const playmarksBody = document.getElementById("playmarksBody");
     const bookDetailsBody = document.getElementById("bookDetailsBody");
     const activeBooksBody = document.getElementById("activeBooksBody");
     const activeBookWeightingsBody = document.getElementById("activeBookWeightingsBody");
@@ -103,7 +114,11 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const addButton = document.getElementById("add");
 
     saveButton.addEventListener("click", (evt) => {
-        console.log("save");
+        const playmarksNames = [];
+        for (const tr of playmarksBody.childNodes) {
+            playmarksNames.push(tr.childNodes[1].innerText);
+        }
+
         const bookDetails = [];
         for (const tr of bookDetailsBody.childNodes) {
             const key = tr.childNodes[1].childNodes[0].value;
@@ -122,7 +137,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBookWeightingsNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
+        setSettings(playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -140,6 +155,12 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     addButton.addEventListener("click", (evt) => {
         addBookDetailsRow(bookDetailsBody, "", "", "");
+    });
+
+    playmarksBody.addEventListener("click", (evt) => {
+        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+            playmarksBody.removeChild(evt.target.parentElement);
+        }
     });
 
     bookDetailsBody.addEventListener("click", (evt) => {

@@ -42,14 +42,21 @@ const makeBookDetailsMap = (bookDetails) => {
   return result;
 };
 
-const makeVersionedSettings = (bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
+const makeVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
   return {
     v1: {
+      playmarksMap: playmarksMap,
       bookDetailsMap: bookDetailsMap,
       activeBooksMap: activeBooksMap,
       activeBookWeightingsMap: activeBookWeightingsMap
     }
   };
+};
+
+const DEFAULT_PLAYMARKS_MAP = {
+    "5/0": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=5&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7",
+    "3/2": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25&weight=2&days=7",
+    "Arb": "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days="
 };
 
 const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
@@ -75,6 +82,7 @@ const DEFAULT_ACTIVE_BOOKS_MAP = {};
 const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
+    DEFAULT_PLAYMARKS_MAP,
     DEFAULT_BOOK_DETAILS_MAP,
     DEFAULT_ACTIVE_BOOKS_MAP,
     DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP);
@@ -86,31 +94,32 @@ const getSettings = (callback) => {
   });
 }
 
-const setVersionedSettings = (bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
-  const settings = makeVersionedSettings(bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
+const setVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
+  const settings = makeVersionedSettings(playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
   chrome.storage.sync.set(settings, callback);
 }
 
-const setSettings = (bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
+const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
   getSettings(settings => {
+    const playmarksMap = keepKeys2(settings.playmarksMap, playmarksNames);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
     const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
     const activeBookWeightingsMap = keepKeys2(settings.activeBookWeightingsMap, activeBookWeightingsNames);
-    setVersionedSettings(bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback);
+    setVersionedSettings(playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback);
   });
 }
 
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
     settings.activeBooksMap[name] = activeBooks;
-    setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+    setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
   });
 };
 
 const setBookWeightings = (name, weightings, callback) => {
     getSettings(settings => {
         settings.activeBookWeightingsMap[name] = weightings;
-        setVersionedSettings(settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+        setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
     });
 };
 

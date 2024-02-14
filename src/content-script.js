@@ -5,9 +5,21 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 // instead of on demand when needed.
 let settings = null;
 
+// TODO(dburger): since some UI enhancements can't be done until getSettings returns,
+// perhaps all UI enhancements should be moved here for consistency. For example,
+// the bookmarks on the plays page come from settings.playmarksMap.
+
 getSettings(s => {
   settings = s;
-  if (isBooksPage()) {
+  if (isPlaysPage() || isBetMarketDetailsPage()) {
+    const settingsAnchor = document.querySelector('a[href="/settings"]');
+    // TODO(dburger): if not found log error and bail.
+    // TODO(dburger): need a way to control link order.
+    for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
+      insertAfter(navDiv(key, value, key), settingsAnchor.parentElement);
+    }
+    highlightCurrentPlaysNav();
+  } else if (isBooksPage()) {
     // TODO(dburger): DRY this and the next.
     const datalist = document.getElementById("activeBooksNamesDatalist");
     if (datalist) {
@@ -149,28 +161,6 @@ const navDiv = (id, href, text) => {
  */
 const minEvUrl = (minEv, minWeight) => {
   return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=${minWeight}&days=7`;
-};
-
-/**
- * Creates and returns the clickable navigation div for minimum EV plays.
- *
- * @param id {string} - The id attribute to apply to the div element.
- * @param minEv {number} - The minimum EV of plays to display.
- * @param minWeight {number} - The minimum weight of plays to display.
- * @param text {string} - The text to display in the link.
- * @returns {HTMLDivElement} - The clickable navigation div.
- */
-const minEvPlaysDiv = (id, minEv, minWeight, text) => {
-  return navDiv(id, minEvUrl(minEv, minWeight), text);
-};
-
-/**
- * Creates and returns the clickable navigation div for arb plays.
- *
- * @returns {HTMLDivElement} - The clickable navigation div.
- */
-const arbPlaysDiv = () => {
-  return navDiv("arb", ARB_URL, "A");
 };
 
 /**
@@ -358,9 +348,6 @@ const addCommonNav = (div) => {
 const addPlaysNav = (anchor) => {
   const div = anchor.parentElement;
   addCommonNav(div);
-  insertAfter(arbPlaysDiv(), div);
-  insertAfter(minEvPlaysDiv("3/2", 3, 2, "3/2"), div);
-  insertAfter(minEvPlaysDiv("5/0", 5, 0, "5/0"), div);
 };
 
 const highlightCurrentPlaysNav = () => {
@@ -448,7 +435,6 @@ const settingsAnchor = document.querySelector('a[href="/settings"]');
 if (settingsAnchor) {
   if (isPlaysPage() || isBetMarketDetailsPage()) {
     addPlaysNav(settingsAnchor);
-    highlightCurrentPlaysNav();
   } else if (isEventsPage()) {
     addEventsNav(settingsAnchor);
   } else if (isBooksPage()) {
