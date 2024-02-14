@@ -60,7 +60,7 @@ const isPlaysPage = () => {
  * @returns {boolean}
  */
 const isEventsPage = () => {
-  return window.location.href.match(/^.*\/events\/?$/);
+  return window.location.href.match(/^.*\/events\/?$/) !== null;
 };
 
 /**
@@ -69,7 +69,7 @@ const isEventsPage = () => {
  * @returns {boolean}
  */
 const isBooksPage = () => {
-  return window.location.href.match(/^.*\/settings\/books\/?$/);
+  return window.location.href.match(/^.*\/settings\/books\/?$/) !== null;
 };
 
 /**
@@ -78,7 +78,7 @@ const isBooksPage = () => {
  * @returns {boolean}
  */
 const isWeightingsPage = () => {
-  return window.location.href.match(/^.*\/settings\/weightings\/?$/);
+  return window.location.href.match(/^.*\/settings\/weightings\/?$/) !== null;
 };
 
 /**
@@ -96,7 +96,7 @@ const isWagersPage = () => {
  * @returns {boolean}
  */
 const isSettingsPage = () => {
-  return window.location.href.match(/^.*\/settings\/?$/);
+  return window.location.href.match(/^.*\/settings\/?$/) !== null;
 };
 
 /**
@@ -105,7 +105,7 @@ const isSettingsPage = () => {
  * @returns {boolean}
  */
 const isBetMarketDetailsPage = () => {
-  return window.location.href.match(/^.*\/events\/.+$/);
+  return window.location.href.match(/^.*\/events\/.+$/) !== null;
 }
 
 const getHomeTeam = (elem) => {
