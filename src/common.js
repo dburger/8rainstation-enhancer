@@ -56,7 +56,8 @@ const makeVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, act
 const DEFAULT_PLAYMARKS_MAP = {
     "5/0": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=5&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7",
     "3/2": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25&weight=2&days=7",
-    "Arb": "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days="
+    "BOA": "/search/plays?search=BetOnline&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7",
+    "PYA": "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7",
 };
 
 const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
