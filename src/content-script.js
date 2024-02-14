@@ -11,16 +11,23 @@ let settings = null;
 
 getSettings(s => {
   settings = s;
+  if (!anchorDiv) {
+    // TODO(dburger): console log not enhanced.
+    return;
+  }
+
   if (isPlaysPage() || isBetMarketDetailsPage()) {
-    const settingsAnchor = document.querySelector('a[href="/settings"]');
-    // TODO(dburger): if not found log error and bail.
     // TODO(dburger): need a way to control link order.
     for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
-      insertAfter(navDiv(key, value, key), settingsAnchor.parentElement);
+      insertAfter(navDiv(key, value, key), anchorDiv);
     }
     highlightCurrentPlaysNav();
   } else if (isBooksPage()) {
     // TODO(dburger): DRY this and the next.
+    insertAfter(storeActiveBooksDiv(), anchorDiv);
+    insertAfter(loadActiveBooksDiv(), anchorDiv);
+    insertAfter(activeBooksNameTextBox(), anchorDiv);
+
     const datalist = document.getElementById("activeBooksNamesDatalist");
     if (datalist) {
       for (const name of Object.keys(settings.activeBooksMap)) {
@@ -32,6 +39,10 @@ getSettings(s => {
       // TODO(dburger): drop an error log.
     }
   } else if (isWeightingsPage()) {
+    insertAfter(storeActiveBookWeightingsDiv(), anchorDiv);
+    insertAfter(loadActiveBookWeightingsDiv(), anchorDiv);
+    insertAfter(activeBookWeightingsNameTextBox(), anchorDiv);
+
     const datalist = document.getElementById("activeBookWeightingsNamesDatalist");
     if (datalist) {
       for (const name of Object.keys(settings.activeBookWeightingsMap)) {
@@ -340,16 +351,6 @@ const activeBookWeightingsNameTextBox = () => {
   return div;
 };
 
-const addCommonNav = (div) => {
-  insertAfter(openOptionsDiv(), div);
-  insertAfter(closeTabsDiv(), div);
-};
-
-const addPlaysNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
-};
-
 const highlightCurrentPlaysNav = () => {
   const navDivs = document.querySelectorAll(".bookmark");
   for (const div of navDivs) {
@@ -358,37 +359,6 @@ const highlightCurrentPlaysNav = () => {
       break;
     }
   }
-};
-
-const addEventsNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
-};
-
-const addBooksNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
-  insertAfter(storeActiveBooksDiv(), div);
-  insertAfter(loadActiveBooksDiv(), div);
-  insertAfter(activeBooksNameTextBox(), div);
-};
-
-const addWeightingsNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
-  insertAfter(storeActiveBookWeightingsDiv(), div);
-  insertAfter(loadActiveBookWeightingsDiv(), div);
-  insertAfter(activeBookWeightingsNameTextBox(), div);
-};
-
-const addWagersNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
-};
-
-const addSettingsNav = (anchor) => {
-  const div = anchor.parentElement;
-  addCommonNav(div);
 };
 
 const getUrls = (book) => {
@@ -430,22 +400,13 @@ window.addEventListener("click", function (evt) {
   }
 }, true);
 
-const settingsAnchor = document.querySelector('a[href="/settings"]');
+const settingsLink = document.querySelector('a[href="/settings"]');
+let anchorDiv = null;
 
-if (settingsAnchor) {
-  if (isPlaysPage() || isBetMarketDetailsPage()) {
-    addPlaysNav(settingsAnchor);
-  } else if (isEventsPage()) {
-    addEventsNav(settingsAnchor);
-  } else if (isBooksPage()) {
-    addBooksNav(settingsAnchor);
-  } else if (isWeightingsPage()) {
-    addWeightingsNav(settingsAnchor);
-  } else if (isWagersPage()) {
-    addWagersNav(settingsAnchor);
-  } else if (isSettingsPage()) {
-    addSettingsNav(settingsAnchor);
-  }
+if (settingsLink) {
+  anchorDiv = openOptionsDiv();
+  insertAfter(anchorDiv, settingsLink.parentElement);
+  insertAfter(closeTabsDiv(), settingsLink.parentElement);
 } else {
   console.log("Settings link not found, navigation not added.");
 }
