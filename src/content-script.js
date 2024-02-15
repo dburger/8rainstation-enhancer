@@ -7,10 +7,6 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 let settings = null;
 let anchorDiv = null;
 
-// TODO(dburger): since some UI enhancements can't be done until getSettings returns,
-// perhaps all UI enhancements should be moved here for consistency. For example,
-// the bookmarks on the plays page come from settings.playmarksMap.
-
 getSettings(s => {
   settings = s;
   if (!anchorDiv) {
@@ -379,7 +375,6 @@ const launchUrls = (urls, homeTeam) => {
       if (homeTeam) {
         url = url.replace("${homeTeam}", homeTeam);
       }
-      // TODO(dburger): noopener?
       window.open(url, "_blank", "noopener,noreferrer");
     }
   }
