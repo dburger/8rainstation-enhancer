@@ -7,6 +7,19 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 let settings = null;
 let anchorDiv = null;
 
+const loadDatalist = (id, values) => {
+  const datalist = document.getElementById(id);
+  if (datalist) {
+    for (const value of values) {
+      const option = document.createElement("option");
+      option.setAttribute("value", value);
+      datalist.appendChild(option);
+    }
+  } else {
+    // TODO(dburger): drop an error log.
+  }
+}
+
 getSettings(s => {
   settings = s;
   if (!anchorDiv) {
@@ -14,42 +27,20 @@ getSettings(s => {
   }
 
   if (isPlaysPage() || isBetMarketDetailsPage()) {
-    // TODO(dburger): need a way to control link order.
     for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
       insertAfter(navDiv(key, value, key), anchorDiv);
     }
     highlightCurrentPlaysNav();
   } else if (isBooksPage()) {
-    // TODO(dburger): DRY this and the next.
     insertAfter(storeActiveBooksDiv(), anchorDiv);
     insertAfter(loadActiveBooksDiv(), anchorDiv);
     insertAfter(activeBooksNameTextBox(), anchorDiv);
-
-    const datalist = document.getElementById("activeBooksNamesDatalist");
-    if (datalist) {
-      for (const name of Object.keys(settings.activeBooksMap)) {
-        const option = document.createElement("option");
-        option.setAttribute("value", name);
-        datalist.appendChild(option);
-      }
-    } else {
-      // TODO(dburger): drop an error log.
-    }
+    loadDatalist("activeBooksNamesDatalist", Object.keys(settings.activeBooksMap));
   } else if (isWeightingsPage()) {
     insertAfter(storeActiveBookWeightingsDiv(), anchorDiv);
     insertAfter(loadActiveBookWeightingsDiv(), anchorDiv);
     insertAfter(activeBookWeightingsNameTextBox(), anchorDiv);
-
-    const datalist = document.getElementById("activeBookWeightingsNamesDatalist");
-    if (datalist) {
-      for (const name of Object.keys(settings.activeBookWeightingsMap)) {
-        const option = document.createElement("option");
-        option.setAttribute("value", name);
-        datalist.appendChild(option);
-      }
-    } else {
-      // TODO(dburger): drop an error log.
-    }
+    loadDatalist("activeBookWeightingsNamesDatalist", Object.keys(settings.activeBookWeightingsMap));
   }
 });
 
