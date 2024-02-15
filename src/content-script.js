@@ -3,7 +3,9 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 // As I understand it, content scripts cannot work as modules. This prevents us
 // from using async / await. Thus, the settings are retrieved here with a callback
 // instead of on demand when needed.
+
 let settings = null;
+let anchorDiv = null;
 
 // TODO(dburger): since some UI enhancements can't be done until getSettings returns,
 // perhaps all UI enhancements should be moved here for consistency. For example,
@@ -12,7 +14,6 @@ let settings = null;
 getSettings(s => {
   settings = s;
   if (!anchorDiv) {
-    // TODO(dburger): console log not enhanced.
     return;
   }
 
@@ -401,12 +402,11 @@ window.addEventListener("click", function (evt) {
 }, true);
 
 const settingsLink = document.querySelector('a[href="/settings"]');
-let anchorDiv = null;
 
 if (settingsLink) {
   anchorDiv = openOptionsDiv();
   insertAfter(anchorDiv, settingsLink.parentElement);
   insertAfter(closeTabsDiv(), settingsLink.parentElement);
 } else {
-  console.log("Settings link not found, navigation not added.");
+  console.error("Settings link not found, navigation not added.");
 }
