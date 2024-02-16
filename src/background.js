@@ -1,11 +1,11 @@
 importScripts("./common.js");
 
 /**
- * Closes all tabs opened to sportsbook sites per the settings.
- * See {@link makeVersionedSettings}.
+ * Closes all tabs opened to sportsbook sites per the settings. Runs in a
+ * background task as only background tasks can work with tabs.
  *
- * @param bookDetailsMap {Object} - The mapping of book text keys to book details
- *     as stored in the settings.
+ * @param bookDetailsMap {Object} - The mapping of book text keys to book
+ *     details as stored in the settings. See {@link makeVersionedSettings}.
  */
 const closeSportsbookTabs = (bookDetailsMap) => {
     const hosts = Object.values(bookDetailsMap).map(bd => bd.hostname);
@@ -24,6 +24,10 @@ const closeSportsbookTabs = (bookDetailsMap) => {
     });
 };
 
+/**
+ * Hooks into the message bus and responds to messages. Used to dispatch tasks
+ * that require a background context.
+ */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs(message.settings.bookDetailsMap);
