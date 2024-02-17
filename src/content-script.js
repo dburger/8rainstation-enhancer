@@ -131,25 +131,27 @@ const getHomeTeam = (elem) => {
 };
 
 /**
- * Creates and returns a clickable navigation div.
+ * Creates and returns a clickable navigation anchor. Note that this used
+ * to return a div, thus the holdover naming. The reason it returns an
+ * anchor instead is that the anchor wraps the div making a larger click
+ * area without having to resort to any trickery.
  *
  * @param id {string} - The id attribute to apply to the div element.
  * @param href {string} - The href for the link included in the div element.
  * @param text {string} - The text to display within the link in the div element.
- * @returns {HTMLDivElement} - The clickable navigation div.
+ * @returns {HTMLDivElement} - The clickable navigation anchor.
  */
 const navDiv = (id, href, text) => {
-  const a = document.createElement("a");
-  a.setAttribute("href", href);
-  a.appendChild(document.createTextNode(text));
-
   const div = document.createElement("div");
   div.setAttribute("id", id);
   const clazz = href ? "nav enhancer bookmark" : "nav enhancer";
   div.setAttribute("class", clazz);
-  div.appendChild(a);
+  div.appendChild(document.createTextNode(text));
 
-  return div;
+  const a = document.createElement("a");
+  a.setAttribute("href", href);
+  a.appendChild(div);
+  return a;
 };
 
 const addPlaymarkDiv = () => {
@@ -337,7 +339,7 @@ const activeBookWeightingsNameTextBox = () => {
 const highlightCurrentPlaysNav = () => {
   const navDivs = document.querySelectorAll(".bookmark");
   for (const div of navDivs) {
-    if (div.tagName === "DIV" && div.childNodes[0] && div.childNodes[0].tagName === "A" && div.childNodes[0].href === window.location.href) {
+    if (div.tagName === "DIV" && div.parentElement.tagName === "A" && div.parentElement.href === window.location.href) {
       div.classList.add("active");
       break;
     }
