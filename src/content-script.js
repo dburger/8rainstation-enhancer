@@ -154,7 +154,7 @@ const navDiv = (id, href, text) => {
 
 const addPlaymarkDiv = () => {
   const div = navDiv("addPlaymark", "", "+");
-  div.add the click listener;
+  return div;
 };
 
 /**
