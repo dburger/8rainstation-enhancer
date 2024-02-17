@@ -152,17 +152,6 @@ const navDiv = (id, href, text) => {
 };
 
 /**
- * Returns the minimum +EV URL for the given minimum +EV.
- *
- * @param minEv {number} - The minimum +EV to set in the URL.
- * @param minWeight {number} - The minimum weight to set in the URL.
- * @returns {string} - The URL for the given minimum +EV.
- */
-const minEvUrl = (minEv, minWeight) => {
-  return `/search/plays?search=&group=Y&bet=Y&ways=1&ev=${minEv}&arb=0&sort=1&max=250&width=6.5%25&weight=${minWeight}&days=7`;
-};
-
-/**
  * Creates and returns a clickable div that operates by sending a message.
  *
  * @param id {number|string} - The id attribute to apply to the div element.
