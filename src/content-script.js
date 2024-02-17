@@ -27,6 +27,7 @@ getSettings(s => {
   }
 
   if (isPlaysPage() || isBetMarketDetailsPage()) {
+    insertAfter(addPlaymarkDiv(), anchorDiv);
     for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
       insertAfter(navDiv(key, value, key), anchorDiv);
     }
@@ -151,10 +152,15 @@ const navDiv = (id, href, text) => {
   return div;
 };
 
+const addPlaymarkDiv = () => {
+  const div = navDiv("addPlaymark", "", "+");
+  div.add the click listener;
+};
+
 /**
  * Creates and returns a clickable div that operates by sending a message.
  *
- * @param id {number|string} - The id attribute to apply to the div element.
+ * @param id {number} - The id attribute to apply to the div element.
  * @param text {string} - The text to display within the link in the div element.
  * @param action {string} - The action to send in the message.
  * @returns {HTMLDivElement} - The clickable navigation div.
