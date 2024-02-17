@@ -156,6 +156,11 @@ const navDiv = (id, href, text) => {
 
 const addPlaymarkDiv = () => {
   const div = navDiv("addPlaymark", "", "+");
+  div.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    console.log("addPlaymark");
+  });
   return div;
 };
 
