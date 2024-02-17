@@ -34,6 +34,16 @@ const bookDetail = (oddsGroup, urlTemplate) => {
   };
 };
 
+/**
+ * Creates a book details map from the input book details.
+ *
+ * @param bookDetails {[[string, string, string]]} - The book details in the
+ * form of [text key, odds group, URL template].
+ *
+ * @returns {{}}
+ * @returns {{string: {hostname: string, oddsGroup: string, urlTemplate: string}}} -
+ *     The created book details map.
+ */
 const makeBookDetailsMap = (bookDetails) => {
   const result = {};
   for (const bd of bookDetails) {
