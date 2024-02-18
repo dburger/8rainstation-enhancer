@@ -48,14 +48,14 @@ const createDeleteRowTd = () => {
 
 const createUpRowTd = () => {
     // TODO(dburger): replace with arrow.
-    const td = createTextTd("UP");
+    const td = createTextTd("\u2191");
     td.className = "upper";
     return td;
 };
 
 const createDownRowTd = () => {
     // TODO(dburger): replace with arrow.
-    const td = createTextTd("DN");
+    const td = createTextTd("\u2193");
     td.className = "downer";
     return td;
 };
@@ -280,13 +280,13 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         // TODO(dburger): use classnames!
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             playmarksBody.removeChild(evt.target.parentElement);
-        } else if (evt.target.tagName === "TD" && evt.target.innerText === "UP") {
+        } else if (evt.target.tagName === "TD" && evt.target.innerText === "\u2191") {
             const row = evt.target.parentElement;
             const priorRow = row.previousSibling;
             if (priorRow) {
                 insertBefore(row, priorRow);
             }
-        } else if (evt.target.tagName === "TD" && evt.target.innerText === "DN") {
+        } else if (evt.target.tagName === "TD" && evt.target.innerText === "\u2193") {
             const row = evt.target.parentElement;
             const nextRow = row.nextSibling;
             if (nextRow) {
