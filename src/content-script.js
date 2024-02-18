@@ -29,7 +29,7 @@ getSettings(s => {
   if (isPlaysPage() || isBetMarketDetailsPage()) {
     insertAfter(addPlaymarkDiv(), anchorDiv);
     for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
-      insertAfter(navDiv(key, value, key), anchorDiv);
+      insertAfter(navDiv(value, key), anchorDiv);
     }
     highlightCurrentPlaysNav();
   } else if (isBooksPage()) {
@@ -136,14 +136,12 @@ const getHomeTeam = (elem) => {
  * anchor instead is that the anchor wraps the div making a larger click
  * area without having to resort to any trickery.
  *
- * @param id {string} - The id attribute to apply to the div element.
  * @param href {string} - The href for the link included in the div element.
  * @param text {string} - The text to display within the link in the div element.
  * @returns {HTMLDivElement} - The clickable navigation anchor.
  */
-const navDiv = (id, href, text) => {
+const navDiv = (href, text) => {
   const div = document.createElement("div");
-  div.setAttribute("id", id);
   const clazz = href ? "nav enhancer bookmark" : "nav enhancer";
   div.setAttribute("class", clazz);
   div.appendChild(document.createTextNode(text));
@@ -156,8 +154,7 @@ const navDiv = (id, href, text) => {
 
 const addEditablePlaymarkDiv = (div) => {
   const prior = div.previousSibling;
-  // TODO(dburger): unique id? doesn't really need an id.
-  const playmark = navDiv("x", "", "NAME");
+  const playmark = navDiv("", "NAME");
   insertAfter(playmark, div);
   const editableDiv = playmark.childNodes[0];
   editableDiv.setAttribute("contenteditable", true);
@@ -218,7 +215,7 @@ const addEditablePlaymarkDiv = (div) => {
 };
 
 const addPlaymarkDiv = () => {
-  const div = navDiv("addPlaymark", "", "+");
+  const div = navDiv("", "+");
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -238,7 +235,7 @@ const addPlaymarkDiv = () => {
  * @returns {HTMLDivElement} - The clickable navigation div.
  */
 const sendMessageDiv = (id, text, action) => {
-  const div = navDiv(id, "", text);
+  const div = navDiv("", text);
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -272,7 +269,7 @@ const openOptionsDiv = () => {
 };
 
 const loadActiveBooksDiv = () => {
-  const loadActiveBooksDiv = navDiv("load-books", "", "Load");
+  const loadActiveBooksDiv = navDiv("", "Load");
   loadActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -296,7 +293,7 @@ const loadActiveBooksDiv = () => {
 };
 
 const loadActiveBookWeightingsDiv = () => {
-  const loadActiveBookWeightingsDiv = navDiv("load-weightings", "", "Load");
+  const loadActiveBookWeightingsDiv = navDiv("", "Load");
   loadActiveBookWeightingsDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -320,7 +317,7 @@ const loadActiveBookWeightingsDiv = () => {
 };
 
 const storeActiveBooksDiv = () => {
-  const storeActiveBooksDiv = navDiv("store-books", "", "Store");
+  const storeActiveBooksDiv = navDiv("", "Store");
   storeActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -344,7 +341,7 @@ const storeActiveBooksDiv = () => {
 };
 
 const storeActiveBookWeightingsDiv = () => {
-  const storeActiveBookWeightingsDiv = navDiv("store-weightings", "", "Store");
+  const storeActiveBookWeightingsDiv = navDiv("", "Store");
   storeActiveBookWeightingsDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
