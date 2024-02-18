@@ -133,6 +133,16 @@ const setVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, acti
   chrome.storage.sync.set(settings, callback);
 }
 
+/**
+ * Translates and stores the given settings as called from the settings page.
+ *
+ * @param playmarksNames {string[]} - The names of the playmarks to keep. All others will be removed.
+ * @param bookDetails {[string, string, string]} - The name, odds group, URL template details to store
+ *     in the book details map.
+ * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
+ * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
+ * @param callback - TODO(dburger)
+ */
 const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
   getSettings(settings => {
     const playmarksMap = keepKeys2(settings.playmarksMap, playmarksNames);

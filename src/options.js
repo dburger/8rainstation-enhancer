@@ -107,10 +107,22 @@ const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
     tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
 
+/**
+ * Adds a new key value row.
+ *
+ * @param tbody {HTMLElement} - HTML tbody to add the row to.
+ * @param key {string} - The key for the row.
+ * @param value {string} - The value for the row.
+ */
 const addKeyValueRow = (tbody, key, value) => {
     tbody.appendChild(createKeyValueRow(key, value));
 };
 
+/**
+ * Loads the given playmarks into the playmarks table.
+ *
+ * @param playmarksMap {{string: string}} - The map of playmarks to load.
+ */
 const loadPlaymarks = (playmarksMap) => {
     const tbody = document.getElementById("playmarksBody");
     removeChildren(tbody);
@@ -120,6 +132,12 @@ const loadPlaymarks = (playmarksMap) => {
     }
 };
 
+/**
+ * Loads the given book details into the book details table.
+ *
+ * @param bookDetails {{string: {string, string, string}}} - The book
+ *     details to load.
+ */
 const loadBookDetails = (bookDetails) => {
     const tbody = document.getElementById("bookDetailsBody");
     removeChildren(tbody);
@@ -147,6 +165,11 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
     }
 };
 
+/**
+ * Loads the given settings into the page.
+ *
+ * @param settings {@see makeVersionedSettings}
+ */
 const loadSettings = (settings) => {
     loadPlaymarks(settings.playmarksMap);
     loadBookDetails(settings.bookDetailsMap);
