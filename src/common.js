@@ -143,6 +143,13 @@ const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWe
   });
 }
 
+/**
+ * Stores the given name to active books mapping into the settings.
+ *
+ * @param name {string} - The name to give the mapping.
+ * @param activeBooks {string[]} - The array of active books for the name.
+ * @param callback - TODO(dburger)
+ */
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
     settings.activeBooksMap[name] = activeBooks;
@@ -150,6 +157,14 @@ const setActiveBooks = (name, activeBooks, callback) => {
   });
 };
 
+/**
+ * Stores the given name to book weightings mapping into the settings.
+ *
+ * @param name {string} - The name to give the mapping.
+ * @param weightings {{string: number}} - The mapping of book names to
+ *     weightings to store for the name.
+ * @param callback - TODO(dburger)
+ */
 const setBookWeightings = (name, weightings, callback) => {
     getSettings(settings => {
         settings.activeBookWeightingsMap[name] = weightings;
@@ -157,6 +172,13 @@ const setBookWeightings = (name, weightings, callback) => {
     });
 };
 
+/**
+ * Stores the given name to playmark into the settings.
+ *
+ * @param name {string} - The name to give the playmark.
+ * @param playmark {string} - The playmark to store for the name.
+ * @param callback - TODO(dburger)
+ */
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
         settings.playmarksMap[name] = playmark;
@@ -164,6 +186,13 @@ const addPlaymark = (name, playmark, callback) => {
     });
 };
 
+/**
+ * Modifies and returns the given object keeping only the indicated keys.
+ *
+ * @param obj {object} - The object to modify.
+ * @param keys {string[]} - The keys to keep.
+ * @returns {object} - The modified object.
+ */
 const keepKeys1 = (obj, keys) => {
   for (const key of Object.keys(obj)) {
     if (!keys.includes(key)) {
@@ -173,6 +202,14 @@ const keepKeys1 = (obj, keys) => {
   return obj;
 };
 
+/**
+ * Creates and returns a copy of the given object keeping only the
+ * indicated keys.
+ *
+ * @param obj {object} - The source object to copy.
+ * @param keys {string[]} - The keys to keep.
+ * @returns {{string: any}} - The copied object.
+ */
 const keepKeys2 = (obj, keys) => {
   const newObj = {};
   for (const key of keys) {
@@ -181,6 +218,14 @@ const keepKeys2 = (obj, keys) => {
   return newObj;
 };
 
+/**
+ * Creates and returns a string representation of the given object. The
+ * form of the output is "key: value, ..." The output is "flat." That is
+ * there is no recursion down to attempt to render nested keys.
+ *
+ * @param obj {object} - The object to return a string representation of.
+ * @returns {string} - The string representation of object.
+ */
 const objectToString = (obj) => {
     const parts = [];
     for (const [key, value] of Object.entries(obj)) {
