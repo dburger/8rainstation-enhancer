@@ -1,9 +1,20 @@
+/**
+ * Removes all the children of an element.
+ *
+ * @param elem {HTMLElement} - The element to remove the children of.
+ */
 const removeChildren = (elem) => {
     while (elem.lastChild) {
         elem.removeChild(elem.lastChild);
     }
 }
 
+/**
+ * Creates and returns an input of type text with the given value.
+ *
+ * @param value {string} - The value to give the text input.
+ * @returns {HTMLInputElement} - The created text input.
+ */
 const createInputText = (value) => {
     const input = document.createElement("input");
     input.setAttribute("type", "text");
@@ -11,18 +22,38 @@ const createInputText = (value) => {
     return input;
 };
 
+/**
+ * Creates and returns a table cell td element with the given text.
+ *
+ * @param text {string} - The text to give the element.
+ * @returns {HTMLTableCellElement} - The created td element.
+ */
 const createTextTd = (text) => {
     const td = document.createElement("td");
     td.innerText = text;
     return td;
 }
 
+/**
+ * Creates and returns a td element with text "X" to be used to
+ * delete the row.
+ *
+ * @returns {HTMLTableCellElement} - The created td element.
+ */
 const createDeleteRowTd = () => {
   const td = createTextTd("X");
   td.className = "deleter";
   return td;
 };
 
+/**
+ * Creates and returns a td element containing a text input element with
+ * the given value.
+ *
+ * @param value {string} - The value to give the text input element.
+ * @param className {string} - The class name to give the td, if any.
+ * @returns {HTMLTableCellElement} - The created td element.
+ */
 const createInputTd = (value, className) => {
     const td = document.createElement("td");
     td.appendChild(createInputText(value));
@@ -32,6 +63,14 @@ const createInputTd = (value, className) => {
     return td;
 }
 
+/**
+ * Creates and returns a book details row.
+ *
+ * @param key {string} - The book text key.
+ * @param oddsGroup {string} - The odds group the book belongs to.
+ * @param urlTemplate {string} - The URL template for link generation.
+ * @returns {HTMLTableRowElement} - The created book details row.
+ */
 const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
@@ -41,6 +80,13 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     return tr;
 };
 
+/**
+ * Creates and returns a deletable key value row.
+ *
+ * @param key {string} - The key to use for the row.
+ * @param value {string} - The value to use for the row.
+ * @returns {HTMLTableRowElement} - The created key value row.
+ */
 const createKeyValueRow = (key, value) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
@@ -49,6 +95,14 @@ const createKeyValueRow = (key, value) => {
     return tr;
 }
 
+/**
+ * Adds a new book details row.
+ *
+ * @param tbody {HTMLElement} - HTML tbody to add the row to.
+ * @param key {string} - The book name for the row.
+ * @param oddsGroup {string} - The odds group for the row.
+ * @param urlTemplate {string} - The URL template for the row.
+ */
 const addBookDetailsRow = (tbody, key, oddsGroup, urlTemplate) => {
     tbody.appendChild(createBookDetailsRow(key, oddsGroup, urlTemplate));
 };
