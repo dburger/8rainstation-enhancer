@@ -134,6 +134,13 @@ const setBookWeightings = (name, weightings, callback) => {
     });
 };
 
+const addPlaymark = (name, playmark, callback) => {
+    getSettings(settings => {
+        settings.playmarksMap[name] = playmark;
+        setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+    });
+};
+
 const keepKeys1 = (obj, keys) => {
   for (const key of Object.keys(obj)) {
     if (!keys.includes(key)) {

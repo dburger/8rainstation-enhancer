@@ -154,11 +154,76 @@ const navDiv = (id, href, text) => {
   return a;
 };
 
+const addEditablePlaymarkDiv = (div) => {
+  const prior = div.previousSibling;
+  // TODO(dburger): unique id? doesn't really need an id.
+  const playmark = navDiv("x", "", "NAME");
+  insertAfter(playmark, div);
+  const editableDiv = playmark.childNodes[0];
+  editableDiv.setAttribute("contenteditable", true);
+
+  const sel = window.getSelection();
+  sel.setBaseAndExtent(editableDiv, 0, playmark.childNodes[0], 1);
+
+  const removeEventHandlers = () => {
+    editableDiv.removeEventListener("focusout", focusoutHandler);
+    editableDiv.removeEventListener("keypress", keypressHandler);
+    editableDiv.removeEventListener("keyup", keyupHandler);
+  };
+
+  const commitPlaymark = (evt) => {
+    evt.target.setAttribute("contenteditable", false);
+    console.log(evt.target);
+    evt.target.classList.add("active");
+    console.log(evt.target);
+    window.getSelection().removeAllRanges();
+    insertAfter(div, playmark);
+    addPlaymark(evt.target.innerText, window.location.pathname + window.location.search);
+    removeEventHandlers();
+  };
+
+  const focusoutHandler = (evt) => {
+    console.log("focusout");
+    commitPlaymark(evt);
+  };
+
+  const keypressHandler = (evt) => {
+    console.log("keypress");
+    if (evt.key === "Enter") {
+      console.log("enter key");
+      evt.stopPropagation();
+      evt.preventDefault();
+      // Allow the "focusout" to commitPlaymark.
+      evt.target.blur();
+    }
+  };
+
+  const keyupHandler = (evt) => {
+    console.log("keyup");
+    if (evt.key === "Escape") {
+      console.log("escape key");
+      evt.stopPropagation();
+      evt.preventDefault();
+      // Note that event handlers must be removed before removing the target.
+      // This prevents a "focusout" event from saving the playmark.
+      removeEventHandlers();
+      evt.target.remove();
+      insertAfter(div, prior);
+    }
+  };
+
+  editableDiv.addEventListener("focusout", focusoutHandler);
+  editableDiv.addEventListener("keypress", keypressHandler);
+  editableDiv.addEventListener("keyup", keyupHandler);
+};
+
 const addPlaymarkDiv = () => {
   const div = navDiv("addPlaymark", "", "+");
   div.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
+    addEditablePlaymarkDiv(div);
+    div.remove();
     console.log("addPlaymark");
   });
   return div;
