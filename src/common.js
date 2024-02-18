@@ -40,7 +40,6 @@ const bookDetail = (oddsGroup, urlTemplate) => {
  * @param bookDetails {[[string, string, string]]} - The book details in the
  * form of [text key, odds group, URL template].
  *
- * @returns {{}}
  * @returns {{string: {hostname: string, oddsGroup: string, urlTemplate: string}}} -
  *     The created book details map.
  */
@@ -52,6 +51,16 @@ const makeBookDetailsMap = (bookDetails) => {
   return result;
 };
 
+/**
+ * Creates and returns the JSON serializable object used for storing settings.
+ *
+ * @param playmarksMap {{string: target}} - The map of playmark names to targets to store.
+ * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
+ * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
+ * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
+ * @returns {{v1: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap}}} - Serializable JSON
+ *     object for settings storage.
+ */
 const makeVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
   return {
     v1: {
@@ -98,6 +107,11 @@ const DEFAULT_SETTINGS = makeVersionedSettings(
     DEFAULT_ACTIVE_BOOKS_MAP,
     DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP);
 
+/**
+ * Fetches the settings and returns them in the callback.
+ *
+ * @param callback {function(settings)} - The callback to invoke with the settings.
+ */
 const getSettings = (callback) => {
   chrome.storage.sync.get({v1: {}}, (s) => {
     const settings = Object.keys(s.v1).length === 0 ? DEFAULT_SETTINGS.v1 : s.v1;
@@ -105,6 +119,15 @@ const getSettings = (callback) => {
   });
 }
 
+/**
+ * Stores the settings and indicates the result via the callback.
+ *
+ * @param playmarksMap {{string: target}} - The map of playmark names to targets to store.
+ * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
+ * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
+ * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
+ * @param callback - TODO(dburger)
+ */
 const setVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
   const settings = makeVersionedSettings(playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
   chrome.storage.sync.set(settings, callback);
@@ -166,10 +189,24 @@ const objectToString = (obj) => {
     return parts.join(", ");
 };
 
+/**
+ * Inserts the new element after the existing element.
+ *
+ * @param newElem {HTMLElement} - The new element to insert.
+ * @param elem {HTMLElement} - The existing element to insert after.
+ */
 const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
 
+/**
+ * Walks up the dom tree starting at elem looking for the first element that
+ * satisfies the predicate.
+ *
+ * @param elem {HTMLElement} - The DOM element to start the search at.
+ * @param pred {function(HTMLElement)} - The predicate that checks for a matching element.
+ * @returns {HTMLElement|null} - The matching element, or null if no such element is found.
+ */
 const walkUp = (elem, pred) => {
   if (pred(elem)) {
     return elem;
@@ -177,6 +214,14 @@ const walkUp = (elem, pred) => {
   return elem.parentElement ? walkUp(elem.parentElement, pred) : null;
 }
 
+/**
+ * Walks down the dom tree starting at elem looking for the first element that
+ * satisfies the predicate.
+ *
+ * @param elem {HTMLElement} - The DOM element to start the search at.
+ * @param pred {function(HTMLElement)} - The predicate that checks for a matching element.
+ * @returns {HTMLElement|null} - The matching element, or null if no such element is found.
+ */
 const walkDown = (elem, pred) => {
   if (pred(elem)) {
     return elem;
@@ -191,6 +236,7 @@ const walkDown = (elem, pred) => {
   return null;
 }
 
+// TODO(dburger): use this for all IDs to help prevent id collision.
 /**
  * Takes the given id and returns a uniqueified id. The intention here is
  * to avoid all DOM id collisions as to not disrupt any existing page
