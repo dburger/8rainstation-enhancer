@@ -14,6 +14,14 @@
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
+// TODO(dburger)
+const playmarkDetail = (position, playmark) => {
+    return {
+        position: position,
+        playmark: playmark
+    };
+};
+
 /**
  * Returns a book detail object. This is used in the serialization of the
  * settings and is the value in the {@link bookDetailsMap}.
@@ -33,6 +41,15 @@ const bookDetail = (oddsGroup, urlTemplate) => {
     urlTemplate: urlTemplate
   };
 };
+
+// TODO(dburger)
+const makePlaymarkDetailsMap = (playmarkDetails) => {
+    const result = {};
+    for (const pd of playmarkDetails) {
+        result[pd[0]] = playmarkDetail(pd[1], pd[2]);
+    }
+    return result;
+}
 
 /**
  * Creates a book details map from the input book details.
@@ -54,17 +71,17 @@ const makeBookDetailsMap = (bookDetails) => {
 /**
  * Creates and returns the JSON serializable object used for storing settings.
  *
- * @param playmarksMap {{string: target}} - The map of playmark names to targets to store.
+ * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
  * @returns {{v1: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap}}} - Serializable JSON
  *     object for settings storage.
  */
-const makeVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
+const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
   return {
     v1: {
-      playmarksMap: playmarksMap,
+      playmarkDetailsMap: playmarkDetailsMap,
       bookDetailsMap: bookDetailsMap,
       activeBooksMap: activeBooksMap,
       activeBookWeightingsMap: activeBookWeightingsMap
@@ -72,12 +89,12 @@ const makeVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, act
   };
 };
 
-const DEFAULT_PLAYMARKS_MAP = {
-    "5/0": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=5&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7",
-    "3/2": "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25&weight=2&days=7",
-    "BOA": "/search/plays?search=BetOnline&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7",
-    "PYA": "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7",
-};
+const DEFAULT_PLAYMARK_DETAILS_MAP = makePlaymarkDetailsMap([
+    ["5/0", 0, "/search/plays?search=&group=Y&bet=Y&ways=1&ev=5&arb=0&sort=1&max=250&width=6.5%25&weight=0&days=7"],
+    ["3/2", 1, "/search/plays?search=&group=Y&bet=Y&ways=1&ev=3&arb=0&sort=1&max=250&width=6.5%25&weight=2&days=7"],
+    ["BOA", 2, "/search/plays?search=BetOnline&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7"],
+    ["PYA", 3, "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=7"]
+]);
 
 const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
     ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
@@ -103,7 +120,7 @@ const DEFAULT_ACTIVE_BOOKS_MAP = {};
 const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
-    DEFAULT_PLAYMARKS_MAP,
+    DEFAULT_PLAYMARK_DETAILS_MAP,
     DEFAULT_BOOK_DETAILS_MAP,
     DEFAULT_ACTIVE_BOOKS_MAP,
     DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP);
@@ -123,14 +140,14 @@ const getSettings = (callback) => {
 /**
  * Stores the settings and indicates the result via the callback.
  *
- * @param playmarksMap {{string: target}} - The map of playmark names to targets to store.
+ * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
  * @param callback - TODO(dburger)
  */
-const setVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
-  const settings = makeVersionedSettings(playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
+const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
+  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
   chrome.storage.sync.set(settings, callback);
 }
 
@@ -146,11 +163,11 @@ const setVersionedSettings = (playmarksMap, bookDetailsMap, activeBooksMap, acti
  */
 const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
   getSettings(settings => {
-    const playmarksMap = keepKeys2(settings.playmarksMap, playmarksNames);
+    const playmarkDetailsMap = keepKeys2(settings.playmarkDetailsMap, playmarksNames);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
     const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
     const activeBookWeightingsMap = keepKeys2(settings.activeBookWeightingsMap, activeBookWeightingsNames);
-    setVersionedSettings(playmarksMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback);
+    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback);
   });
 }
 
@@ -164,7 +181,7 @@ const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWe
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
     settings.activeBooksMap[name] = activeBooks;
-    setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+    setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
   });
 };
 
@@ -179,7 +196,7 @@ const setActiveBooks = (name, activeBooks, callback) => {
 const setBookWeightings = (name, weightings, callback) => {
     getSettings(settings => {
         settings.activeBookWeightingsMap[name] = weightings;
-        setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
     });
 };
 
@@ -192,9 +209,15 @@ const setBookWeightings = (name, weightings, callback) => {
  */
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
-        settings.playmarksMap[name] = playmark;
-        setVersionedSettings(settings.playmarksMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+        const details = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
+        settings.playmarkDetailsMap[name] = details;
+        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
     });
+};
+
+// TODO(dburger)
+const sortPlaymarkEntries = (a, b) => {
+    return a[1].position - b[1].position;
 };
 
 /**

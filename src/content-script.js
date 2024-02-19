@@ -35,8 +35,10 @@ getSettings(s => {
 
   if (isPlaysPage() || isBetMarketDetailsPage()) {
     insertAfter(addPlaymarkDiv(), anchorDiv);
-    for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
-      insertAfter(navDiv(value, key), anchorDiv);
+    // We need to reverse here because these are added to the UI after the
+    // anchor. Thus, the reverse undos the insert reverse.
+    for (const [name, pd] of Object.entries(settings.playmarkDetailsMap).sort(sortPlaymarkEntries).reverse()) {
+      insertAfter(navDiv(pd.playmark, name), anchorDiv);
     }
     highlightCurrentPlaymark();
   } else if (isBooksPage()) {

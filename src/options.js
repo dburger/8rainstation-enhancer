@@ -123,12 +123,13 @@ const addKeyValueRow = (tbody, key, value) => {
  *
  * @param playmarksMap {{string: string}} - The map of playmarks to load.
  */
-const loadPlaymarks = (playmarksMap) => {
+const loadPlaymarks = (playmarkDetailsMap) => {
     const tbody = document.getElementById("playmarksBody");
     removeChildren(tbody);
 
-    for (const [key, value] of Object.entries(playmarksMap)) {
-        addKeyValueRow(tbody, key, value);
+    for (const [name, pd] of Object.entries(playmarkDetailsMap).sort(sortPlaymarkEntries)) {
+        // TODO(dburger): stop rendering the position
+        addKeyValueRow(tbody, name, `${pd.position}: ${pd.playmark}`);
     }
 };
 
@@ -183,7 +184,7 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
  * @param settings {@see makeVersionedSettings}
  */
 const loadSettings = (settings) => {
-    loadPlaymarks(settings.playmarksMap);
+    loadPlaymarks(settings.playmarkDetailsMap);
     loadBookDetails(settings.bookDetailsMap);
     loadActiveBooks(settings.activeBooksMap);
     loadActiveBookWeightings(settings.activeBookWeightingsMap);
