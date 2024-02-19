@@ -147,6 +147,12 @@ const loadBookDetails = (bookDetails) => {
     }
 };
 
+/**
+ * Loads the given active books into the active books table.
+ *
+ * @param activeBooksMap {{string: string[]}} - The mapping of names to
+ *     active books for that name to load.
+ */
 const loadActiveBooks = (activeBooksMap) => {
     const tbody = document.getElementById("activeBooksBody");
     removeChildren(tbody);
@@ -156,6 +162,12 @@ const loadActiveBooks = (activeBooksMap) => {
     }
 };
 
+/**
+ * Loads the given active book weightings into the active book weightings table.
+ *
+ * @param activeBookWeightingsMap {{string: {string: number}}} - The mapping of
+ *     names to book weightings to load.
+ */
 const loadActiveBookWeightings = (activeBookWeightingsMap) => {
     const tbody = document.getElementById("activeBookWeightingsBody");
     removeChildren(tbody);
