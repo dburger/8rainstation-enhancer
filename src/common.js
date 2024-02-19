@@ -83,6 +83,7 @@ const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
     ["BetMGM", "BetMGM", "https://sports.az.betmgm.com/en/sports"],
     ["BetRivers", "Kambi", "https://az.betrivers.com"],
     ["Bally Bet", "Kambi", "https://play.ballybet.com/sports#sports/a-z"],
+    ["BetUS", "BetUS", "https://www.betus.com.pa/sportsbook/search/?search=${homeTeam}"],
     ["Betway", "Betway", "https://az.betway.com/sports/home"],
     ["Bovada", "Bovada", "https://www.bovada.lv/sports"],
     ["Caesars", "Caesars", "https://sportsbook.caesars.com/us/az/bet/"],
