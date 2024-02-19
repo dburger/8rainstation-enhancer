@@ -161,9 +161,9 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
  * @param callback - TODO(dburger)
  */
-const setSettings = (playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
+const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
   getSettings(settings => {
-    const playmarkDetailsMap = keepKeys2(settings.playmarkDetailsMap, playmarksNames);
+    const playmarkDetailsMap = makePlaymarkDetailsMap(playmarkDetails);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
     const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
     const activeBookWeightingsMap = keepKeys2(settings.activeBookWeightingsMap, activeBookWeightingsNames);
@@ -277,6 +277,11 @@ const objectToString = (obj) => {
 const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
+
+// TODO(dburger)
+const insertBefore = (newElem, elem) => {
+    elem.parentElement.insertBefore(newElem, elem);
+}
 
 /**
  * Walks up the dom tree starting at elem looking for the first element that

@@ -6,6 +6,6 @@ td.url input {
   width: 30rem;
 }
 
-td.deleter {
+td.deleter, td.upper, td.downer {
   cursor: pointer;
 }

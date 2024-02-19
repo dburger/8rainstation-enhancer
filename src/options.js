@@ -46,6 +46,20 @@ const createDeleteRowTd = () => {
   return td;
 };
 
+const createUpRowTd = () => {
+    // TODO(dburger): replace with arrow.
+    const td = createTextTd("UP");
+    td.className = "upper";
+    return td;
+};
+
+const createDownRowTd = () => {
+    // TODO(dburger): replace with arrow.
+    const td = createTextTd("DN");
+    td.className = "downer";
+    return td;
+};
+
 /**
  * Creates and returns a td element containing a text input element with
  * the given value.
@@ -77,6 +91,16 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     tr.appendChild(createInputTd(key));
     tr.appendChild(createInputTd(oddsGroup));
     tr.appendChild(createInputTd(urlTemplate, "url"));
+    return tr;
+};
+
+const createPlaymarkDetailsRow = (name, playmark) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(createDeleteRowTd());
+    tr.appendChild(createTextTd(name));
+    tr.appendChild(createUpRowTd());
+    tr.appendChild(createDownRowTd());
+    tr.appendChild(createTextTd(playmark));
     return tr;
 };
 
@@ -118,6 +142,10 @@ const addKeyValueRow = (tbody, key, value) => {
     tbody.appendChild(createKeyValueRow(key, value));
 };
 
+const addPlaymarkDetailsRow = (tbody, name, playmark) => {
+    tbody.appendChild(createPlaymarkDetailsRow(name, playmark));
+};
+
 /**
  * Loads the given playmarks into the playmarks table.
  *
@@ -128,8 +156,7 @@ const loadPlaymarks = (playmarkDetailsMap) => {
     removeChildren(tbody);
 
     for (const [name, pd] of Object.entries(playmarkDetailsMap).sort(sortPlaymarkEntries)) {
-        // TODO(dburger): stop rendering the position
-        addKeyValueRow(tbody, name, `${pd.position}: ${pd.playmark}`);
+        addPlaymarkDetailsRow(tbody, name, pd.playmark);
     }
 };
 
@@ -205,9 +232,10 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const addButton = document.getElementById("add");
 
     saveButton.addEventListener("click", (evt) => {
-        const playmarksNames = [];
-        for (const tr of playmarksBody.childNodes) {
-            playmarksNames.push(tr.childNodes[1].innerText);
+        const playmarkDetails = [];
+        for (let i = 0; i < playmarksBody.childNodes.length; i++) {
+            const row = playmarksBody.childNodes[i];
+            playmarkDetails.push([row.childNodes[1].innerText, i, row.childNodes[4].innerText]);
         }
 
         const bookDetails = [];
@@ -228,7 +256,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBookWeightingsNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(playmarksNames, bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
+        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -249,24 +277,40 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     playmarksBody.addEventListener("click", (evt) => {
+        // TODO(dburger): use classnames!
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             playmarksBody.removeChild(evt.target.parentElement);
+        } else if (evt.target.tagName === "TD" && evt.target.innerText === "UP") {
+            const row = evt.target.parentElement;
+            const priorRow = row.previousSibling;
+            if (priorRow) {
+                insertBefore(row, priorRow);
+            }
+        } else if (evt.target.tagName === "TD" && evt.target.innerText === "DN") {
+            const row = evt.target.parentElement;
+            const nextRow = row.nextSibling;
+            if (nextRow) {
+                insertAfter(row, nextRow);
+            }
         }
     });
 
     bookDetailsBody.addEventListener("click", (evt) => {
+        // TODO(dburger): use classnames!
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             bookDetailsBody.removeChild(evt.target.parentElement);
         }
     });
 
     activeBooksBody.addEventListener("click", (evt) => {
+        // TODO(dburger): use classnames!
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             activeBooksBody.removeChild(evt.target.parentElement);
         }
     });
 
     activeBookWeightingsBody.addEventListener("click", (evt) => {
+        // TODO(dburger): should use the classnames!
         if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
             activeBookWeightingsBody.removeChild(evt.target.parentElement);
         }
