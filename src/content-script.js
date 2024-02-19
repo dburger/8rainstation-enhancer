@@ -214,6 +214,11 @@ const addEditablePlaymarkDiv = (div) => {
   editableDiv.addEventListener("keyup", keyupHandler);
 };
 
+/**
+ * Creates and returns the clickable div to add a playmark.
+ *
+ * @returns {HTMLDivElement} - The div to add a playmark.
+ */
 const addPlaymarkDiv = () => {
   const div = navDiv("", "+");
   div.addEventListener("click", (evt) => {
@@ -268,6 +273,12 @@ const openOptionsDiv = () => {
   return sendMessageDiv("options", "O", OPEN_OPTIONS_TAB);
 };
 
+/**
+ * Creates and returns the clickable div to load the selected named active
+ * books.
+ *
+ * @returns {HTMLDivElement} - The clickable div to load active books.
+ */
 const loadActiveBooksDiv = () => {
   const loadActiveBooksDiv = navDiv("", "Load");
   loadActiveBooksDiv.addEventListener("click", (evt) => {
@@ -292,6 +303,12 @@ const loadActiveBooksDiv = () => {
   return loadActiveBooksDiv;
 };
 
+/**
+ * Creates and returns the clickable div to load the selected named book
+ * weightings.
+ *
+ * @returns {HTMLDivElement} - The clickable div to load book weightings.
+ */
 const loadActiveBookWeightingsDiv = () => {
   const loadActiveBookWeightingsDiv = navDiv("", "Load");
   loadActiveBookWeightingsDiv.addEventListener("click", (evt) => {
@@ -413,6 +430,13 @@ const highlightCurrentPlaysNav = () => {
   }
 };
 
+/**
+ * Returns the URLs in the same odds group as the given book.
+ *
+ * @param book {string} - The book key to return URLs for.
+ * @returns {string[]} - The list of URLs in the same odds group as the
+ *     given book.
+ */
 const getUrls = (book) => {
   const bookDetails = settings.bookDetailsMap[book];
   if (bookDetails) {
@@ -424,6 +448,13 @@ const getUrls = (book) => {
   }
 }
 
+/**
+ * Launches the given URLs into tabs.
+ *
+ * @param urls {string[]} - The array of URLs to launch.
+ * @param homeTeam - The home team for the event. Used in URL
+ *     generation.
+ */
 const launchUrls = (urls, homeTeam) => {
   if (urls.length > 0) {
     for (let url of urls) {
