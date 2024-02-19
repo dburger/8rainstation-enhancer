@@ -7,6 +7,12 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 let settings = null;
 let anchorDiv = null;
 
+/**
+ * Loads a datalist.
+ *
+ * @param id {string} - The id of the datalist to load.
+ * @param values {string[]} - The array of values to load.
+ */
 const loadDatalist = (id, values) => {
   const datalist = document.getElementById(id);
   if (datalist) {
@@ -16,10 +22,11 @@ const loadDatalist = (id, values) => {
       datalist.appendChild(option);
     }
   } else {
-    // TODO(dburger): drop an error log.
+    console.error(`datalist ${id} not found and not loaded.`);
   }
 }
 
+/** Fetches the settings on page load and finishes setting up the page. */
 getSettings(s => {
   settings = s;
   if (!anchorDiv) {
@@ -31,7 +38,7 @@ getSettings(s => {
     for (const [key, value] of Object.entries(settings.playmarksMap).reverse()) {
       insertAfter(navDiv(value, key), anchorDiv);
     }
-    highlightCurrentPlaysNav();
+    highlightCurrentPlaymark();
   } else if (isBooksPage()) {
     insertAfter(storeActiveBooksDiv(), anchorDiv);
     insertAfter(loadActiveBooksDiv(), anchorDiv);
@@ -108,6 +115,13 @@ const isBetMarketDetailsPage = () => {
   return window.location.href.match(/^.*\/events\/.+$/) !== null;
 }
 
+/**
+ * Attempts to find the home team on the page and returns it.
+ *
+ * @param elem {HTMLElement} - The element to start the search from. Depending on
+ *     the source page, this may or may not affect the search.
+ * @returns {null|string} - The home team or null if not found.
+ */
 const getHomeTeam = (elem) => {
   if (isPlaysPage()) {
     const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
@@ -152,6 +166,14 @@ const navDiv = (href, text) => {
   return a;
 };
 
+/**
+ * Adds a new playmark div in edit state. The user then can complete the edit
+ * with an <enter> or by changing the focus. The <escape> key will cancel the
+ * adding of the playmark.
+ *
+ * @param div {HTMLElement} - The add div that will be used to position the
+ *     new div. It is hidden and then brought back on completion of the edit.
+ */
 const addEditablePlaymarkDiv = (div) => {
   const prior = div.previousSibling;
   const playmark = navDiv("", "NAME");
@@ -333,6 +355,12 @@ const loadActiveBookWeightingsDiv = () => {
   return loadActiveBookWeightingsDiv;
 };
 
+/**
+ * Creates and returns the clickable div to store the current active books. The name
+ * will come from the current value in the active books name text box.
+ *
+ * @returns {HTMLDivElement} - The clickable div to store the current active books.
+ */
 const storeActiveBooksDiv = () => {
   const storeActiveBooksDiv = navDiv("", "Store");
   storeActiveBooksDiv.addEventListener("click", (evt) => {
@@ -357,6 +385,12 @@ const storeActiveBooksDiv = () => {
   return storeActiveBooksDiv;
 };
 
+/**
+ * Creates and returns the clickable div to store the current book weightings.
+ * The name will come from the current value in the active books name text box.
+ *
+ * @returns {HTMLDivElement} - The clickable div to store the current active books.
+ */
 const storeActiveBookWeightingsDiv = () => {
   const storeActiveBookWeightingsDiv = navDiv("", "Store");
   storeActiveBookWeightingsDiv.addEventListener("click", (evt) => {
@@ -384,6 +418,11 @@ const storeActiveBookWeightingsDiv = () => {
   return storeActiveBookWeightingsDiv;
 };
 
+/**
+ * Creates and returns the active books name text box.
+ *
+ * @returns {HTMLDivElement} - The active books name text box.
+ */
 const activeBooksNameTextBox = () => {
   const input = document.createElement("input");
   input.setAttribute("id", "activeBooksNameTextBox");
@@ -402,6 +441,11 @@ const activeBooksNameTextBox = () => {
   return div;
 };
 
+/**
+ * Creates and returns the active books weightings name text box.
+ *
+ * @returns {HTMLDivElement} - The active books weightings name text box.
+ */
 const activeBookWeightingsNameTextBox = () => {
   const input = document.createElement("input");
   input.setAttribute("id", "activeBookWeightingsNameTextBox");
@@ -420,7 +464,10 @@ const activeBookWeightingsNameTextBox = () => {
   return div;
 };
 
-const highlightCurrentPlaysNav = () => {
+/**
+ * Highlights the playmark that matches the current URL, if any.
+ */
+const highlightCurrentPlaymark = () => {
   const navDivs = document.querySelectorAll(".bookmark");
   for (const div of navDivs) {
     if (div.tagName === "DIV" && div.parentElement.tagName === "A" && div.parentElement.href === window.location.href) {
@@ -466,6 +513,7 @@ const launchUrls = (urls, homeTeam) => {
   }
 }
 
+/** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
     const urls = getUrls(evt.target.innerText);
