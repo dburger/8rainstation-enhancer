@@ -46,14 +46,24 @@ const createDeleteRowTd = () => {
   return td;
 };
 
-// TODO(dburger)
+/**
+ * Creates and returns a td element with an up arrow to be used to
+ * move the row up.
+ *
+ * @returns {HTMLTableCellElement} - The created td element.
+ */
 const createUpRowTd = () => {
     const td = createTextTd("\u2191");
     td.className = "upper";
     return td;
 };
 
-// TODO(dburger)
+/**
+ * Creates and returns a td element with a down arrow to be used to
+ * move the row down.
+ *
+ * @returns {HTMLTableCellElement} - The created td element.
+ */
 const createDownRowTd = () => {
     const td = createTextTd("\u2193");
     td.className = "downer";
