@@ -310,16 +310,16 @@ const loadActiveBooksDiv = () => {
     evt.stopPropagation();
     const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
     getSettings(settings => {
-      // TODO(dburger): convert to Set for speed up below?
-      const activeBooks = settings.activeBooksMap[activeBooksName];
+      let activeBooks = settings.activeBooksMap[activeBooksName];
       if (!activeBooks) {
         return;
       }
+      activeBooks = new Set(activeBooks);
       const bookDivs = document.querySelectorAll(".book");
       for (const bookDiv of bookDivs) {
         const label = bookDiv.childNodes[1];
         if (label !== undefined && label.innerText !== "Select All Books") {
-          label.childNodes[1].checked = activeBooks.includes(label.innerText);
+          label.childNodes[1].checked = activeBooks.has(label.innerText);
         }
       }
     });
