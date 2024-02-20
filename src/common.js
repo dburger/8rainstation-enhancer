@@ -14,7 +14,13 @@
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
-// TODO(dburger)
+/**
+ * Returns a playmark detail object.
+ *
+ * @param position {number} - The sort order position for the playmark.
+ * @param playmark {string} - The target URL for the playmark.
+ * @returns {{playmark, position}} - The playmark detail object.
+ */
 const playmarkDetail = (position, playmark) => {
     return {
         position: position,
@@ -42,7 +48,15 @@ const bookDetail = (oddsGroup, urlTemplate) => {
   };
 };
 
-// TODO(dburger)
+/**
+ * Creates a playmark details map from the input playmark details.
+ *
+ * @param playmarkDetails {[[string, string, string]]} - The playmark details
+ *     in the form of [text key, sort position, target URL].
+ *
+ * @returns {{string: {position: number, playmark: string}}} - The created
+ *     playmark details map.
+ */
 const makePlaymarkDetailsMap = (playmarkDetails) => {
     const result = {};
     for (const pd of playmarkDetails) {
@@ -215,7 +229,13 @@ const addPlaymark = (name, playmark, callback) => {
     });
 };
 
-// TODO(dburger)
+/**
+ * Sort function to play playmark entries in position order.
+ *
+ * @param a {object} - The playmarkDetailsMap entry a.
+ * @param b {object} - The playmarkDetailsMap entry b.
+ * @returns {number} - The value indicating the sort order.
+ */
 const sortPlaymarkEntries = (a, b) => {
     return a[1].position - b[1].position;
 };
@@ -278,7 +298,12 @@ const insertAfter = (newElem, elem) => {
   elem.parentElement.insertBefore(newElem, elem.nextSibling);
 };
 
-// TODO(dburger)
+/**
+ * Inserts the new element before the existing element.
+ *
+ * @param newElem {HTMLElement} - The new element to insert.
+ * @param elem {HTMLElement} - The existing element to insert before.
+ */
 const insertBefore = (newElem, elem) => {
     elem.parentElement.insertBefore(newElem, elem);
 }
