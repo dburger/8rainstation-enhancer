@@ -46,15 +46,15 @@ const createDeleteRowTd = () => {
   return td;
 };
 
+// TODO(dburger)
 const createUpRowTd = () => {
-    // TODO(dburger): replace with arrow.
     const td = createTextTd("\u2191");
     td.className = "upper";
     return td;
 };
 
+// TODO(dburger)
 const createDownRowTd = () => {
-    // TODO(dburger): replace with arrow.
     const td = createTextTd("\u2193");
     td.className = "downer";
     return td;
@@ -276,17 +276,28 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         addBookDetailsRow(bookDetailsBody, "", "", "");
     });
 
+    const isDeleter = (target) => {
+        return target.tagName === "TD" && target.classList.contains("deleter");
+    };
+
+    const isUpper = (target) => {
+        return target.tagName === "TD" && target.classList.contains("upper");
+    };
+
+    const isDowner = (target) => {
+        return target.tagName === "TD" && target.classList.contains("downer");
+    };
+
     playmarksBody.addEventListener("click", (evt) => {
-        // TODO(dburger): use classnames!
-        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+        if (isDeleter(evt.target)) {
             playmarksBody.removeChild(evt.target.parentElement);
-        } else if (evt.target.tagName === "TD" && evt.target.innerText === "\u2191") {
+        } else if (isUpper(evt.target)) {
             const row = evt.target.parentElement;
             const priorRow = row.previousSibling;
             if (priorRow) {
                 insertBefore(row, priorRow);
             }
-        } else if (evt.target.tagName === "TD" && evt.target.innerText === "\u2193") {
+        } else if (isDowner(evt.target)) {
             const row = evt.target.parentElement;
             const nextRow = row.nextSibling;
             if (nextRow) {
@@ -296,22 +307,19 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     });
 
     bookDetailsBody.addEventListener("click", (evt) => {
-        // TODO(dburger): use classnames!
-        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+        if (isDeleter(evt.target)) {
             bookDetailsBody.removeChild(evt.target.parentElement);
         }
     });
 
     activeBooksBody.addEventListener("click", (evt) => {
-        // TODO(dburger): use classnames!
-        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+        if (isDeleter(evt.target)) {
             activeBooksBody.removeChild(evt.target.parentElement);
         }
     });
 
     activeBookWeightingsBody.addEventListener("click", (evt) => {
-        // TODO(dburger): should use the classnames!
-        if (evt.target.tagName === "TD" && evt.target.innerText === "X") {
+        if (isDeleter(evt.target)) {
             activeBookWeightingsBody.removeChild(evt.target.parentElement);
         }
     });
