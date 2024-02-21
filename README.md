@@ -26,7 +26,10 @@ Well, as Google explains it:
 * Second, you must put your browser into Developer mode. Click on the triple
   dots -> Extensions -> Manage Extensions. Toggle Developer mode in the
   upper right.
-* Download the extension to your local disk.
+* Download the extension to your local disk. There are a couple of ways to do this:
+  * If you are a git and github user, you can check out the project using git.
+  * If you don't know how to use git, click <> Code -> Download ZIP above and
+    unpack the ZIP file.
 * Under Manage Extensions, click Load unpacked, and select the src/ directory
   from your downloaded extension.
 
