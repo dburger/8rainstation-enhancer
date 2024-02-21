@@ -4,6 +4,12 @@ const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&s
 // from using async / await. Thus, the settings are retrieved here with a callback
 // instead of on demand when needed.
 
+const ACTIVE_BOOKS_NAME_TEXT_BOX_ID = "activeBooksNameTextBox";
+const ACTIVE_BOOKS_NAMES_DATALIST_ID = "activeBooksNamesDatalist";
+
+const ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID = "activeBookWeightingsNameTextBox";
+const ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID = "activeBookWeightingsNamesDatalist";
+
 let settings = null;
 let anchorDiv = null;
 
@@ -45,12 +51,12 @@ getSettings(s => {
     insertAfter(storeActiveBooksDiv(), anchorDiv);
     insertAfter(loadActiveBooksDiv(), anchorDiv);
     insertAfter(activeBooksNameTextBox(), anchorDiv);
-    loadDatalist("activeBooksNamesDatalist", Object.keys(settings.activeBooksMap));
+    loadDatalist(ACTIVE_BOOKS_NAMES_DATALIST_ID, Object.keys(settings.activeBooksMap));
   } else if (isWeightingsPage()) {
     insertAfter(storeActiveBookWeightingsDiv(), anchorDiv);
     insertAfter(loadActiveBookWeightingsDiv(), anchorDiv);
     insertAfter(activeBookWeightingsNameTextBox(), anchorDiv);
-    loadDatalist("activeBookWeightingsNamesDatalist", Object.keys(settings.activeBookWeightingsMap));
+    loadDatalist(ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID, Object.keys(settings.activeBookWeightingsMap));
   }
 });
 
@@ -308,7 +314,7 @@ const loadActiveBooksDiv = () => {
   loadActiveBooksDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
+    const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
     getSettings(settings => {
       let activeBooks = settings.activeBooksMap[activeBooksName];
       if (!activeBooks) {
@@ -338,7 +344,7 @@ const loadActiveBookWeightingsDiv = () => {
   loadActiveBookWeightingsDiv.addEventListener("click", (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    const activeWeightingsName = document.getElementById("activeBookWeightingsNameTextBox").value;
+    const activeWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
     getSettings(settings => {
       const activeWeightings = settings.activeBookWeightingsMap[activeWeightingsName];
       if (!activeWeightings) {
@@ -378,7 +384,7 @@ const storeActiveBooksDiv = () => {
         activeBooks.push(label.innerText);
       }
     }
-    const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
+    const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
     setActiveBooks(activeBooksName, activeBooks, () => {
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
@@ -412,7 +418,7 @@ const storeActiveBookWeightingsDiv = () => {
         activeWeightings[book] = weight;
       }
     }
-    const activeBookWeightingsName = document.getElementById("activeBookWeightingsNameTextBox").value;
+    const activeBookWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
     setBookWeightings(activeBookWeightingsName, activeWeightings, () => {
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
@@ -429,13 +435,13 @@ const storeActiveBookWeightingsDiv = () => {
  */
 const activeBooksNameTextBox = () => {
   const input = document.createElement("input");
-  input.setAttribute("id", "activeBooksNameTextBox");
+  input.setAttribute("id", ACTIVE_BOOKS_NAME_TEXT_BOX_ID);
   input.setAttribute("type", "text");
-  input.setAttribute("list", "activeBooksNamesDatalist");
+  input.setAttribute("list", ACTIVE_BOOKS_NAMES_DATALIST_ID);
   input.setAttribute("size", "10");
 
   const datalist = document.createElement("datalist");
-  datalist.setAttribute("id", "activeBooksNamesDatalist");
+  datalist.setAttribute("id", ACTIVE_BOOKS_NAMES_DATALIST_ID);
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav unclickable");
@@ -452,13 +458,13 @@ const activeBooksNameTextBox = () => {
  */
 const activeBookWeightingsNameTextBox = () => {
   const input = document.createElement("input");
-  input.setAttribute("id", "activeBookWeightingsNameTextBox");
+  input.setAttribute("id", ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID);
   input.setAttribute("type", "text");
-  input.setAttribute("list", "activeBookWeightingsNamesDatalist");
+  input.setAttribute("list", ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID);
   input.setAttribute("size", "10");
 
   const datalist = document.createElement("datalist");
-  datalist.setAttribute("id", "activeBookWeightingsNamesDatalist");
+  datalist.setAttribute("id", ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID);
 
   const div = document.createElement("div");
   div.setAttribute("class", "nav unclickable");
