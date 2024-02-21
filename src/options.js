@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBookWeightingsNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, (e) => {
+        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, () => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
