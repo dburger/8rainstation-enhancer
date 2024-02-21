@@ -158,7 +158,7 @@ const getSettings = (callback) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @param callback - TODO(dburger)
+ * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
   const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
@@ -173,7 +173,7 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  *     in the book details map.
  * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
  * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
- * @param callback - TODO(dburger)
+ * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
   getSettings(settings => {
@@ -190,7 +190,7 @@ const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookW
  *
  * @param name {string} - The name to give the mapping.
  * @param activeBooks {string[]} - The array of active books for the name.
- * @param callback - TODO(dburger)
+ * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
@@ -205,7 +205,7 @@ const setActiveBooks = (name, activeBooks, callback) => {
  * @param name {string} - The name to give the mapping.
  * @param weightings {{string: number}} - The mapping of book names to
  *     weightings to store for the name.
- * @param callback - TODO(dburger)
+ * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setBookWeightings = (name, weightings, callback) => {
     getSettings(settings => {
@@ -219,7 +219,7 @@ const setBookWeightings = (name, weightings, callback) => {
  *
  * @param name {string} - The name to give the playmark.
  * @param playmark {string} - The playmark to store for the name.
- * @param callback - TODO(dburger)
+ * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
