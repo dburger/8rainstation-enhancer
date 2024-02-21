@@ -35,6 +35,6 @@ Well, as Google explains it:
 If you like the software and find it useful, you can do a few things to
 support the author.
 
-* Sign up for 8rain Station using the affiliate link "burger"
+* Sign up for 8rain Station using the affiliate link "BURGER"
 * Make a paypal donation to the author to davidburger@gmail.com
 * Make a bitcoin donation to the author at bc1qk2d4h9rs9f26ylpctst5yv6jmgwk89e96wuenw
