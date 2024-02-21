@@ -10,7 +10,6 @@
 // when using async/await from non-module code. Thus instead of mixing
 // approaches, we just use callbacks exclusively.
 
-// TODO(dburger): javascript enums or other approach?
 const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
@@ -335,7 +334,8 @@ const walkDown = (elem, pred) => {
   if (pred(elem)) {
     return elem;
   }
-  // TODO(dburger): This is depth first, perhaps switch this to breadth first.
+  // This is depth first, breadth first might be nice but would a nice queue
+  // implementation. This is shallow enough probably doesn't matter.
   for (const child of elem.childNodes) {
     const result = walkDown(child, pred);
     if (result) {
@@ -344,17 +344,3 @@ const walkDown = (elem, pred) => {
   }
   return null;
 }
-
-// TODO(dburger): use this for all IDs to help prevent id collision.
-/**
- * Takes the given id and returns a uniqueified id. The intention here is
- * to avoid all DOM id collisions as to not disrupt any existing page
- * Javascript.
- *
- * @param id {string} - The id to uniqueify.
- * @returns {string} - The uniqueified id.
- */
-const idgen = (id) => {
-  // 8rain Station Enhancer.
-  return "8rse-" + id;
-};

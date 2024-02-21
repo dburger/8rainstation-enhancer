@@ -386,6 +386,7 @@ const storeActiveBooksDiv = () => {
     }
     const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
     setActiveBooks(activeBooksName, activeBooks, () => {
+      // TODO(dburger): need to add the name to the datalist if not there already.
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
       }
@@ -420,6 +421,7 @@ const storeActiveBookWeightingsDiv = () => {
     }
     const activeBookWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
     setBookWeightings(activeBookWeightingsName, activeWeightings, () => {
+      // TODO(dburger): need to add the name to the datalist if not there already.
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
       }
