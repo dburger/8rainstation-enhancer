@@ -3,11 +3,15 @@
 ## Features
 
 The 8rain Station Enhancer is a Chrome extension designed improve the
-usability of the 8rain Station website. The features include:
+usability of the 8rain Station website. 8rain Station is an outstanding
+tool for persons wanting to place mathematically advantaged sports wagers.
+The website is great, and they continue to add features, however, they
+currently have higher priorities than the features this extension provides.
+The features this extension adds includes:
 
 * Making sportsbook names clickable links that launch to the sportsbook.
 * A button that closes all open sportsbook sites when clicked.
-* The ability to quickly add bookmarks to specific plays page filtering
+* The ability to quickly add bookmarks to specific plays filtering
   on the Plays and Bet Market Details pages.
 * The ability to define named active sportsbook sets on the Books page.
 * The ability to define named sportsbook weightings on the Weightings page.
