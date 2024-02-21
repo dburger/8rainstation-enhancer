@@ -36,6 +36,14 @@ Well, as Google explains it:
     unpack the ZIP file.
 * Under Manage Extensions, click Load unpacked, and select the src/ directory
   from your downloaded extension.
+* Make sure you have enabled the extension.
+
+## What do I do if the extension breaks?
+
+If you find the extension is not working correctly or is interfering with
+8rain Station in some way it is likely because 8rain Station has been
+updated in a way that broke the extension. In this case disable the
+extension and notify me, davidburger@gmail.com.
 
 ## How can I support the author?
 
