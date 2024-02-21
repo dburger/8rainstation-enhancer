@@ -32,6 +32,25 @@ const loadDatalist = (id, values) => {
   }
 }
 
+/**
+ * Adds the value to the datalist represented by id if does not already
+ * contain it.
+ *
+ * @param id {string} - The id of the datalist to check / add to.
+ * @param value {string} - The value to add.
+ */
+const maybeAdd2Datalist = (id, value) => {
+  const datalist = document.getElementById(id);
+  for (const option of datalist.childNodes) {
+    if (option.value === value) {
+      return;
+    }
+  }
+  const option = document.createElement("option");
+  option.setAttribute("value", value);
+  datalist.appendChild(option);
+};
+
 /** Fetches the settings on page load and finishes setting up the page. */
 getSettings(s => {
   settings = s;
@@ -386,9 +405,10 @@ const storeActiveBooksDiv = () => {
     }
     const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
     setActiveBooks(activeBooksName, activeBooks, () => {
-      // TODO(dburger): need to add the name to the datalist if not there already.
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
+      } else {
+        maybeAdd2Datalist(ACTIVE_BOOKS_NAMES_DATALIST_ID, activeBooksName);
       }
     });
   });
@@ -421,9 +441,10 @@ const storeActiveBookWeightingsDiv = () => {
     }
     const activeBookWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
     setBookWeightings(activeBookWeightingsName, activeWeightings, () => {
-      // TODO(dburger): need to add the name to the datalist if not there already.
       if (chrome.runtime.lastError) {
         window.alert(chrome.runtime.lastError.message);
+      } else {
+        maybeAdd2Datalist(ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID, activeBookWeightingsName);
       }
     });
   });
