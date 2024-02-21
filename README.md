@@ -2,7 +2,7 @@
 
 ## Features
 
-The 8rain Station Enhancer is a Chrome extension designed improve the
+The 8rain Station Enhancer is a Chrome extension designed to improve the
 usability of the [8rain Station](https://8rainstation.com/) website. 8rain
 Station is an outstanding tool for persons wanting to place mathematically
 advantaged sports wagers. The website is great, and they continue to add
@@ -23,6 +23,8 @@ Well, as Google explains it:
 > We don't allow content or services that facilitate online gambling,
 > including but not limited to online casinos, sports betting, lotteries,
 > or games of skill that offer prizes of cash or other value.
+
+Bummer, huh?
 
 ## OK, it isn't in the Chrome Web Store, so how do I install it?
 
@@ -54,3 +56,5 @@ support the author.
   link "BURGER"
 * Make a paypal donation to the author to davidburger@gmail.com
 * Make a bitcoin donation to the author at bc1qk2d4h9rs9f26ylpctst5yv6jmgwk89e96wuenw
+* Buy the author a beer
+* Pay the author to write a custom Chrome extension
