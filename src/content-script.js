@@ -379,9 +379,10 @@ const storeActiveBooksDiv = () => {
       }
     }
     const activeBooksName = document.getElementById("activeBooksNameTextBox").value;
-    setActiveBooks(activeBooksName, activeBooks, (x) => {
-      // TODO(dburger): Drop a better log.
-      console.log("called back");
+    setActiveBooks(activeBooksName, activeBooks, () => {
+      if (chrome.runtime.lastError) {
+        window.alert(chrome.runtime.lastError.message);
+      }
     });
   });
   return storeActiveBooksDiv;
@@ -412,9 +413,10 @@ const storeActiveBookWeightingsDiv = () => {
       }
     }
     const activeBookWeightingsName = document.getElementById("activeBookWeightingsNameTextBox").value;
-    setBookWeightings(activeBookWeightingsName, activeWeightings, (x) => {
-      // TODO(dburger): Drop a better log.
-      console.log("called back");
+    setBookWeightings(activeBookWeightingsName, activeWeightings, () => {
+      if (chrome.runtime.lastError) {
+        window.alert(chrome.runtime.lastError.message);
+      }
     });
   });
   return storeActiveBookWeightingsDiv;
