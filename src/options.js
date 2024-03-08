@@ -104,6 +104,13 @@ const createBookDetailsRow = (key, oddsGroup, urlTemplate) => {
     return tr;
 };
 
+/**
+ * Creates and returns a playmark details row.
+ *
+ * @param name {string} - The text used for the playmark link.
+ * @param playmark {string} - The URL for the playmark.
+ * @returns {HTMLTableRowElement} - The created playmark details row.
+ */
 const createPlaymarkDetailsRow = (name, playmark) => {
     const tr = document.createElement("tr");
     tr.appendChild(createDeleteRowTd());
@@ -159,7 +166,8 @@ const addPlaymarkDetailsRow = (tbody, name, playmark) => {
 /**
  * Loads the given playmarks into the playmarks table.
  *
- * @param playmarksMap {{string: string}} - The map of playmarks to load.
+ * @param playmarkDetailsMap {{string: {string, number}}} - The map of playmark names
+ *     to playmark and position to load.
  */
 const loadPlaymarks = (playmarkDetailsMap) => {
     const tbody = document.getElementById("playmarksBody");

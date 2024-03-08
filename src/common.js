@@ -167,7 +167,8 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
 /**
  * Translates and stores the given settings as called from the settings page.
  *
- * @param playmarksNames {string[]} - The names of the playmarks to keep. All others will be removed.
+ * @param playmarkDetails {[[string, string, string]]} - The playmark details
+ *     in the form of [text key, sort position, target URL].
  * @param bookDetails {[string, string, string]} - The name, odds group, URL template details to store
  *     in the book details map.
  * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
@@ -222,8 +223,7 @@ const setBookWeightings = (name, weightings, callback) => {
  */
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
-        const details = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
-        settings.playmarkDetailsMap[name] = details;
+        settings.playmarkDetailsMap[name] = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
         setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
     });
 };

@@ -219,9 +219,7 @@ const addEditablePlaymarkDiv = (div) => {
 
   const commitPlaymark = (evt) => {
     evt.target.setAttribute("contenteditable", false);
-    console.log(evt.target);
     evt.target.classList.add("active");
-    console.log(evt.target);
     window.getSelection().removeAllRanges();
     insertAfter(div, playmark);
     addPlaymark(evt.target.innerText, window.location.pathname + window.location.search);
@@ -229,14 +227,11 @@ const addEditablePlaymarkDiv = (div) => {
   };
 
   const focusoutHandler = (evt) => {
-    console.log("focusout");
     commitPlaymark(evt);
   };
 
   const keypressHandler = (evt) => {
-    console.log("keypress");
     if (evt.key === "Enter") {
-      console.log("enter key");
       evt.stopPropagation();
       evt.preventDefault();
       // Allow the "focusout" to commitPlaymark.
@@ -245,9 +240,7 @@ const addEditablePlaymarkDiv = (div) => {
   };
 
   const keyupHandler = (evt) => {
-    console.log("keyup");
     if (evt.key === "Escape") {
-      console.log("escape key");
       evt.stopPropagation();
       evt.preventDefault();
       // Note that event handlers must be removed before removing the target.
@@ -435,8 +428,7 @@ const storeActiveBookWeightingsDiv = () => {
       const label = bookDiv.childNodes[3];
       if (input.value) {
         const book = label.innerText;
-        const weight = parseFloat(input.value);
-        activeWeightings[book] = weight;
+        activeWeightings[book] = parseFloat(input.value);
       }
     }
     const activeBookWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
