@@ -88,16 +88,19 @@ const makeBookDetailsMap = (bookDetails) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @returns {{v1: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap}}} - Serializable JSON
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
+ *     If "book", it will load into a named tab per the book name.
+ * @returns {{v2: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap, bookLinkTarget}}} - Serializable JSON
  *     object for settings storage.
  */
-const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap) => {
+const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget) => {
   return {
-    v1: {
+    v2: {
       playmarkDetailsMap: playmarkDetailsMap,
       bookDetailsMap: bookDetailsMap,
       activeBooksMap: activeBooksMap,
-      activeBookWeightingsMap: activeBookWeightingsMap
+      activeBookWeightingsMap: activeBookWeightingsMap,
+      bookLinkTarget: bookLinkTarget
     }
   };
 };
@@ -131,12 +134,14 @@ const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
 
 const DEFAULT_ACTIVE_BOOKS_MAP = {};
 const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
+const DEFAULT_BOOK_LINK_TARGET = "_blank";
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
     DEFAULT_PLAYMARK_DETAILS_MAP,
     DEFAULT_BOOK_DETAILS_MAP,
     DEFAULT_ACTIVE_BOOKS_MAP,
-    DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP);
+    DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP,
+    DEFAULT_BOOK_LINK_TARGET);
 
 /**
  * Fetches the settings and returns them in the callback.
@@ -144,9 +149,17 @@ const DEFAULT_SETTINGS = makeVersionedSettings(
  * @param callback {function(settings)} - The callback to invoke with the settings.
  */
 const getSettings = (callback) => {
-  chrome.storage.sync.get({v1: {}}, (s) => {
-    const settings = Object.keys(s.v1).length === 0 ? DEFAULT_SETTINGS.v1 : s.v1;
-    callback(settings);
+  chrome.storage.sync.get({v1: {}, v2: {}}, (s) => {
+    if (Object.keys(s.v2).length > 0) {
+      // s.v2 is already what we want.
+    } else if (Object.keys(s.v1).length > 0) {
+      // Transition from v1 to v2. We'll continue to do this translation until they save new settings.
+      // At that time we'll delete s.v1 and store s.v2.
+      s = makeVersionedSettings(s.v1.playmarkDetailsMap, s.v1.bookDetailsMap, s.v1.activeBooksMap, s.v1.activeBookWeightingsMap, DEFAULT_BOOK_LINK_TARGET);
+    } else {
+      s = DEFAULT_SETTINGS;
+    }
+    callback(s.v2);
   });
 }
 
@@ -157,10 +170,14 @@ const getSettings = (callback) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
+ *     If "book", it will load into a named tab per the book name.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback) => {
-  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap);
+const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback) => {
+  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget);
+  // TODO(dburger): callback?
+  chrome.storage.sync.remove("v1");
   chrome.storage.sync.set(settings, callback);
 }
 
@@ -173,15 +190,17 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  *     in the book details map.
  * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
  * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
+ *     If "book", it will load into a named tab per the book name.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, callback) => {
+const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, callback) => {
   getSettings(settings => {
     const playmarkDetailsMap = makePlaymarkDetailsMap(playmarkDetails);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
     const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
     const activeBookWeightingsMap = keepKeys2(settings.activeBookWeightingsMap, activeBookWeightingsNames);
-    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, callback);
+    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback);
   });
 }
 
@@ -195,7 +214,7 @@ const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookW
 const setActiveBooks = (name, activeBooks, callback) => {
   getSettings(settings => {
     settings.activeBooksMap[name] = activeBooks;
-    setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+    setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
   });
 };
 
@@ -210,7 +229,7 @@ const setActiveBooks = (name, activeBooks, callback) => {
 const setBookWeightings = (name, weightings, callback) => {
     getSettings(settings => {
         settings.activeBookWeightingsMap[name] = weightings;
-        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
     });
 };
 
@@ -224,7 +243,7 @@ const setBookWeightings = (name, weightings, callback) => {
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
         settings.playmarkDetailsMap[name] = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
-        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, callback);
+        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
     });
 };
 

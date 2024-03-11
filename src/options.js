@@ -274,7 +274,8 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBookWeightingsNames.push(tr.childNodes[1].innerText);
         }
 
-        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, () => {
+        // TODO(dburger): remove hard coding of DEFAULT_BOOK_LINK_TARGET, retrieve it from the settings page.
+        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, DEFAULT_BOOK_LINK_TARGET, () => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
