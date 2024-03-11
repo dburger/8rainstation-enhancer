@@ -503,45 +503,49 @@ const highlightCurrentPlaymark = () => {
 };
 
 /**
- * Returns the URLs in the same odds group as the given book.
+ * Returns a URL map for the books in the same odds group as the given book.
  *
- * @param book {string} - The book key to return URLs for.
- * @returns {string[]} - The list of URLs in the same odds group as the
- *     given book.
+ * @param book {string} - The book key to return a URL template map for.
+ * @returns {{string: string}} - The map of names to URL templates for the books in
+ *     the same odds group as the given book.
  */
-const getUrls = (book) => {
+const getBookUrlTemplates = (book) => {
+  const result = {};
   const bookDetails = settings.bookDetailsMap[book];
   if (bookDetails) {
-    return Object.values(settings.bookDetailsMap)
-        .filter(bd => bd.oddsGroup === bookDetails.oddsGroup)
-        .map(bd => bd.urlTemplate);
-  } else {
-    return [];
+    for (const [name, bd] of Object.entries(settings.bookDetailsMap)) {
+      if (bd.oddsGroup === bookDetails.oddsGroup) {
+        result[name] = bd.urlTemplate;
+      }
+    }
   }
-}
+  return result;
+};
 
 /**
- * Launches the given URLs into tabs.
+ * Launches the URLs from the given map into tabs.
  *
- * @param urls {string[]} - The array of URLs to launch.
+ * @param urlTemplates {{string: string}} - The map of names to URL templates to launch.
  * @param homeTeam - The home team for the event. Used in URL
  *     generation.
  */
-const launchUrls = (urls, homeTeam) => {
-  if (urls.length > 0) {
-    for (let url of urls) {
-      if (homeTeam) {
-        url = url.replace("${homeTeam}", homeTeam);
-      }
-      window.open(url, "_blank", "noopener,noreferrer");
+const launchUrls = (urlTemplates, homeTeam) => {
+  for (let [name, url] of Object.entries(urlTemplates)) {
+    if (homeTeam) {
+      url = url.replace("${homeTeam}", homeTeam);
     }
+    // From MDN:
+    // When noopener is used, non-empty target names, other than _top, _self, and _parent,
+    // are treated like _blank in terms of deciding whether to open a new browsing context.
+    console.log("opening", url);
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 }
 
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
-    const urls = getUrls(evt.target.innerText);
+    const urlTemplates = getBookUrlTemplates(evt.target.innerText);
     const homeTeam = getHomeTeam(evt.target);
 
     // In the case of the Bet Market Details page we don't want to pop up
@@ -551,7 +555,7 @@ window.addEventListener("click", function (evt) {
       evt.stopPropagation();
     }
 
-    launchUrls(urls, homeTeam);
+    launchUrls(urlTemplates, homeTeam);
   }
 }, true);
 
