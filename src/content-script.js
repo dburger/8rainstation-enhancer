@@ -535,6 +535,11 @@ const launchUrls = (urlTemplates, homeTeam) => {
       url = url.replace("${homeTeam}", homeTeam);
     }
 
+    // TODO(dburger): send a message to a background script to change the URL
+    // of existing tabs or open new tabs.
+    // chrome.tabs.update(tab.id, {url: "https://www.whatismybrowser.com/detect/what-is-my-referrer", highlighted: true});
+    // chrome.tabs.create({url: "https://www.whatismybrowser.com/detect/what-is-my-referrer"});
+
     // TODO(dburger): Unfortunately it appears that "noreferrer" makes it so
     // that named targets still open in a new tab each time. Thus we only
     // allow "_self" and "_blank" for now. Presumably all users will want
