@@ -179,6 +179,17 @@ const loadPlaymarks = (playmarkDetailsMap) => {
 };
 
 /**
+ * Loads the given bookLinkTarget into the book link target select.
+ *
+ * @param bookLinkTarget {string} - The book link target to load, limited to
+ *     "_self" and "_blank".
+ */
+const loadBookLinkTarget = (bookLinkTarget) => {
+    const select = document.getElementById("bookLinkTarget");
+    select.value = bookLinkTarget;
+};
+
+/**
  * Loads the given book details into the book details table.
  *
  * @param bookDetails {{string: {string, string, string}}} - The book
@@ -230,6 +241,7 @@ const loadActiveBookWeightings = (activeBookWeightingsMap) => {
  */
 const loadSettings = (settings) => {
     loadPlaymarks(settings.playmarkDetailsMap);
+    loadBookLinkTarget(settings.bookLinkTarget);
     loadBookDetails(settings.bookDetailsMap);
     loadActiveBooks(settings.activeBooksMap);
     loadActiveBookWeightings(settings.activeBookWeightingsMap);
@@ -240,6 +252,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
 
     const playmarksBody = document.getElementById("playmarksBody");
+    const bookLinkTargetSelect = document.getElementById("bookLinkTarget");
     const bookDetailsBody = document.getElementById("bookDetailsBody");
     const activeBooksBody = document.getElementById("activeBooksBody");
     const activeBookWeightingsBody = document.getElementById("activeBookWeightingsBody");
@@ -255,6 +268,8 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             const row = playmarksBody.childNodes[i];
             playmarkDetails.push([row.childNodes[1].innerText, i, row.childNodes[4].innerText]);
         }
+
+        const bookLinkTarget = bookLinkTargetSelect.value;
 
         const bookDetails = [];
         for (const tr of bookDetailsBody.childNodes) {
@@ -274,8 +289,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             activeBookWeightingsNames.push(tr.childNodes[1].innerText);
         }
 
-        // TODO(dburger): remove hard coding of DEFAULT_BOOK_LINK_TARGET, retrieve it from the settings page.
-        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, DEFAULT_BOOK_LINK_TARGET, () => {
+        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, () => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }

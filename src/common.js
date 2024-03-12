@@ -88,8 +88,7 @@ const makeBookDetailsMap = (bookDetails) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
- *     If "book", it will load into a named tab per the book name.
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
  * @returns {{v2: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap, bookLinkTarget}}} - Serializable JSON
  *     object for settings storage.
  */
@@ -170,8 +169,7 @@ const getSettings = (callback) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
- *     If "book", it will load into a named tab per the book name.
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback) => {
@@ -190,8 +188,7 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  *     in the book details map.
  * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
  * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets and "book".
- *     If "book", it will load into a named tab per the book name.
+ * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, callback) => {

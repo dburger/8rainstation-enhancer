@@ -534,11 +534,12 @@ const launchUrls = (urlTemplates, homeTeam) => {
     if (homeTeam) {
       url = url.replace("${homeTeam}", homeTeam);
     }
-    // From MDN:
-    // When noopener is used, non-empty target names, other than _top, _self, and _parent,
-    // are treated like _blank in terms of deciding whether to open a new browsing context.
-    console.log("opening", url);
-    window.open(url, "_blank", "noopener,noreferrer");
+
+    // TODO(dburger): Unfortunately it appears that "noreferrer" makes it so
+    // that named targets still open in a new tab each time. Thus we only
+    // allow "_self" and "_blank" for now. Presumably all users will want
+    // "_blank".
+    window.open(url, target, "noreferrer");
   }
 }
 
