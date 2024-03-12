@@ -539,7 +539,7 @@ const launchUrls = (urlTemplates, homeTeam) => {
     // that named targets still open in a new tab each time. Thus we only
     // allow "_self" and "_blank" for now. Presumably all users will want
     // "_blank".
-    window.open(url, target, "noreferrer");
+    window.open(url, settings.bookLinkTarget, "noreferrer");
   }
 }
 
