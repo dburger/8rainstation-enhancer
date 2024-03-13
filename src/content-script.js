@@ -503,57 +503,29 @@ const highlightCurrentPlaymark = () => {
 };
 
 /**
- * Returns a URL map for the books in the same odds group as the given book.
+ * Launches the URLs from books in the given book's odds group into tabs.
  *
- * @param book {string} - The book key to return a URL template map for.
- * @returns {{string: string}} - The map of names to URL templates for the books in
- *     the same odds group as the given book.
- */
-const getBookUrlTemplates = (book) => {
-  const result = {};
-  const bookDetails = settings.bookDetailsMap[book];
-  if (bookDetails) {
-    for (const [name, bd] of Object.entries(settings.bookDetailsMap)) {
-      if (bd.oddsGroup === bookDetails.oddsGroup) {
-        result[name] = bd.urlTemplate;
-      }
-    }
-  }
-  return result;
-};
-
-/**
- * Launches the URLs from the given map into tabs.
- *
- * @param urlTemplates {{string: string}} - The map of names to URL templates to launch.
+ * @param book {string} - The sportsbook to launch tab(s) for. All books in the
+ *     same odds group will be launched.
  * @param homeTeam - The home team for the event. Used in URL
  *     generation.
  */
-const launchUrls = (urlTemplates, homeTeam) => {
-  for (let [name, url] of Object.entries(urlTemplates)) {
-    if (homeTeam) {
-      url = url.replace("${homeTeam}", homeTeam);
-    }
+const launchUrls = (book, homeTeam) => {
+  const message = {
+    action: OPEN_SPORTSBOOK_TABS,
+    settings: settings,
+    book: book,
+    homeTeam: homeTeam
+  };
 
-    // TODO(dburger): send a message to a background script to change the URL
-    // of existing tabs or open new tabs.
-    // chrome.tabs.update(tab.id, {url: "https://www.whatismybrowser.com/detect/what-is-my-referrer", highlighted: true});
-    // chrome.tabs.create({url: "https://www.whatismybrowser.com/detect/what-is-my-referrer"});
-
-    // TODO(dburger): Unfortunately it appears that "noreferrer" makes it so
-    // that named targets still open in a new tab each time. Thus we only
-    // allow "_self" and "_blank" for now. Presumably all users will want
-    // "_blank".
-    window.open(url, settings.bookLinkTarget, "noreferrer");
-  }
-}
+  chrome.runtime.sendMessage(message, (resp) => {
+    console.log(`${message.action} result ${resp.result}`);
+  });
+};
 
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
-    const urlTemplates = getBookUrlTemplates(evt.target.innerText);
-    const homeTeam = getHomeTeam(evt.target);
-
     // In the case of the Bet Market Details page we don't want to pop up
     // the save bet dialog if they clicked the book name.
     if (isBetMarketDetailsPage()) {
@@ -561,7 +533,9 @@ window.addEventListener("click", function (evt) {
       evt.stopPropagation();
     }
 
-    launchUrls(urlTemplates, homeTeam);
+    const book = evt.target.innerText;
+    const homeTeam = getHomeTeam(evt.target);
+    launchUrls(book, homeTeam);
   }
 }, true);
 
