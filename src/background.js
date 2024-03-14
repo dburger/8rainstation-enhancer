@@ -25,13 +25,15 @@ const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap) => {
     // TODO(dburger): allow strategies, "_blank" versus "book".
     const bookDetails = bookDetailsMap[book];
     if (bookDetails) {
+        // From here we'll pass this as an array so this value can be updated in called functions.
+        const indexArray = [index + 1];
         for (const [name, bd] of Object.entries(bookDetailsMap)) {
             if (bd.oddsGroup === bookDetails.oddsGroup) {
                 let url = bd.urlTemplate;
                 if (homeTeam) {
                     url = url.replace("${homeTeam}", homeTeam);
                 }
-                createOrUpdateTab(bd, url, index);
+                createOrUpdateTab(bd, url, indexArray);
             }
         }
     }
@@ -44,10 +46,10 @@ const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap) => {
  * @param bookDetails {{string: {string, string, string}}} - The book
  *     details indicating which tabs to handle.
  * @param url {string} - The URL to open for the book.
- * @param index - The index position to open the tab at, if necessary.
+ * @param indexArray - The array containing the index position to open the tab at, if necessary.
+ *     Passed as an array so that we can update the value if we needed to create a tab.
  */
-const createOrUpdateTab = (bookDetails, url, index) => {
-    // TODO(dburger): should highlighted become an option?
+const createOrUpdateTab = (bookDetails, url, indexArray) => {
     chrome.tabs.query({url: "https://*/*"}, (tabs) => {
         let updated = false;
         for (const tab of tabs) {
@@ -58,7 +60,7 @@ const createOrUpdateTab = (bookDetails, url, index) => {
             }
         }
         if (!updated) {
-            chrome.tabs.create({url: url, index: index++ + 1});
+            chrome.tabs.create({url: url, index: indexArray[0]++});
         }
     });
 };
