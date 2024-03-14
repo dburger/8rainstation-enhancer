@@ -181,11 +181,16 @@ const loadPlaymarks = (playmarkDetailsMap) => {
 /**
  * Loads the given bookLinkTarget into the book link target select.
  *
- * @param bookLinkTarget {string} - The book link target to load, limited to
- *     "_self" and "_blank".
+ * @param bookLinkTarget {string} - The book link target to load.
  */
 const loadBookLinkTarget = (bookLinkTarget) => {
     const select = document.getElementById("bookLinkTarget");
+    for (const value of BOOK_LINK_TARGET_OPTIONS) {
+        const option = document.createElement("option");
+        option.text = value;
+        option.value = value;
+        select.add(option);
+    }
     select.value = bookLinkTarget;
 };
 

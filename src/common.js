@@ -89,7 +89,7 @@ const makeBookDetailsMap = (bookDetails) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
+ * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @returns {{v2: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap, bookLinkTarget}}} - Serializable JSON
  *     object for settings storage.
  */
@@ -132,9 +132,14 @@ const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
     ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
 ]);
 
+const BOOK_LINK_TARGET_NEW_TAB = "new tab";
+const BOOK_LINK_TARGET_BOOK_TAB = "book tab";
+// TODO(dburger): oh Javascript freeze me.
+const BOOK_LINK_TARGET_OPTIONS = [BOOK_LINK_TARGET_NEW_TAB, BOOK_LINK_TARGET_BOOK_TAB];
+
 const DEFAULT_ACTIVE_BOOKS_MAP = {};
 const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
-const DEFAULT_BOOK_LINK_TARGET = "_blank";
+const DEFAULT_BOOK_LINK_TARGET = BOOK_LINK_TARGET_NEW_TAB;
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
     DEFAULT_PLAYMARK_DETAILS_MAP,
@@ -170,7 +175,7 @@ const getSettings = (callback) => {
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
  * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
+ * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback) => {
@@ -189,7 +194,7 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  *     in the book details map.
  * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
  * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
- * @param bookLinkTarget {string} - The indicator of how to load a book link. Accepts normal URL targets "_self" and "_blank".
+ * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
 const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, callback) => {
