@@ -180,8 +180,12 @@ const getSettings = (callback) => {
  */
 const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback) => {
   const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget);
-  // TODO(dburger): callback?
-  chrome.storage.sync.remove("v1");
+  chrome.storage.sync.remove("v1", () => {
+      if (chrome.runtime.lastError) {
+          console.error("Failed to delete settings version v1.");
+          console.error(chrome.runtime.lastError.message);
+      }
+  });
   chrome.storage.sync.set(settings, callback);
 }
 
