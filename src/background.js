@@ -23,7 +23,6 @@ importScripts("./common.js");
  * @param bookLinkTarget {string} - The indicator of how to open the tabs.
  */
 const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap, bookLinkTarget) => {
-    // TODO(dburger): allow strategies, "_blank" versus "book".
     const bookDetails = bookDetailsMap[book];
     if (bookDetails) {
         // From here we'll pass this as an array so this value can be updated in called functions.
