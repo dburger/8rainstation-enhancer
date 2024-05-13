@@ -521,6 +521,17 @@ const launchUrls = (book, homeTeam) => {
   });
 };
 
+const isTotalDiv = (elem) => {
+  return elem && (elem.className === "no-total" || elem.className === "market-total");
+}
+
+const copyTotal = (elem) => {
+  const text = elem.innerText;
+  if (text && text.length > 1) {
+    navigator.clipboard.writeText(text.substring(1));
+  }
+}
+
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName !== "DIV") {
@@ -534,15 +545,16 @@ window.addEventListener("click", function (evt) {
       evt.stopPropagation();
     }
 
+    const elem = evt.target.previousElementSibling;
+    if (isTotalDiv(elem)) {
+      copyTotal(elem);
+    }
+
     const book = evt.target.innerText;
     const homeTeam = getHomeTeam(evt.target);
     launchUrls(book, homeTeam);
-  } else if (evt.target.className === "no-total" || evt.target.className === "market-total") {
-    // Put the bet size on the clipboard minus the dollar sign.
-    const text = evt.target.innerText;
-    if (text.length > 1) {
-      navigator.clipboard.writeText(text.substring(1));
-    }
+  } else if (isTotalDiv(evt.target)) {
+    copyTotal(evt.target);
   }
 }, true);
 
