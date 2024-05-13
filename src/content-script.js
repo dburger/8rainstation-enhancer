@@ -1,5 +1,3 @@
-const ARB_URL = "/search/plays?search=Pinnacle&group=Y&bet=Y&ways=2&ev=0&arb=0&sort=2&max=250&width=&weight=&days=";
-
 // As I understand it, content scripts cannot work as modules. This prevents us
 // from using async / await. Thus, the settings are retrieved here with a callback
 // instead of on demand when needed.
@@ -525,7 +523,10 @@ const launchUrls = (book, homeTeam) => {
 
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
-  if (evt.target.tagName === "DIV" && evt.target.className === "sports_book_name") {
+  if (evt.target.tagName !== "DIV") {
+    return;
+  }
+  if (evt.target.className === "sports_book_name") {
     // In the case of the Bet Market Details page we don't want to pop up
     // the save bet dialog if they clicked the book name.
     if (isBetMarketDetailsPage()) {
@@ -536,6 +537,12 @@ window.addEventListener("click", function (evt) {
     const book = evt.target.innerText;
     const homeTeam = getHomeTeam(evt.target);
     launchUrls(book, homeTeam);
+  } else if (evt.target.className === "no-total" || evt.target.className === "market-total") {
+    // Put the bet size on the clipboard minus the dollar sign.
+    const text = evt.target.innerText;
+    if (text.length > 1) {
+      navigator.clipboard.writeText(text.substring(1));
+    }
   }
 }, true);
 

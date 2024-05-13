@@ -9,7 +9,7 @@ div.logo img {
     --enhanced-clickable-active-color: lime;
 }
 
-div.sports_book_name {
+div.sports_book_name, div.no-total, div.market-total {
     border-radius: 0.5rem;
     border: 0.1rem solid var(--enhanced-clickable-color);
 }
