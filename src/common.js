@@ -128,7 +128,6 @@ const DEFAULT_BOOK_DETAILS_MAP = makeBookDetailsMap([
     ["DraftKings", "DraftKings", "https://sportsbook.draftkings.com/"],
     ["Pinnacle", "Pinnacle", "https://www.pinnacle.com/en/search/${homeTeam}"],
     ["SuperBook", "SuperBook", "https://az.superbook.com/sports"],
-    ["Unibet", "Kambi", "https://az.unibet.com/sports#home"],
     ["WynnBET", "WynnBET", "https://bet.wynnbet.com/sports/us/sports/recommendations"]
 ]);
 
