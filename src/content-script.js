@@ -538,13 +538,6 @@ window.addEventListener("click", function (evt) {
     return;
   }
   if (evt.target.className === "sports_book_name") {
-    // In the case of the Bet Market Details page we don't want to pop up
-    // the save bet dialog if they clicked the book name.
-    if (isBetMarketDetailsPage()) {
-      evt.preventDefault();
-      evt.stopPropagation();
-    }
-
     const elem = evt.target.previousElementSibling;
     if (isTotalDiv(elem)) {
       copyTotal(elem);
