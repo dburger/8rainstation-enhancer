@@ -185,6 +185,9 @@ const loadPlaymarks = (playmarkDetailsMap) => {
  */
 const loadBookLinkTarget = (bookLinkTarget) => {
     const select = document.getElementById("bookLinkTarget");
+    // This makes it so that the reload and defaults clicks don't end up
+    // duplicating the options.
+    select.length = 0;
     for (const value of BOOK_LINK_TARGET_OPTIONS) {
         const option = document.createElement("option");
         option.text = value;
