@@ -12,6 +12,8 @@ the features this extension provides. The features this extension adds includes:
 * Making sportsbook names clickable links that launch to the sportsbook.
   (Note that I do not send the referrer header, so the sportsbook will not
   know you are coming from 8rain Station.)
+* When a sportsbook name or wager amount is clicked on, the Kelly computed
+  wager amount is copied to the clipboard.
 * A button that closes all open sportsbook sites when clicked.
 * The ability to quickly add bookmarks to specific plays filtering
   on the Plays and Bet Market Details pages.
