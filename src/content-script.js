@@ -12,19 +12,14 @@ getSettings(s => {
     return;
   }
 
-  if (isBetMarketDetailsPage() || isEventsPage() || isPlaysPage() || isSettingsPage() || isWagersPage()) {
-    insertAfter(addPlaymarkDiv(), anchorDiv);
-    // We need to reverse here because these are added to the UI after the
-    // anchor. Thus, the reverse undos the insert reverse.
-    for (const [name, pd] of Object.entries(settings.playmarkDetailsMap).sort(sortPlaymarkEntries).reverse()) {
-      insertAfter(navDiv(pd.playmark, name), anchorDiv);
-    }
-    highlightCurrentPlaymark();
-  } else if (isBooksPage()) {
-    // NOOP.
-  } else if (isWeightingsPage()) {
-    // NOOP.
+
+  insertAfter(addPlaymarkDiv(), anchorDiv);
+  // We need to reverse here because these are added to the UI after the
+  // anchor. Thus, the reverse undos the insert reverse.
+  for (const [name, pd] of Object.entries(settings.playmarkDetailsMap).sort(sortPlaymarkEntries).reverse()) {
+    insertAfter(navDiv(pd.playmark, name), anchorDiv);
   }
+  highlightCurrentPlaymark();
 });
 
 /**
