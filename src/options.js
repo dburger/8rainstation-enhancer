@@ -7,7 +7,7 @@ const removeChildren = (elem) => {
     while (elem.lastChild) {
         elem.removeChild(elem.lastChild);
     }
-}
+};
 
 /**
  * Creates and returns an input of type text with the given value.
@@ -213,36 +213,6 @@ const loadBookDetails = (bookDetails) => {
 };
 
 /**
- * Loads the given active books into the active books table.
- *
- * @param activeBooksMap {{string: string[]}} - The mapping of names to
- *     active books for that name to load.
- */
-const loadActiveBooks = (activeBooksMap) => {
-    const tbody = document.getElementById("activeBooksBody");
-    removeChildren(tbody);
-
-    for (const [key, value] of Object.entries(activeBooksMap)) {
-        addKeyValueRow(tbody, key, value);
-    }
-};
-
-/**
- * Loads the given active book weightings into the active book weightings table.
- *
- * @param activeBookWeightingsMap {{string: {string: number}}} - The mapping of
- *     names to book weightings to load.
- */
-const loadActiveBookWeightings = (activeBookWeightingsMap) => {
-    const tbody = document.getElementById("activeBookWeightingsBody");
-    removeChildren(tbody);
-
-    for (const [key, value] of Object.entries(activeBookWeightingsMap)) {
-        addKeyValueRow(tbody, key, objectToString(value));
-    }
-};
-
-/**
  * Loads the given settings into the page.
  *
  * @param settings {@see makeVersionedSettings}
@@ -251,8 +221,6 @@ const loadSettings = (settings) => {
     loadPlaymarks(settings.playmarkDetailsMap);
     loadBookLinkTarget(settings.bookLinkTarget);
     loadBookDetails(settings.bookDetailsMap);
-    loadActiveBooks(settings.activeBooksMap);
-    loadActiveBookWeightings(settings.activeBookWeightingsMap);
 };
 
 /** Initial page configuration, loads settings into the page. */
@@ -262,8 +230,6 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const playmarksBody = document.getElementById("playmarksBody");
     const bookLinkTargetSelect = document.getElementById("bookLinkTarget");
     const bookDetailsBody = document.getElementById("bookDetailsBody");
-    const activeBooksBody = document.getElementById("activeBooksBody");
-    const activeBookWeightingsBody = document.getElementById("activeBookWeightingsBody");
 
     const saveButton = document.getElementById("save");
     const reloadButton = document.getElementById("reload");
@@ -287,17 +253,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             bookDetails.push([key, oddsGroup, urlTemplate]);
         }
 
-        const activeBooksNames = [];
-        for (const tr of activeBooksBody.childNodes) {
-            activeBooksNames.push(tr.childNodes[1].innerText);
-        }
-
-        const activeBookWeightingsNames = [];
-        for (const tr of activeBookWeightingsBody.childNodes) {
-            activeBookWeightingsNames.push(tr.childNodes[1].innerText);
-        }
-
-        setSettings(playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, () => {
+        setSettings(playmarkDetails, bookDetails, bookLinkTarget, () => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }
@@ -350,18 +306,6 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     bookDetailsBody.addEventListener("click", (evt) => {
         if (isDeleter(evt.target)) {
             bookDetailsBody.removeChild(evt.target.parentElement);
-        }
-    });
-
-    activeBooksBody.addEventListener("click", (evt) => {
-        if (isDeleter(evt.target)) {
-            activeBooksBody.removeChild(evt.target.parentElement);
-        }
-    });
-
-    activeBookWeightingsBody.addEventListener("click", (evt) => {
-        if (isDeleter(evt.target)) {
-            activeBookWeightingsBody.removeChild(evt.target.parentElement);
         }
     });
 });

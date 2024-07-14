@@ -2,52 +2,8 @@
 // from using async / await. Thus, the settings are retrieved here with a callback
 // instead of on demand when needed.
 
-const ACTIVE_BOOKS_NAME_TEXT_BOX_ID = "activeBooksNameTextBox";
-const ACTIVE_BOOKS_NAMES_DATALIST_ID = "activeBooksNamesDatalist";
-
-const ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID = "activeBookWeightingsNameTextBox";
-const ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID = "activeBookWeightingsNamesDatalist";
-
 let settings = null;
 let anchorDiv = null;
-
-/**
- * Loads a datalist.
- *
- * @param id {string} - The id of the datalist to load.
- * @param values {string[]} - The array of values to load.
- */
-const loadDatalist = (id, values) => {
-  const datalist = document.getElementById(id);
-  if (datalist) {
-    for (const value of values) {
-      const option = document.createElement("option");
-      option.setAttribute("value", value);
-      datalist.appendChild(option);
-    }
-  } else {
-    console.error(`datalist ${id} not found and not loaded.`);
-  }
-}
-
-/**
- * Adds the value to the datalist represented by id if does not already
- * contain it.
- *
- * @param id {string} - The id of the datalist to check / add to.
- * @param value {string} - The value to add.
- */
-const maybeAdd2Datalist = (id, value) => {
-  const datalist = document.getElementById(id);
-  for (const option of datalist.childNodes) {
-    if (option.value === value) {
-      return;
-    }
-  }
-  const option = document.createElement("option");
-  option.setAttribute("value", value);
-  datalist.appendChild(option);
-};
 
 /** Fetches the settings on page load and finishes setting up the page. */
 getSettings(s => {
@@ -65,15 +21,9 @@ getSettings(s => {
     }
     highlightCurrentPlaymark();
   } else if (isBooksPage()) {
-    insertAfter(storeActiveBooksDiv(), anchorDiv);
-    insertAfter(loadActiveBooksDiv(), anchorDiv);
-    insertAfter(activeBooksNameTextBox(), anchorDiv);
-    loadDatalist(ACTIVE_BOOKS_NAMES_DATALIST_ID, Object.keys(settings.activeBooksMap));
+    // NOOP.
   } else if (isWeightingsPage()) {
-    insertAfter(storeActiveBookWeightingsDiv(), anchorDiv);
-    insertAfter(loadActiveBookWeightingsDiv(), anchorDiv);
-    insertAfter(activeBookWeightingsNameTextBox(), anchorDiv);
-    loadDatalist(ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID, Object.keys(settings.activeBookWeightingsMap));
+    // NOOP.
   }
 });
 
@@ -311,180 +261,6 @@ const closeTabsDiv = () => {
  */
 const openOptionsDiv = () => {
   return sendMessageDiv("options", "O", OPEN_OPTIONS_TAB);
-};
-
-/**
- * Creates and returns the clickable div to load the selected named active
- * books.
- *
- * @returns {HTMLDivElement} - The clickable div to load active books.
- */
-const loadActiveBooksDiv = () => {
-  const loadActiveBooksDiv = navDiv("", "Load");
-  loadActiveBooksDiv.addEventListener("click", (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
-    getSettings(settings => {
-      let activeBooks = settings.activeBooksMap[activeBooksName];
-      if (!activeBooks) {
-        return;
-      }
-      activeBooks = new Set(activeBooks);
-      const bookDivs = document.querySelectorAll(".book");
-      for (const bookDiv of bookDivs) {
-        const label = bookDiv.childNodes[1];
-        if (label !== undefined && label.innerText !== "Select All Books") {
-          label.childNodes[1].checked = activeBooks.has(label.innerText);
-        }
-      }
-    });
-  });
-  return loadActiveBooksDiv;
-};
-
-/**
- * Creates and returns the clickable div to load the selected named book
- * weightings.
- *
- * @returns {HTMLDivElement} - The clickable div to load book weightings.
- */
-const loadActiveBookWeightingsDiv = () => {
-  const loadActiveBookWeightingsDiv = navDiv("", "Load");
-  loadActiveBookWeightingsDiv.addEventListener("click", (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    const activeWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
-    getSettings(settings => {
-      const activeWeightings = settings.activeBookWeightingsMap[activeWeightingsName];
-      if (!activeWeightings) {
-        return;
-      }
-      const bookDivs = document.querySelectorAll(".book");
-      for (const bookDiv of bookDivs) {
-        const input = bookDiv.childNodes[1];
-        const label = bookDiv.childNodes[3];
-        const book = label.innerText;
-        const weight = activeWeightings[book];
-        input.value = weight ? weight : "";
-      }
-    });
-  });
-  return loadActiveBookWeightingsDiv;
-};
-
-/**
- * Creates and returns the clickable div to store the current active books. The name
- * will come from the current value in the active books name text box.
- *
- * @returns {HTMLDivElement} - The clickable div to store the current active books.
- */
-const storeActiveBooksDiv = () => {
-  const storeActiveBooksDiv = navDiv("", "Store");
-  storeActiveBooksDiv.addEventListener("click", (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    const activeBooks = [];
-    const bookDivs = document.querySelectorAll(".book");
-    // This is somewhat fragile obviously. For example, extra text nodes in the DOM
-    // will throw this off. May need to change to the walk* algorithms instead.
-    for (const bookDiv of bookDivs) {
-      const label = bookDiv.childNodes[1];
-      if (label !== undefined && label.innerText !== "Select All Books" && label.childNodes[1].checked) {
-        activeBooks.push(label.innerText);
-      }
-    }
-    const activeBooksName = document.getElementById(ACTIVE_BOOKS_NAME_TEXT_BOX_ID).value;
-    setActiveBooks(activeBooksName, activeBooks, () => {
-      if (chrome.runtime.lastError) {
-        window.alert(chrome.runtime.lastError.message);
-      } else {
-        maybeAdd2Datalist(ACTIVE_BOOKS_NAMES_DATALIST_ID, activeBooksName);
-      }
-    });
-  });
-  return storeActiveBooksDiv;
-};
-
-/**
- * Creates and returns the clickable div to store the current book weightings.
- * The name will come from the current value in the active books name text box.
- *
- * @returns {HTMLDivElement} - The clickable div to store the current active books.
- */
-const storeActiveBookWeightingsDiv = () => {
-  const storeActiveBookWeightingsDiv = navDiv("", "Store");
-  storeActiveBookWeightingsDiv.addEventListener("click", (evt) => {
-    evt.preventDefault();
-    evt.stopPropagation();
-    const activeWeightings = {};
-    const bookDivs = document.querySelectorAll(".book");
-    // This is somewhat fragile obviously. For example, extra text nodes in the DOM
-    // will throw this off. May need to change to the walk* algorithms instead.
-    for (const bookDiv of bookDivs) {
-      const input = bookDiv.childNodes[1];
-      const label = bookDiv.childNodes[3];
-      if (input.value) {
-        const book = label.innerText;
-        activeWeightings[book] = parseFloat(input.value);
-      }
-    }
-    const activeBookWeightingsName = document.getElementById(ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID).value;
-    setBookWeightings(activeBookWeightingsName, activeWeightings, () => {
-      if (chrome.runtime.lastError) {
-        window.alert(chrome.runtime.lastError.message);
-      } else {
-        maybeAdd2Datalist(ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID, activeBookWeightingsName);
-      }
-    });
-  });
-  return storeActiveBookWeightingsDiv;
-};
-
-/**
- * Creates and returns the active books name text box.
- *
- * @returns {HTMLDivElement} - The active books name text box.
- */
-const activeBooksNameTextBox = () => {
-  const input = document.createElement("input");
-  input.setAttribute("id", ACTIVE_BOOKS_NAME_TEXT_BOX_ID);
-  input.setAttribute("type", "text");
-  input.setAttribute("list", ACTIVE_BOOKS_NAMES_DATALIST_ID);
-  input.setAttribute("size", "10");
-
-  const datalist = document.createElement("datalist");
-  datalist.setAttribute("id", ACTIVE_BOOKS_NAMES_DATALIST_ID);
-
-  const div = document.createElement("div");
-  div.setAttribute("class", "nav unclickable");
-  div.appendChild(input);
-  div.appendChild(datalist);
-
-  return div;
-};
-
-/**
- * Creates and returns the active books weightings name text box.
- *
- * @returns {HTMLDivElement} - The active books weightings name text box.
- */
-const activeBookWeightingsNameTextBox = () => {
-  const input = document.createElement("input");
-  input.setAttribute("id", ACTIVE_BOOK_WEIGHTINGS_NAME_TEXT_BOX_ID);
-  input.setAttribute("type", "text");
-  input.setAttribute("list", ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID);
-  input.setAttribute("size", "10");
-
-  const datalist = document.createElement("datalist");
-  datalist.setAttribute("id", ACTIVE_BOOK_WEIGHTINGS_NAMES_DATALIST_ID);
-
-  const div = document.createElement("div");
-  div.setAttribute("class", "nav unclickable");
-  div.appendChild(input);
-  div.appendChild(datalist);
-
-  return div;
 };
 
 /**

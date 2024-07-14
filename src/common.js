@@ -87,19 +87,16 @@ const makeBookDetailsMap = (bookDetails) => {
  *
  * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
- * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
- * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
+
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
- * @returns {{v2: {playmarksMap, activeBooksMap, bookDetailsMap, activeBookWeightingsMap, bookLinkTarget}}} - Serializable JSON
+ * @returns {{v2: {playmarksMap, bookDetailsMap, bookLinkTarget}}} - Serializable JSON
  *     object for settings storage.
  */
-const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget) => {
+const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget) => {
   return {
     v2: {
       playmarkDetailsMap: playmarkDetailsMap,
       bookDetailsMap: bookDetailsMap,
-      activeBooksMap: activeBooksMap,
-      activeBookWeightingsMap: activeBookWeightingsMap,
       bookLinkTarget: bookLinkTarget
     }
   };
@@ -137,15 +134,11 @@ const BOOK_LINK_TARGET_BOOK_TAB = "book tab";
 // TODO(dburger): oh Javascript freeze me.
 const BOOK_LINK_TARGET_OPTIONS = [BOOK_LINK_TARGET_NEW_TAB, BOOK_LINK_TARGET_BOOK_TAB];
 
-const DEFAULT_ACTIVE_BOOKS_MAP = {};
-const DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP = {};
 const DEFAULT_BOOK_LINK_TARGET = BOOK_LINK_TARGET_NEW_TAB;
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
     DEFAULT_PLAYMARK_DETAILS_MAP,
     DEFAULT_BOOK_DETAILS_MAP,
-    DEFAULT_ACTIVE_BOOKS_MAP,
-    DEFAULT_ACTIVE_BOOK_WEIGHTINGS_MAP,
     DEFAULT_BOOK_LINK_TARGET);
 
 /**
@@ -160,7 +153,7 @@ const getSettings = (callback) => {
     } else if (Object.keys(s.v1).length > 0) {
       // Transition from v1 to v2. We'll continue to do this translation until they save new settings.
       // At that time we'll delete s.v1 and store s.v2.
-      s = makeVersionedSettings(s.v1.playmarkDetailsMap, s.v1.bookDetailsMap, s.v1.activeBooksMap, s.v1.activeBookWeightingsMap, DEFAULT_BOOK_LINK_TARGET);
+      s = makeVersionedSettings(s.v1.playmarkDetailsMap, s.v1.bookDetailsMap, DEFAULT_BOOK_LINK_TARGET);
     } else {
       s = DEFAULT_SETTINGS;
     }
@@ -173,13 +166,11 @@ const getSettings = (callback) => {
  *
  * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
- * @param activeBooksMap {{string: string[]}} - The map of names to active books for that name to store.
- * @param activeBookWeightingsMap {{string: {string: number}}} - The map of names to book weightings maps to store.
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback) => {
-  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget);
+const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback) => {
+  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, bookLinkTarget);
   chrome.storage.sync.remove("v1", () => {
       if (chrome.runtime.lastError) {
           console.error("Failed to delete settings version v1.");
@@ -196,49 +187,16 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, activeBooksMap
  *     in the form of [text key, sort position, target URL].
  * @param bookDetails {[string, string, string]} - The name, odds group, URL template details to store
  *     in the book details map.
- * @param activeBooksNames {string[]} - The names of the active book groupings to keep.
- * @param activeBookWeightingsNames {string[]} - The names of the book weightings to keep.
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setSettings = (playmarkDetails, bookDetails, activeBooksNames, activeBookWeightingsNames, bookLinkTarget, callback) => {
+const setSettings = (playmarkDetails, bookDetails, bookLinkTarget, callback) => {
   getSettings(settings => {
     const playmarkDetailsMap = makePlaymarkDetailsMap(playmarkDetails);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
-    const activeBooksMap = keepKeys2(settings.activeBooksMap, activeBooksNames);
-    const activeBookWeightingsMap = keepKeys2(settings.activeBookWeightingsMap, activeBookWeightingsNames);
-    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, activeBooksMap, activeBookWeightingsMap, bookLinkTarget, callback);
+    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback);
   });
 }
-
-/**
- * Stores the given name to active books mapping into the settings.
- *
- * @param name {string} - The name to give the mapping.
- * @param activeBooks {string[]} - The array of active books for the name.
- * @param callback {() => void} - The callback invoked after the settings have been set.
- */
-const setActiveBooks = (name, activeBooks, callback) => {
-  getSettings(settings => {
-    settings.activeBooksMap[name] = activeBooks;
-    setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
-  });
-};
-
-/**
- * Stores the given name to book weightings mapping into the settings.
- *
- * @param name {string} - The name to give the mapping.
- * @param weightings {{string: number}} - The mapping of book names to
- *     weightings to store for the name.
- * @param callback {() => void} - The callback invoked after the settings have been set.
- */
-const setBookWeightings = (name, weightings, callback) => {
-    getSettings(settings => {
-        settings.activeBookWeightingsMap[name] = weightings;
-        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
-    });
-};
 
 /**
  * Stores the given name to playmark into the settings.
@@ -250,7 +208,7 @@ const setBookWeightings = (name, weightings, callback) => {
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
         settings.playmarkDetailsMap[name] = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
-        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.activeBooksMap, settings.activeBookWeightingsMap, settings.bookLinkTarget, callback);
+        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.bookLinkTarget, callback);
     });
 };
 
