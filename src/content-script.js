@@ -56,7 +56,7 @@ getSettings(s => {
     return;
   }
 
-  if (isPlaysPage() || isBetMarketDetailsPage()) {
+  if (isBetMarketDetailsPage() || isEventsPage() || isPlaysPage() || isSettingsPage() || isWagersPage()) {
     insertAfter(addPlaymarkDiv(), anchorDiv);
     // We need to reverse here because these are added to the UI after the
     // anchor. Thus, the reverse undos the insert reverse.
