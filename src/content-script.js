@@ -107,7 +107,8 @@ const getHomeTeam = (elem) => {
   } else if (isBetMarketDetailsPage()) {
     const divs = document.querySelectorAll("div.event-team");
     if (divs.length === 2) {
-      return divs[1].innerText;
+      // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
+      return divs[1].innerText.split(" (")[0];
     }
   }
 
