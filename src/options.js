@@ -236,6 +236,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const defaultsButton = document.getElementById("defaults");
     const addButton = document.getElementById("add");
     const exportButton = document.getElementById("export");
+    const fileImportInput = document.getElementById("fileImport");
 
     saveButton.addEventListener("click", (evt) => {
         const playmarkDetails = [];
@@ -283,6 +284,18 @@ document.addEventListener("DOMContentLoaded", (evt) => {
                 filename: "options.json",
             });
         });
+    });
+
+    fileImportInput.addEventListener("change", (evt) => {
+        if (fileImportInput.files.length > 0) {
+            const file = fileImportInput.files[0];
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                window.alert(reader.result);
+            }, false);
+            // TODO(dburger): encoding second parameter?
+            reader.readAsText(file);
+        }
     });
 
     const isDeleter = (target) => {
