@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const reloadButton = document.getElementById("reload");
     const defaultsButton = document.getElementById("defaults");
     const addButton = document.getElementById("add");
+    const exportButton = document.getElementById("export");
 
     saveButton.addEventListener("click", (evt) => {
         const playmarkDetails = [];
@@ -271,6 +272,17 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     addButton.addEventListener("click", (evt) => {
         addBookDetailsRow(bookDetailsBody, "", "", "");
+    });
+
+    exportButton.addEventListener("click", (evt) => {
+        getSettings(settings => {
+            const blob = new Blob([JSON.stringify(settings)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            chrome.downloads.download({
+                url: url,
+                filename: "options.json",
+            });
+        });
     });
 
     const isDeleter = (target) => {
