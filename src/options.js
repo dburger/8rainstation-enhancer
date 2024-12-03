@@ -277,6 +277,10 @@ document.addEventListener("DOMContentLoaded", (evt) => {
 
     exportButton.addEventListener("click", (evt) => {
         getSettings(settings => {
+            // TODO(dburger): pull "v2" version from latest version constant?
+            settings = {
+                v2: settings,
+            };
             const blob = new Blob([JSON.stringify(settings)], {type: "application/json"});
             const url = URL.createObjectURL(blob);
             chrome.downloads.download({
