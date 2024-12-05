@@ -189,6 +189,16 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget
           console.error(chrome.runtime.lastError.message);
       }
   });
+  syncSettings(settings, callback);
+};
+
+/**
+ * Syncs fully realized settings to storage.
+ *
+ * @param settings {{v2: {playmarksMap, bookDetailsMap, bookLinkTarget}}} - Fully realized settings
+ * @param callback {() => void} - The callback invoked after the settings have been set.
+ */
+const syncSettings = (settings, callback) => {
   chrome.storage.sync.set(settings, callback);
 };
 

@@ -296,7 +296,13 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             const reader = new FileReader();
             reader.addEventListener("load", () => {
                 settings = JSON.parse(reader.result);
-                window.alert(settings);
+                syncSettings(settings, () => {
+                    if (chrome.runtime.lastError) {
+                        window.alert(chrome.runtime.lastError.message);
+                    } else {
+                        getSettings(loadSettings);
+                    }
+                });
             }, false);
             // TODO(dburger): encoding second parameter?
             reader.readAsText(file);
