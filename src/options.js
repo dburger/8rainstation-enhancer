@@ -295,7 +295,8 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             const file = fileImportInput.files[0];
             const reader = new FileReader();
             reader.addEventListener("load", () => {
-                window.alert(reader.result);
+                settings = JSON.parse(reader.result);
+                window.alert(settings);
             }, false);
             // TODO(dburger): encoding second parameter?
             reader.readAsText(file);

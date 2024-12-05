@@ -147,19 +147,31 @@ const DEFAULT_SETTINGS = makeVersionedSettings(
  * @param callback {function(settings)} - The callback to invoke with the settings.
  */
 const getSettings = (callback) => {
-  chrome.storage.sync.get({v1: {}, v2: {}}, (s) => {
-    if (Object.keys(s.v2).length > 0) {
-      // s.v2 is already what we want.
-    } else if (Object.keys(s.v1).length > 0) {
-      // Transition from v1 to v2. We'll continue to do this translation until they save new settings.
-      // At that time we'll delete s.v1 and store s.v2.
-      s = makeVersionedSettings(s.v1.playmarkDetailsMap, s.v1.bookDetailsMap, DEFAULT_BOOK_LINK_TARGET);
-    } else {
-      s = DEFAULT_SETTINGS;
-    }
-    callback(s.v2);
+  chrome.storage.sync.get({v1: {}, v2: {}}, (settings) => {
+    settings = migrateSettings(settings);
+    callback(settings.v2);
   });
-}
+};
+
+/**
+ * Examines settings and returns the equivalent for the current version. If settings
+ * is already in the current version form, it is returned unchanged.
+ *
+ * @param settings {Object} - settings object, possibly of a prior version
+ * @returns {{v2: {playmarksMap, bookDetailsMap, bookLinkTarget}}}
+ */
+const migrateSettings = (settings) => {
+  if (Object.keys(settings.v2).length > 0) {
+      // settings is already what we want.
+  } else if (Object.keys(settings.v1).length > 0) {
+      // Transition from v1 to v2. We'll continue to do this translation until they save new settings.
+      // At that time we'll delete settings.v1 and store settings.v2.
+      settings = makeVersionedSettings(settings.v1.playmarkDetailsMap, settings.v1.bookDetailsMap, DEFAULT_BOOK_LINK_TARGET);
+  } else {
+      settings = DEFAULT_SETTINGS;
+  }
+  return settings;
+};
 
 /**
  * Stores the settings and indicates the result via the callback.
@@ -178,7 +190,7 @@ const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget
       }
   });
   chrome.storage.sync.set(settings, callback);
-}
+};
 
 /**
  * Translates and stores the given settings as called from the settings page.
@@ -196,7 +208,7 @@ const setSettings = (playmarkDetails, bookDetails, bookLinkTarget, callback) => 
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
     setVersionedSettings(playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback);
   });
-}
+};
 
 /**
  * Stores the given name to playmark into the settings.
