@@ -236,6 +236,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     const defaultsButton = document.getElementById("defaults");
     const addButton = document.getElementById("add");
     const exportButton = document.getElementById("export");
+    const importButton = document.getElementById("import");
     const fileImportInput = document.getElementById("fileImport");
 
     saveButton.addEventListener("click", (evt) => {
@@ -288,6 +289,10 @@ document.addEventListener("DOMContentLoaded", (evt) => {
                 filename: "options.json",
             });
         });
+    });
+
+    importButton.addEventListener("click", (evt) => {
+        fileImportInput.click();
     });
 
     fileImportInput.addEventListener("change", (evt) => {

@@ -13,10 +13,6 @@
                 <button id="reload">Reload</button>
                 <button id="defaults">Defaults</button>
             </p>
-            <p>
-                <button id="export">Export</button>
-                <input type="file" id="fileImport" name="fileImport" accept="application/json"/>
-            </p>
         </div>
 
         <div>
@@ -75,6 +71,24 @@
                 <tbody id="bookDetailsBody">
                 </tbody>
             </table>
+        </div>
+        <div>
+            <h2>Options Export/Import</h2>
+            <p>
+                Since this extension was rejected from the Chrome extension store for being
+                related to sports wagering, the most effective way to sync your settings
+                across devices is to export them on one machine and import them on the other.
+                This also allows you to save your options with another user.
+            </p>
+            <p>
+              <button id="export">Export</button>
+              <!--
+                  We hide the file input and forward the click event to it from the import button.
+                  This allows us to control the text that is on the button.
+               -->
+              <button id="import">Import</button>
+              <input type="file" id="fileImport" name="fileImport" accept="application/json" style="display:none"/>
+            </p>
         </div>
     </body>
     <script src="common.js"></script>
