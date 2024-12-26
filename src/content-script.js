@@ -259,6 +259,29 @@ const openOptionsDiv = () => {
   return sendMessageDiv("options", "O", OPEN_OPTIONS_TAB);
 };
 
+const addMegDiv = () => {
+  const div = navDiv("", "M");
+  div.addEventListener("click", (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    for (const line of document.querySelectorAll("div.line")) {
+      const pevDiv = line.querySelector(".positive_ev");
+      const percent = pevDiv.innerText;
+      const edge = parseFloat(percent) / 100.0;
+      const americanPrice = parseInt(line.querySelector(".price").innerText);
+      const fractionalOdds = (americanPrice >= 100) ? americanPrice / 100.0 : -100.0 / americanPrice;
+      const meg = (edge ** 2) / (2 * fractionalOdds);
+      const basisPoints = (meg * 10000).toFixed(2);
+      // console.log(`${edge} @ ${americanPrice} is ${basisPoints}b`);
+      // const div = document.createElement("div");
+      // div.innerText = `${basisPoints}b`;
+      // insertAfter(div, pevDiv);
+      pevDiv.innerText = `${percent} ${basisPoints}b`;
+    }
+  });
+  return div;
+};
+
 /**
  * Highlights the playmark that matches the current URL, if any.
  */
@@ -328,6 +351,7 @@ const settingsLink = document.querySelector('a[href="/settings"]');
 if (settingsLink) {
   anchorDiv = openOptionsDiv();
   insertAfter(anchorDiv, settingsLink.parentElement);
+  insertAfter(addMegDiv(), settingsLink.parentElement);
   insertAfter(closeTabsDiv(), settingsLink.parentElement);
 } else {
   console.error("Settings link not found, navigation not added.");
