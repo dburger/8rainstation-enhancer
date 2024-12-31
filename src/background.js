@@ -58,10 +58,13 @@ const createOrUpdateTab = (bookDetails, url, bookLinkTarget, indexArray) => {
             for (const tab of tabs) {
                 if (tab.url.includes(bookDetails.hostname)) {
                     chrome.tabs.update(tab.id, {url: url, highlighted: true});
-                    chrome.tabs.move(tab.id, {index: indexArray[0]});
-                    // TODO(dburger): do indexArray[0] need to be adjusted for the case when we
-                    // are launching multiple books in a book group and this one came from the
-                    // left of the 8rs tab?
+                    let index;
+                    if (tab.index < indexArray[0]) {
+                        index = indexArray[0]--;
+                    } else {
+                        index = indexArray[0] + 1;
+                    }
+                    chrome.tabs.move(tab.id, {index: index});
                     updated = true;
                     break;
                 }
