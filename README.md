@@ -17,6 +17,13 @@ the features this extension provides. The features this extension adds includes:
 * A button that closes all open sportsbook sites when clicked.
 * The ability to quickly add bookmarks to specific plays filtering
   on the Plays and Bet Market Details pages.
+* Each chip containing the edge of a play is augmented with the Maximum
+  Effective Growth or MEG calculation of the bet in basis points. See
+  [But How Much Did You Lose?](https://amzn.to/4gvlGiw)
+  for details on the calculation.
+* The ability to export and import your settings. (This is helpful because
+  this extension isn't in the Chrome Web Store and thus can't sync settings
+  via that mechanism.)
 
 ## Why isn't this in the Chrome Web Store?
 
