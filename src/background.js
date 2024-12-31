@@ -26,7 +26,7 @@ const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap, bookLinkTarge
     const bookDetails = bookDetailsMap[book];
     if (bookDetails) {
         // From here we'll pass this as an array so this value can be updated in called functions.
-        const indexArray = [index + 1];
+        const indexArray = [index];
         for (const [name, bd] of Object.entries(bookDetailsMap)) {
             if (bd.oddsGroup === bookDetails.oddsGroup) {
                 let url = bd.urlTemplate;
@@ -58,12 +58,16 @@ const createOrUpdateTab = (bookDetails, url, bookLinkTarget, indexArray) => {
             for (const tab of tabs) {
                 if (tab.url.includes(bookDetails.hostname)) {
                     chrome.tabs.update(tab.id, {url: url, highlighted: true});
+                    chrome.tabs.move(tab.id, {index: indexArray[0]});
+                    // TODO(dburger): do indexArray[0] need to be adjusted for the case when we
+                    // are launching multiple books in a book group and this one came from the
+                    // left of the 8rs tab?
                     updated = true;
                     break;
                 }
             }
             if (!updated) {
-                chrome.tabs.create({url: url, index: indexArray[0]++});
+                chrome.tabs.create({url: url, index: ++indexArray[0]});
             }
         });
     } else {
