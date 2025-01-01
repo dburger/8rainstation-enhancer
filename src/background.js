@@ -137,7 +137,7 @@ const closeSportsbookTabs = (bookDetailsMap) => {
  */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === OPEN_SPORTSBOOK_TABS) {
-        openSportsbookTabs(message.book, message.homeTeam, message.settings.bookDetailsMap, message.settings.bookLinkTarget);
+        openSportsbookTabs(message.book, message.gameInfo.homeTeam, message.settings.bookDetailsMap, message.settings.bookLinkTarget);
     } else if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs(message.settings.bookDetailsMap);
     } else if (message.action === OPEN_OPTIONS_TAB) {

@@ -86,21 +86,21 @@ const isBetMarketDetailsPage = () => {
 }
 
 /**
- * Attempts to find the home team on the page and returns it.
+ * Attempts to find the game info on the page and returns it.
  *
  * @param elem {HTMLElement} - The element to start the search from. Depending on
  *     the source page, this may or may not affect the search.
- * @returns {null|string} - The home team or null if not found.
+ * @returns {null|GameInfo} - The game info or null if not found.
  */
-const getHomeTeam = (elem) => {
+const getGameInfo = (elem) => {
   if (isPlaysPage()) {
     const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
     if (div) {
-      const gdiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
-      if (gdiv) {
-        const parts = gdiv.innerText.split(" at ");
+      const gameDiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
+      if (gameDiv) {
+        const parts = gameDiv.innerText.split(" at ");
         if (parts.length === 2) {
-          return parts[1];
+          return new GameInfo(parts[1]);
         }
       }
     }
@@ -108,7 +108,7 @@ const getHomeTeam = (elem) => {
     const divs = document.querySelectorAll("div.event-team");
     if (divs.length === 2) {
       // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
-      return divs[1].innerText.split(" (")[0];
+      return new GameInfo(divs[1].innerText.split(" (")[0]);
     }
   }
 
@@ -305,15 +305,14 @@ const highlightCurrentPlaymark = () => {
  *
  * @param book {string} - The sportsbook to launch tab(s) for. All books in the
  *     same odds group will be launched.
- * @param homeTeam - The home team for the event. Used in URL
- *     generation.
+ * @param gameInfo - The game info for the event. Used in URL generation.
  */
-const launchUrls = (book, homeTeam) => {
+const launchUrls = (book, gameInfo) => {
   const message = {
     action: OPEN_SPORTSBOOK_TABS,
     settings: settings,
     book: book,
-    homeTeam: homeTeam
+    gameInfo: gameInfo,
   };
 
   chrome.runtime.sendMessage(message, (resp) => {
@@ -344,8 +343,8 @@ window.addEventListener("click", function (evt) {
     }
 
     const book = evt.target.innerText;
-    const homeTeam = getHomeTeam(evt.target);
-    launchUrls(book, homeTeam);
+    const gameInfo = getGameInfo(evt.target);
+    launchUrls(book, gameInfo);
   } else if (isTotalDiv(evt.target)) {
     copyTotal(evt.target);
   }

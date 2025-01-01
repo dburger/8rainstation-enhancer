@@ -14,6 +14,12 @@ const CLOSE_SPORTSBOOK_TABS = "closeSportsBookTabs";
 const OPEN_SPORTSBOOK_TABS = "openSportsBookTabs";
 const OPEN_OPTIONS_TAB = "openOptionsTab";
 
+class GameInfo {
+    constructor(homeTeam, sport) {
+        this.homeTeam = homeTeam;
+    }
+}
+
 /**
  * Returns a playmark detail object.
  *
