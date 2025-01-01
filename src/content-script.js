@@ -351,16 +351,6 @@ window.addEventListener("click", function (evt) {
   }
 }, true);
 
-const settingsLink = document.querySelector('a[href="/settings"]');
-
-if (settingsLink) {
-  anchorDiv = openOptionsDiv();
-  insertAfter(anchorDiv, settingsLink.parentElement);
-  insertAfter(closeTabsDiv(), settingsLink.parentElement);
-} else {
-  console.log("Settings link not found, navigation not added.");
-}
-
 const addTimer = () => {
   const memberNoElem = document.querySelector(".member-no");
   if (memberNoElem) {
@@ -374,15 +364,29 @@ const addTimer = () => {
   }
 };
 
+const notifyPlays = () => {
+  if (document.querySelectorAll(".play").length > 0) {
+    // --autoplay-policy=no-user-gesture-required
+    // or site settings -> allow sound
+    const myAudio = new Audio(chrome.runtime.getURL("hint.wav"));
+    myAudio.play();
+  }
+};
+
+const settingsLink = document.querySelector('a[href="/settings"]');
+
+if (settingsLink) {
+  anchorDiv = openOptionsDiv();
+  insertAfter(anchorDiv, settingsLink.parentElement);
+  insertAfter(closeTabsDiv(), settingsLink.parentElement);
+} else {
+  console.log("Settings link not found, navigation not added.");
+}
+
 if (isPlaysPage()) {
   addMeg("line");
   addTimer();
+  notifyPlays();
 } else if (isBetMarketDetailsPage()) {
   addMeg("odds");
-}
-
-if (document.querySelectorAll(".play").length > 0) {
-  // --autoplay-policy=no-user-gesture-required
-  const myAudio = new Audio(chrome.runtime.getURL("hint.wav"));
-  myAudio.play();
 }
