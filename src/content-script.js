@@ -361,14 +361,28 @@ if (settingsLink) {
   console.error("Settings link not found, navigation not added.");
 }
 
+const addTimer = () => {
+  const memberNoElem = document.querySelector(".member-no");
+  if (memberNoElem) {
+    const startTime = Date.now();
+    const updateTime = () => {
+      const currTime = Date.now();
+      const secs = Math.round((currTime - startTime) / 1000);
+      memberNoElem.innerText = `${secs} secs`;
+    }
+    setInterval(updateTime, 1000);
+  }
+};
+
 if (isPlaysPage()) {
   addMeg("line");
+  addTimer();
 } else if (isBetMarketDetailsPage()) {
   addMeg("odds");
 }
 
 if (document.querySelectorAll(".play").length > 0) {
   // --autoplay-policy=no-user-gesture-required
-  const myAudio = new Audio(chrome.runtime.getURL("alarm.wav"));
+  const myAudio = new Audio(chrome.runtime.getURL("hint.wav"));
   myAudio.play();
 }
