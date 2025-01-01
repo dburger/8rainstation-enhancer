@@ -9,6 +9,19 @@ importScripts("./common.js");
 // https://www.whatismybrowser.com/detect/what-is-my-referrer
 // and so that no referrer is available.
 
+const  determineUrl = (book, urlTemplate, homeTeam) => {
+    let url = urlTemplate;
+    // TODO(dburger): some books don't offer a way to do search. In some cases
+    // we can at least jump to the correct league page. This is a temporary
+    // hack for DK during NBA until we can sort all this out.
+    if (book === "DraftKings") {
+        url = "https://sportsbook.draftkings.com/leagues/basketball/nba";
+    } else if (homeTeam) {
+        url = url.replace("${homeTeam}", homeTeam);
+    }
+    return url;
+}
+
 /**
  * Creates or updates tabs as indicated.
  *
@@ -27,12 +40,9 @@ const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap, bookLinkTarge
     if (bookDetails) {
         // From here we'll pass this as an array so this value can be updated in called functions.
         const indexArray = [index];
-        for (const [name, bd] of Object.entries(bookDetailsMap)) {
+        for (const [book, bd] of Object.entries(bookDetailsMap)) {
             if (bd.oddsGroup === bookDetails.oddsGroup) {
-                let url = bd.urlTemplate;
-                if (homeTeam) {
-                    url = url.replace("${homeTeam}", homeTeam);
-                }
+                const url = determineUrl(book, bd.urlTemplate, homeTeam);
                 createOrUpdateTab(bd, url, bookLinkTarget, indexArray);
             }
         }
