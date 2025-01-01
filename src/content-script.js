@@ -358,7 +358,7 @@ if (settingsLink) {
   insertAfter(anchorDiv, settingsLink.parentElement);
   insertAfter(closeTabsDiv(), settingsLink.parentElement);
 } else {
-  console.error("Settings link not found, navigation not added.");
+  console.log("Settings link not found, navigation not added.");
 }
 
 const addTimer = () => {
