@@ -97,18 +97,21 @@ const getGameInfo = (elem) => {
     const div = walkUp(elem, (e) => e.tagName === "DIV" && e.className === "play");
     if (div) {
       const gameDiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "game_name");
-      if (gameDiv) {
-        const parts = gameDiv.innerText.split(" at ");
-        if (parts.length === 2) {
-          return new GameInfo(parts[1]);
-        }
+      const sportDiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "sport_league");
+      if (gameDiv && sportDiv) {
+        const homeTeam = gameDiv.innerText.split(" at ")[1];
+        const sport = sportDiv.innerText.split(" - ")[0];
+        return new GameInfo(homeTeam, sport);
       }
     }
   } else if (isBetMarketDetailsPage()) {
     const divs = document.querySelectorAll("div.event-team");
-    if (divs.length === 2) {
+    const h1 = document.querySelector("h1");
+    if (divs.length > 1 && h1) {
       // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
-      return new GameInfo(divs[1].innerText.split(" (")[0]);
+      const homeTeam = divs[1].innerText.split(" (")[0];
+      const sport = h1.innerText.split(" - ")[1];
+      return new GameInfo(homeTeam, sport);
     }
   }
 

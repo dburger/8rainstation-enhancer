@@ -17,6 +17,7 @@ const OPEN_OPTIONS_TAB = "openOptionsTab";
 class GameInfo {
     constructor(homeTeam, sport) {
         this.homeTeam = homeTeam;
+        this.sport = sport;
     }
 }
 
