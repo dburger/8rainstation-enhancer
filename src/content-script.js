@@ -366,3 +366,9 @@ if (isPlaysPage()) {
 } else if (isBetMarketDetailsPage()) {
   addMeg("odds");
 }
+
+if (document.querySelectorAll(".play").length > 0) {
+  // --autoplay-policy=no-user-gesture-required
+  const myAudio = new Audio(chrome.runtime.getURL("alarm.wav"));
+  myAudio.play();
+}
