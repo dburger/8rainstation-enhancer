@@ -92,16 +92,20 @@ const makeBookDetailsMap = (bookDetails) => {
 /**
  * Creates and returns the JSON serializable object used for storing settings.
  *
+ * @param showMeg {boolean} - Whether to show Maximum Expected Growth calculations next to Expected Value calculations.
+ * @param notifyPlays {boolean} - Whether to do audio notifications on the existence of plays on the plays page.
  * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
 
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
- * @returns {{v2: {playmarksMap, bookDetailsMap, bookLinkTarget}}} - Serializable JSON
+ * @returns {{v2: {showMeg, notifyPlays, playmarksMap, bookDetailsMap, bookLinkTarget}}} - Serializable JSON
  *     object for settings storage.
  */
-const makeVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget) => {
+const makeVersionedSettings = (showMeg, notifyPlays, playmarkDetailsMap, bookDetailsMap, bookLinkTarget) => {
   return {
     v2: {
+      showMeg: showMeg,
+      notifyPlays: notifyPlays,
       playmarkDetailsMap: playmarkDetailsMap,
       bookDetailsMap: bookDetailsMap,
       bookLinkTarget: bookLinkTarget
@@ -144,6 +148,8 @@ const BOOK_LINK_TARGET_OPTIONS = [BOOK_LINK_TARGET_NEW_TAB, BOOK_LINK_TARGET_BOO
 const DEFAULT_BOOK_LINK_TARGET = BOOK_LINK_TARGET_NEW_TAB;
 
 const DEFAULT_SETTINGS = makeVersionedSettings(
+    false,
+    false,
     DEFAULT_PLAYMARK_DETAILS_MAP,
     DEFAULT_BOOK_DETAILS_MAP,
     DEFAULT_BOOK_LINK_TARGET);
@@ -173,7 +179,7 @@ const migrateSettings = (settings) => {
   } else if (Object.keys(settings.v1).length > 0) {
       // Transition from v1 to v2. We'll continue to do this translation until they save new settings.
       // At that time we'll delete settings.v1 and store settings.v2.
-      settings = makeVersionedSettings(settings.v1.playmarkDetailsMap, settings.v1.bookDetailsMap, DEFAULT_BOOK_LINK_TARGET);
+      settings = makeVersionedSettings(false, false, settings.v1.playmarkDetailsMap, settings.v1.bookDetailsMap, DEFAULT_BOOK_LINK_TARGET);
   } else {
       settings = DEFAULT_SETTINGS;
   }
@@ -183,13 +189,15 @@ const migrateSettings = (settings) => {
 /**
  * Stores the settings and indicates the result via the callback.
  *
+ * @param showMeg {boolean} - Whether to show Maximum Expected Growth calculations next to Expected Value calculations.
+ * @param notifyPlays {boolean} - Whether to do audio notifications on the existence of plays on the plays page.
  * @param playmarkDetailsMap {{string: playmarkDetail}} - The map of playmark names to playmark details to store.
  * @param bookDetailsMap {{string: bookDetail}} - The map of book names to book details to store.
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setVersionedSettings = (playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback) => {
-  const settings = makeVersionedSettings(playmarkDetailsMap, bookDetailsMap, bookLinkTarget);
+const setVersionedSettings = (showMeg, notifyPlays, playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback) => {
+  const settings = makeVersionedSettings(showMeg, notifyPlays, playmarkDetailsMap, bookDetailsMap, bookLinkTarget);
   chrome.storage.sync.remove("v1", () => {
       if (chrome.runtime.lastError) {
           console.error("Failed to delete settings version v1.");
@@ -212,6 +220,8 @@ const syncSettings = (settings, callback) => {
 /**
  * Translates and stores the given settings as called from the settings page.
  *
+ * @param showMeg {boolean} - Whether to show Maximum Expected Growth calculations next to Expected Value calculations.
+ * @param notifyPlays {boolean} - Whether to do audio notifications on the existence of plays on the plays page.
  * @param playmarkDetails {[[string, string, string]]} - The playmark details
  *     in the form of [text key, sort position, target URL].
  * @param bookDetails {[string, string, string]} - The name, odds group, URL template details to store
@@ -219,11 +229,13 @@ const syncSettings = (settings, callback) => {
  * @param bookLinkTarget {string} - The indicator of how to load a book link.
  * @param callback {() => void} - The callback invoked after the settings have been set.
  */
-const setSettings = (playmarkDetails, bookDetails, bookLinkTarget, callback) => {
+const setSettings = (showMeg, notifyPlays, playmarkDetails, bookDetails, bookLinkTarget, callback) => {
+  // TODO(dburger): why is settings fetched here? This is obviously not right. It doesn't appear this is necessary.
+  // Need to research and remove this fetch.
   getSettings(settings => {
     const playmarkDetailsMap = makePlaymarkDetailsMap(playmarkDetails);
     const bookDetailsMap = makeBookDetailsMap(bookDetails);
-    setVersionedSettings(playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback);
+    setVersionedSettings(showMeg, notifyPlays, playmarkDetailsMap, bookDetailsMap, bookLinkTarget, callback);
   });
 };
 

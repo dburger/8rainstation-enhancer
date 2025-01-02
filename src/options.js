@@ -163,6 +163,14 @@ const addPlaymarkDetailsRow = (tbody, name, playmark) => {
     tbody.appendChild(createPlaymarkDetailsRow(name, playmark));
 };
 
+const loadGeneral = (settings) => {
+    const showMegCheckbox = document.getElementById("showMeg");
+    const notifyPlaysCheckbox = document.getElementById("notifyPlays");
+
+    showMegCheckbox.checked = settings.showMeg;
+    notifyPlaysCheckbox.checked = settings.notifyPlays;
+};
+
 /**
  * Loads the given playmarks into the playmarks table.
  *
@@ -218,6 +226,7 @@ const loadBookDetails = (bookDetails) => {
  * @param settings {@see makeVersionedSettings}
  */
 const loadSettings = (settings) => {
+    loadGeneral(settings);
     loadPlaymarks(settings.playmarkDetailsMap);
     loadBookLinkTarget(settings.bookLinkTarget);
     loadBookDetails(settings.bookDetailsMap);
@@ -226,6 +235,9 @@ const loadSettings = (settings) => {
 /** Initial page configuration, loads settings into the page. */
 document.addEventListener("DOMContentLoaded", (evt) => {
     getSettings(loadSettings);
+
+    const showMegCheckbox = document.getElementById("showMeg");
+    const notifyPlaysCheckbox = document.getElementById("notifyPlays");
 
     const playmarksBody = document.getElementById("playmarksBody");
     const bookLinkTargetSelect = document.getElementById("bookLinkTarget");
@@ -256,7 +268,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             bookDetails.push([key, oddsGroup, urlTemplate]);
         }
 
-        setSettings(playmarkDetails, bookDetails, bookLinkTarget, () => {
+        setSettings(showMegCheckbox.checked, notifyPlaysCheckbox.checked, playmarkDetails, bookDetails, bookLinkTarget, () => {
             if (chrome.runtime.lastError) {
                 window.alert(chrome.runtime.lastError.message);
             }

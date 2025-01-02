@@ -20,6 +20,20 @@ getSettings(s => {
     insertAfter(navDiv(pd.playmark, name), anchorDiv);
   }
   highlightCurrentPlaymark();
+
+  if (isPlaysPage()) {
+    if (settings.showMeg) {
+      addMeg("line");
+    }
+    addTimer();
+    if (settings.notifyPlays) {
+      notifyPlays();
+    }
+  } else if (isBetMarketDetailsPage()) {
+    if (settings.showMeg) {
+      addMeg("odds");
+    }
+  }
 });
 
 /**
@@ -383,12 +397,4 @@ if (settingsLink) {
   insertAfter(closeTabsDiv(), settingsLink.parentElement);
 } else {
   console.log("Settings link not found, navigation not added.");
-}
-
-if (isPlaysPage()) {
-  addMeg("line");
-  addTimer();
-  notifyPlays();
-} else if (isBetMarketDetailsPage()) {
-  addMeg("odds");
 }
