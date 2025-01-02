@@ -12,7 +12,6 @@ getSettings(s => {
     return;
   }
 
-
   insertAfter(addPlaymarkDiv(), anchorDiv);
   // We need to reverse here because these are added to the UI after the
   // anchor. Thus, the reverse undos the insert reverse.
@@ -384,7 +383,7 @@ const notifyPlays = () => {
   if (document.querySelectorAll(".play").length > 0) {
     // --autoplay-policy=no-user-gesture-required
     // or site settings -> allow sound
-    const myAudio = new Audio(chrome.runtime.getURL("hint.wav"));
+    const myAudio = new Audio(chrome.runtime.getURL("ticker.wav"));
     myAudio.play();
   }
 };

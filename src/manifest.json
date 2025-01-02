@@ -25,7 +25,7 @@
     "tabs"
   ],
   "web_accessible_resources": [{
-    "resources": ["alarm.wav", "hint.wav"],
+    "resources": ["alarm.wav", "hint.wav", "ticker.wav"],
     "matches": ["https://app.8rainstation.com/*"]
   }]
 }
