@@ -9,19 +9,16 @@ importScripts("./common.js");
 // https://www.whatismybrowser.com/detect/what-is-my-referrer
 // and so that no referrer is available.
 
+const draftKingsUrl = (sport) => {
+    return `https://sportsbook.draftkings.com/leagues/basketball/${sport.toLowerCase()}`;
+};
+
 const  determineUrl = (book, urlTemplate, gameInfo) => {
     let url = urlTemplate;
-    // TODO(dburger): some books don't offer a way to do search. In some cases
-    // we can at least jump to the correct league page. This is a temporary
-    // hack for DK during NBA until we can sort all this out.
+    // Some books don't offer a way to do search. For some of these we have
+    // custom overrides.
     if (book === "DraftKings") {
-        if (gameInfo.sport === "NBA") {
-            url = "https://sportsbook.draftkings.com/leagues/basketball/nba";
-        } else if (gameInfo.sport === "NCAAM") {
-            url = "https://sportsbook.draftkings.com/leagues/basketball/ncaab";
-        } else {
-            url = "https://sportsbook.draftkings.com";
-        }
+        url = draftKingsUrl(gameInfo.sport);
     } else if (gameInfo.homeTeam) {
         url = url.replace("${homeTeam}", gameInfo.homeTeam);
     }
