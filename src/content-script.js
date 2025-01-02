@@ -98,6 +98,10 @@ const isBetMarketDetailsPage = () => {
   return window.location.href.match(/^.*\/events\/.+$/) !== null;
 }
 
+const extractSport = (text) => {
+  return text.split(" - ")[0].split(" ")[0].toUpperCase();
+};
+
 /**
  * Attempts to find the game info on the page and returns it.
  *
@@ -113,7 +117,7 @@ const getGameInfo = (elem) => {
       const sportDiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "sport_league");
       if (gameDiv && sportDiv) {
         const homeTeam = gameDiv.innerText.split(" at ")[1];
-        const sport = sportDiv.innerText.split(" - ")[0];
+        const sport = extractSport(sportDiv.innerText);
         return new GameInfo(homeTeam, sport);
       }
     }
@@ -123,7 +127,7 @@ const getGameInfo = (elem) => {
     if (divs.length > 1 && h1) {
       // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
       const homeTeam = divs[1].innerText.split(" (")[0];
-      const sport = h1.innerText.split(" - ")[1];
+      const sport = extractSport(h1.innerText);
       return new GameInfo(homeTeam, sport);
     }
   }

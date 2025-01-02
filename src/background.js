@@ -9,15 +9,21 @@ importScripts("./common.js");
 // https://www.whatismybrowser.com/detect/what-is-my-referrer
 // and so that no referrer is available.
 
-const  determineUrl = (book, urlTemplate, homeTeam) => {
+const  determineUrl = (book, urlTemplate, gameInfo) => {
     let url = urlTemplate;
     // TODO(dburger): some books don't offer a way to do search. In some cases
     // we can at least jump to the correct league page. This is a temporary
     // hack for DK during NBA until we can sort all this out.
     if (book === "DraftKings") {
-        url = "https://sportsbook.draftkings.com/leagues/basketball/nba";
-    } else if (homeTeam) {
-        url = url.replace("${homeTeam}", homeTeam);
+        if (gameInfo.sport === "NBA") {
+            url = "https://sportsbook.draftkings.com/leagues/basketball/nba";
+        } else if (gameInfo.sport === "NCAAM") {
+            url = "https://sportsbook.draftkings.com/leagues/basketball/ncaab";
+        } else {
+            url = "https://sportsbook.draftkings.com";
+        }
+    } else if (gameInfo.homeTeam) {
+        url = url.replace("${homeTeam}", gameInfo.homeTeam);
     }
     return url;
 }
@@ -27,22 +33,21 @@ const  determineUrl = (book, urlTemplate, homeTeam) => {
  *
  * @param book {string} - The book to create tabs for. Note that all books in
  *     the same odds group will be launched.
- * @param homeTeam {string} - The home team in the contest. Used to create
- *     more specific URLs when possible.
+ * @param gameInfo {GameInfo} - The GameInfo for the contest.
  * @param index {number} - The index of the 8rain Station tab. This will be
  *     used to place new tabs relative to the station tab.
  * @param bookDetailsMap {Object} - The mapping of book text keys to book
  *     details as stored in the settings. See {@link makeVersionedSettings}.
  * @param bookLinkTarget {string} - The indicator of how to open the tabs.
  */
-const createOrUpdateTabs = (book, homeTeam, index, bookDetailsMap, bookLinkTarget) => {
+const createOrUpdateTabs = (book, gameInfo, index, bookDetailsMap, bookLinkTarget) => {
     const bookDetails = bookDetailsMap[book];
     if (bookDetails) {
         // From here we'll pass this as an array so this value can be updated in called functions.
         const indexArray = [index];
         for (const [book, bd] of Object.entries(bookDetailsMap)) {
             if (bd.oddsGroup === bookDetails.oddsGroup) {
-                const url = determineUrl(book, bd.urlTemplate, homeTeam);
+                const url = determineUrl(book, bd.urlTemplate, gameInfo);
                 createOrUpdateTab(bd, url, bookLinkTarget, indexArray);
             }
         }
@@ -93,17 +98,16 @@ const createOrUpdateTab = (bookDetails, url, bookLinkTarget, indexArray) => {
  * Opens sportsbook tabs for all sportsbooks in the given book's odds group.
  *
  * @param book {string} - The book key name of the book to open tabs for.
- * @param homeTeam {string} - The home team in the contest. Used to produce more
- *     specific URLs where possible.
+ * @param gameInfo {GameInfo} - The GameInfo for the contest.
  * @param bookDetailsMap {Object} - The mapping of book text keys to book
  *     details as stored in the settings. See {@link makeVersionedSettings}.
  * @param bookLinkTarget {string} - The indicator of how to open the tabs.
  */
-const openSportsbookTabs = (book, homeTeam, bookDetailsMap, bookLinkTarget) => {
+const openSportsbookTabs = (book, gameInfo, bookDetailsMap, bookLinkTarget) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         // 8rain Station tab index.
         const index = tabs[0].index;
-        createOrUpdateTabs(book, homeTeam, index, bookDetailsMap, bookLinkTarget);
+        createOrUpdateTabs(book, gameInfo, index, bookDetailsMap, bookLinkTarget);
     });
 };
 
@@ -137,7 +141,7 @@ const closeSportsbookTabs = (bookDetailsMap) => {
  */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === OPEN_SPORTSBOOK_TABS) {
-        openSportsbookTabs(message.book, message.gameInfo.homeTeam, message.settings.bookDetailsMap, message.settings.bookLinkTarget);
+        openSportsbookTabs(message.book, message.gameInfo, message.settings.bookDetailsMap, message.settings.bookLinkTarget);
     } else if (message.action === CLOSE_SPORTSBOOK_TABS) {
         closeSportsbookTabs(message.settings.bookDetailsMap);
     } else if (message.action === OPEN_OPTIONS_TAB) {
