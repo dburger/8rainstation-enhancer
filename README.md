@@ -71,3 +71,6 @@ support the author.
 * Make a bitcoin donation to the author at bc1qk2d4h9rs9f26ylpctst5yv6jmgwk89e96wuenw
 * Buy the author a beer
 * Pay the author to write a custom Chrome extension
+* When you sign up for sportsbooks use my referral code:
+   * Novig - https://share.novig.us/davidburger
+
