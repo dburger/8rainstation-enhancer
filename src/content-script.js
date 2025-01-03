@@ -26,7 +26,11 @@ getSettings(s => {
     }
     addTimer();
     if (settings.notifyPlays) {
-      notifyPlays();
+      // The intention here is to not play the notification on back button navigation, however,
+      // wonkiness has been noted about when this fires page load events.
+      if (window.performance.getEntriesByType("navigation")[0].entryType !== "back_forward") {
+        notifyPlays();
+      }
     }
   } else if (isBetMarketDetailsPage()) {
     if (settings.showMeg) {
