@@ -384,8 +384,9 @@ const addTimer = () => {
     const startTime = Date.now();
     const updateTime = () => {
       const currTime = Date.now();
-      const secs = Math.round((currTime - startTime) / 1000);
-      memberNoElem.innerText = `${secs} secs`;
+      const secs = `${Math.round((currTime - startTime) / 1000)} secs`;
+      memberNoElem.innerText = secs;
+      document.title = `8rs ${secs}`;
     }
     setInterval(updateTime, 1000);
   }
