@@ -9,8 +9,8 @@ importScripts("./common.js");
 // https://www.whatismybrowser.com/detect/what-is-my-referrer
 // and so that no referrer is available.
 
-const draftKingsUrl = (sport) => {
-    return `https://sportsbook.draftkings.com/leagues/basketball/${sport.toLowerCase()}`;
+const draftKingsUrl = (gameInfo) => {
+    return `https://sportsbook.draftkings.com/leagues/${gameInfo.sport}/${gameInfo.league}`;
 };
 
 const  determineUrl = (book, urlTemplate, gameInfo) => {
@@ -18,7 +18,7 @@ const  determineUrl = (book, urlTemplate, gameInfo) => {
     // Some books don't offer a way to do search. For some of these we have
     // custom overrides.
     if (book === "DraftKings") {
-        url = draftKingsUrl(gameInfo.sport);
+        url = draftKingsUrl(gameInfo);
     } else if (gameInfo.homeTeam) {
         url = url.replace("${homeTeam}", gameInfo.homeTeam);
     }

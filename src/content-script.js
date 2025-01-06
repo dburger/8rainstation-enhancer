@@ -102,12 +102,19 @@ const isBetMarketDetailsPage = () => {
   return window.location.href.match(/^.*\/events\/.+$/) !== null;
 }
 
-const extractSportPlaysPage = (text) => {
-  return text.split(" - ")[0].split(" ")[0].toUpperCase();
+const parseSportLeague = (text) => {
+  const parts = text.split(" ");
+  const league = parts[0];
+  const sport = parts[1];
+  return [sport.toLowerCase(), league.toLowerCase()];
 };
 
-const extractSportDetailsPage = (text) => {
-  return text.split(" - ")[1].split(" ")[0].toUpperCase();
+const extractSportLeaguePlaysPage = (text) => {
+  return parseSportLeague(text.split(" - ")[0]);
+};
+
+const extractSportLeagueDetailsPage = (text) => {
+  return parseSportLeague(text.split(" - ")[1]);
 }
 
 /**
@@ -125,8 +132,8 @@ const getGameInfo = (elem) => {
       const sportDiv = walkDown(div, (e) => e.tagName === "DIV" && e.className === "sport_league");
       if (gameDiv && sportDiv) {
         const homeTeam = gameDiv.innerText.split(" at ")[1];
-        const sport = extractSportPlaysPage(sportDiv.innerText);
-        return new GameInfo(homeTeam, sport);
+        const [sport, league] = extractSportLeaguePlaysPage(sportDiv.innerText);
+        return new GameInfo(homeTeam, sport, league);
       }
     }
   } else if (isBetMarketDetailsPage()) {
@@ -135,8 +142,8 @@ const getGameInfo = (elem) => {
     if (divs.length > 1 && h1) {
       // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
       const homeTeam = divs[1].innerText.split(" (")[0];
-      const sport = extractSportDetailsPage(h1.innerText);
-      return new GameInfo(homeTeam, sport);
+      const [sport, league] = extractSportLeaguePlaysPage(h1.innerText);
+      return new GameInfo(homeTeam, sport, league);
     }
   }
 
