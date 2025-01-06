@@ -104,9 +104,12 @@ const isBetMarketDetailsPage = () => {
 
 const parseSportLeague = (text) => {
   const parts = text.split(" ");
-  const league = parts[0];
-  const sport = parts[1];
-  return [sport.toLowerCase(), league.toLowerCase()];
+  let league = parts[0].toLowerCase();
+  const sport = parts[1].toLowerCase();
+  if (sport === "basketball" && league === "ncaam") {
+    league = "ncaab";
+  }
+  return [sport, league];
 };
 
 const extractSportLeaguePlaysPage = (text) => {
@@ -142,7 +145,7 @@ const getGameInfo = (elem) => {
     if (divs.length > 1 && h1) {
       // Split off the record they add after the team name: "Kansas City Chiefs (0-0-0)"
       const homeTeam = divs[1].innerText.split(" (")[0];
-      const [sport, league] = extractSportLeaguePlaysPage(h1.innerText);
+      const [sport, league] = extractSportLeagueDetailsPage(h1.innerText);
       return new GameInfo(homeTeam, sport, league);
     }
   }
