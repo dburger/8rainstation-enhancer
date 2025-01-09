@@ -402,8 +402,18 @@ const addTimer = () => {
   }
 };
 
+const getVisiblePlaysCount = () => {
+  let count = 0;
+  for (const play of document.querySelectorAll(".play")) {
+    if (play.style.display !== "none") {
+      count++;
+    }
+  }
+  return count;
+};
+
 const notifyPlays = () => {
-  if (document.querySelectorAll(".play").length > 0) {
+  if (getVisiblePlaysCount() > 0) {
     // --autoplay-policy=no-user-gesture-required
     // or site settings -> allow sound
     const myAudio = new Audio(chrome.runtime.getURL("ticker.wav"));
