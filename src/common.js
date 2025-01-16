@@ -250,7 +250,7 @@ const setSettings = (showMeg, notifyPlays, playmarkDetails, bookDetails, bookLin
 const addPlaymark = (name, playmark, callback) => {
     getSettings(settings => {
         settings.playmarkDetailsMap[name] = playmarkDetail(Object.keys(settings.playmarkDetailsMap).length, playmark);
-        setVersionedSettings(settings.playmarkDetailsMap, settings.bookDetailsMap, settings.bookLinkTarget, callback);
+        setVersionedSettings(settings.showMeg, settings.notifyPlays, settings.playmarkDetailsMap, settings.bookDetailsMap, settings.bookLinkTarget, callback);
     });
 };
 
