@@ -5,6 +5,21 @@
 let settings = null;
 let anchorDiv = null;
 
+const hookOriginate = () => {
+  document.addEventListener("keydown", (evt) => {
+    if (evt.key === "m" && evt.ctrlKey) {
+      const amount = getNthByName("amount", 2);
+      const odds = getNthByName("odds", 2);
+      const notes = getNthBySelector(".notes input", 2);
+      if (amount && odds && notes) {
+        amount.value = "0.01";
+        notes.value = "make";
+        odds.focus();
+      }
+    }
+  });
+};
+
 /** Fetches the settings on page load and finishes setting up the page. */
 getSettings(s => {
   settings = s;
@@ -36,6 +51,8 @@ getSettings(s => {
     if (settings.showMeg) {
       addMeg("odds");
     }
+
+    hookOriginate();
   }
 });
 

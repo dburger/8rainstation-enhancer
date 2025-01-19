@@ -370,3 +370,15 @@ const walkDown = (elem, pred) => {
   }
   return null;
 }
+
+const getNthByName = (name, n) => {
+    const elems = document.getElementsByName(name);
+    const i = n - 1;
+    return elems.length > i ? elems[i] : null;
+};
+
+const getNthBySelector = (name, n) => {
+    const elems = document.querySelectorAll(name);
+    const i = n - 1;
+    return elems.length > i ? elems[i] : null;
+};
