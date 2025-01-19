@@ -14,6 +14,10 @@ the features this extension provides. The features this extension adds includes:
   know you are coming from 8rain Station.)
 * When a sportsbook name or wager amount is clicked on, the Kelly computed
   wager amount is copied to the clipboard.
+* Hitting CTRL-m on the bet market details page when the details form is
+  visible will cause the bet details to be filled in for a make order.
+  That is 1 cent for the amount, "make" for the notes, and will put the
+  focus on the odds field.
 * A button that closes all open sportsbook sites when clicked.
 * The ability to quickly add bookmarks to specific plays filtering
   on the Plays and Bet Market Details pages.
