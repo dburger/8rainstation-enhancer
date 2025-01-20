@@ -375,17 +375,6 @@ const launchUrls = (book, gameInfo) => {
   });
 };
 
-const isTotalDiv = (elem) => {
-  return elem && (elem.className === "no-total" || elem.className === "market-total");
-}
-
-const copyTotal = (elem) => {
-  const text = elem.innerText;
-  if (text && text.length > 1) {
-    navigator.clipboard.writeText(text.substring(1));
-  }
-}
-
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
   if (evt.target.tagName !== "DIV") {
@@ -393,15 +382,10 @@ window.addEventListener("click", function (evt) {
   }
   if (evt.target.className === "sports_book_name") {
     const elem = evt.target.previousElementSibling;
-    if (isTotalDiv(elem)) {
-      copyTotal(elem);
-    }
 
     const book = evt.target.innerText;
     const gameInfo = getGameInfo(evt.target);
     launchUrls(book, gameInfo);
-  } else if (isTotalDiv(evt.target)) {
-    copyTotal(evt.target);
   }
 }, true);
 
