@@ -39,7 +39,9 @@ getSettings(s => {
     if (settings.showMeg) {
       addMeg("line");
     }
+
     addTimer();
+
     if (settings.notifyPlays) {
       // The intention here is to not play the notification on back button navigation, however,
       // wonkiness has been noted about when this fires page load events.
@@ -47,6 +49,8 @@ getSettings(s => {
         notifyPlays();
       }
     }
+
+    hookOriginate();
   } else if (isBetMarketDetailsPage()) {
     if (settings.showMeg) {
       addMeg("odds");
