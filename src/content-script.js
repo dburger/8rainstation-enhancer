@@ -5,7 +5,7 @@
 let settings = null;
 let anchorDiv = null;
 
-const hookOriginate = () => {
+const hookBetSlipOps = () => {
   document.addEventListener("keydown", (evt) => {
     if (evt.key === "m" && evt.ctrlKey) {
       const amount = getNthByName("amount", 2);
@@ -15,6 +15,12 @@ const hookOriginate = () => {
         amount.value = "0.01";
         notes.value = "make";
         odds.focus();
+      }
+    } else if (evt.key === "Escape") {
+      for (const button of document.querySelectorAll("button")) {
+        if (button.innerText === "Clear") {
+          button.click();
+        }
       }
     }
   });
@@ -50,13 +56,13 @@ getSettings(s => {
       }
     }
 
-    hookOriginate();
+    hookBetSlipOps();
   } else if (isBetMarketDetailsPage()) {
     if (settings.showMeg) {
       addMeg("odds");
     }
 
-    hookOriginate();
+    hookBetSlipOps();
   }
 });
 
