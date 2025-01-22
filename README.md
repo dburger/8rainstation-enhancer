@@ -16,6 +16,8 @@ the features this extension provides. The features this extension adds includes:
   visible will cause the bet details to be filled in for a make order.
   That is 1 cent for the amount, "make" for the notes, and will put the
   focus on the odds field.
+* Hitting "Escape" when the betslip is visible initiates a "Clear"
+  click for the betslip. This makes dismissing the betslip much faster.
 * A button that closes all open sportsbook sites when clicked.
 * The ability to quickly add bookmarks to specific plays filtering
   on the Plays and Bet Market Details pages.
