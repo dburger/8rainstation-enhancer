@@ -20,6 +20,7 @@ const hookBetSlipOps = () => {
       for (const button of document.querySelectorAll("button")) {
         if (button.innerText === "Clear") {
           button.click();
+          break;
         }
       }
     }
