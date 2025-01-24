@@ -388,13 +388,13 @@ const launchUrls = (book, gameInfo) => {
 
 /** Adds the hook to react to clicks on sportsbook names. */
 window.addEventListener("click", function (evt) {
-  if (evt.target.tagName !== "DIV") {
+  // Lower case "text", really? Yes, looks like that is the case.
+  if (evt.target.tagName !== "DIV" && evt.target.tagName !== "text") {
     return;
   }
-  if (evt.target.className === "sports_book_name") {
-    const elem = evt.target.previousElementSibling;
-
-    const book = evt.target.innerText;
+  // Second one actually is instance of SVGAnimatedString.
+  if (evt.target.className === "sports_book_name" || evt.target.className.baseVal === "book") {
+    const book = evt.target.innerText || evt.target.childNodes[0].textContent;
     const gameInfo = getGameInfo(evt.target);
     launchUrls(book, gameInfo);
   }
