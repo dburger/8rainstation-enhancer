@@ -9,6 +9,11 @@ div.logo img {
     --enhanced-clickable-active-color: lime;
 }
 
+div.sports_book_name {
+    border-radius: 0.5rem;
+    border: 0.1rem dashed var(--enhanced-clickable-color);
+}
+
 .nav.enhancer {
     border: 0.1rem solid var(--enhanced-clickable-color) !important;
 }
