@@ -2,6 +2,9 @@
 // from using async / await. Thus, the settings are retrieved here with a callback
 // instead of on demand when needed.
 
+// Can show with css file somehow?
+const ENHANCED_CLICKABLE_COLOR = "yellow";
+
 let settings = null;
 let anchorDiv = null;
 
@@ -386,9 +389,23 @@ const launchUrls = (book, gameInfo) => {
   });
 };
 
+let highlightActive = false;
+
+const addHighlight = () => {
+  const stylesheet = document.styleSheets[0];
+  stylesheet.insertRule(`div.sports_book_name { border-radius: 0.5rem; border: 0.1rem solid ${ENHANCED_CLICKABLE_COLOR};}`, stylesheet.cssRules.length);
+  highlightActive = true;
+};
+
+const removeHighlight = () => {
+  const stylesheet = document.styleSheets[0];
+  stylesheet.removeRule(stylesheet.cssRules.length - 1);
+  highlightActive = false;
+};
+
 /** Adds the hook to react to clicks on sportsbook names if the CTRL key is depressed. */
 window.addEventListener("click", function (evt) {
-  if (!evt.ctrlKey) {
+  if (!highlightActive) {
     return;
   }
   // Lower case "text", really? Yes, looks like that is the case.
@@ -400,8 +417,23 @@ window.addEventListener("click", function (evt) {
     const book = evt.target.innerText || evt.target.childNodes[0].textContent;
     const gameInfo = getGameInfo(evt.target);
     launchUrls(book, gameInfo);
+    removeHighlight();
+    evt.stopPropagation();
+    evt.preventDefault();
   }
 }, true);
+
+window.addEventListener("keydown", (evt) => {
+  if ((evt.ctrlKey || evt.key === "CapsLock") && !highlightActive) {
+    addHighlight();
+  }
+});
+
+window.addEventListener("keyup", (evt) => {
+  if (highlightActive) {
+    removeHighlight();
+  }
+});
 
 const addTimer = () => {
   const memberNoElem = document.querySelector(".member-no");
