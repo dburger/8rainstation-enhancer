@@ -386,8 +386,11 @@ const launchUrls = (book, gameInfo) => {
   });
 };
 
-/** Adds the hook to react to clicks on sportsbook names. */
+/** Adds the hook to react to clicks on sportsbook names if the CTRL key is depressed. */
 window.addEventListener("click", function (evt) {
+  if (!evt.ctrlKey) {
+    return;
+  }
   // Lower case "text", really? Yes, looks like that is the case.
   if (evt.target.tagName !== "DIV" && evt.target.tagName !== "text") {
     return;
