@@ -9,9 +9,9 @@ advantaged sports wagers. The website is great, and they continue to add
 features, however, they currently have higher priorities than working on
 the features this extension provides. The features this extension adds includes:
 
-* Making sportsbook names clickable links that launch to the sportsbook.
-  (Note that I do not send the referrer header, so the sportsbook will not
-  know you are coming from 8rain Station.)
+* Making sportsbook names clickable links (when the CTRL key is depressed)
+  that launch to the sportsbook. (Note that I do not send the referrer header,
+  so the sportsbook will not know you are coming from 8rain Station.)
 * Hitting CTRL-m on the bet market details page when the details form is
   visible will cause the bet details to be filled in for a make order.
   That is 1 cent for the amount, "make" for the notes, and will put the
